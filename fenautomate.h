@@ -6,6 +6,11 @@
 #include "automate.h"
 #include "etat.h"
 #include "simulateur.h"
+
+#include <QLabel>
+#include <QSpinBox>
+#include <QLineEdit>
+#include <QIntValidator>
 #include <QTableView>
 #include <QTableWidget>
 #include <QGridLayout>
@@ -84,11 +89,35 @@ public slots:
 
 // Classe qui correspond à la fenêtre d'un automate 1D
 class fenAutomate1D : public fenAutomate{
+Q_OBJECT
+    QSpinBox* num; // numéro
+    QLineEdit* numeroBit[8]; // un QLineEdit par bit
+    QLabel* numl;
+    QLabel* numeroBitl[8];
+    QVBoxLayout* numc;
+    QVBoxLayout* bitc[8];
+    QHBoxLayout* numeroc;
+    QIntValidator* zeroOneValidator;
+    QTableWidget* depart;
+    QPushButton* simulation;
+    QTableWidget* states = nullptr;
+
+    unsigned int dimension = 20;
+    QSpinBox* nbSim; // Nombre de générations
+    QHBoxLayout* simLaye;
 public:
-    fenAutomate1D(QString nom, Simulateur* s):fenAutomate(nom,s){}
+    fenAutomate1D(QString nom, Simulateur* s);
     virtual ~fenAutomate1D(){}
     virtual void avancer(){ return; }
     virtual void reculer(){ return; }
+
+public slots:
+    void synchronizeNumToNumBit(int n);
+    void synchronizeNumBitToNum(const QString& n);
+    void numberGeneration(int value);
+
+    void simulate();
+    void cellActivation(QModelIndex indx);
 };
 
 

@@ -39,11 +39,16 @@ private:
     QComboBox* choixAutomate; // Boite déroulante
     QLineEdit* nomAutomate; // Boite de texte
     QPushButton* btOK; // Bouton créer
-    QSpinBox* maxVoisins; // Champ nombre max de voisins
     QSpinBox* buffer; // Champ buffer
+    QLabel* minVoisinsLabel;
     QSpinBox* minVoisins; // champ nombre min de voisins
+    QLabel* maxVoisinsLabel;
+    QSpinBox* maxVoisins; // Champ nombre max de voisins
+    QLabel* exactVoisinsLabel;
     QSpinBox* exactVoisins; // champ nombre exact de voisins
+    QLabel* numeroAutomateLabel;
     QSpinBox* numeroAutomate; // Champ numero automate
+    QLabel* txtNumeroAutomateLabel;
     QLineEdit* txtNumeroAutomate; // Champ numero automate (idem qu'avant mais en 00100101)
     QSpinBox* rows; // champ lignes
     QSpinBox* column; // champ colonnes
@@ -56,6 +61,8 @@ public:
 public slots:
     void creatAuto(); // Slot qui crée un automate et emit newAuto(fenAutomate*)
     void statusChanged(QString a); // Slot quand la valeur de la QComboBox change (choix du type d'automate)
+    void updateMaxVoisins(int n);
+    void updateMinVoisins(int n);
 
 signals:
     void newAuto(fenAutomate*);
