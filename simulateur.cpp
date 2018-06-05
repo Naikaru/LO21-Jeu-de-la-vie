@@ -50,7 +50,8 @@ void Simulateur::build(unsigned int c){
 
 
 void Simulateur::setEtatDepart(const Etat& e){
-    depart = &e;
+    Etat* noconstdepart = const_cast<Etat*>(depart);
+    *noconstdepart = e;
     reset();
 }
 
@@ -79,7 +80,7 @@ const Etat& Simulateur::dernier() const{
 void Simulateur::reset(){
     if (depart==nullptr) throw SimulateurException("Simulateur1D::reset->"+ERROR_BAD_START_STATE);
     build(0);
-    etats[0] = new Etat(*const_cast<Etat*>(depart));
+    *etats[0] = *depart;
     rang = 0;
 }
 
