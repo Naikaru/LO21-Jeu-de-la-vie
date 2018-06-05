@@ -10,5 +10,7 @@
         <file>bacteria.png</file>
         <file>virus(1).png</file>
         <file>virus.png</file>
+        <file>pause.png</file>
+        <file>play-button.png</file>
     </qresource>
 </RCC>

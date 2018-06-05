@@ -1,6 +1,6 @@
 #include "fenautomate.h"
 
-fenAutomate::fenAutomate(Simulateur* s)
+fenAutomate::fenAutomate(Simulateur* s):monSimu(s)
 {
     setWindowTitle("Automate anonyme");
     UImaker();
@@ -18,16 +18,18 @@ fenAutomate::fenAutomate(QString nom, Simulateur* s)
 void fenAutomate::UImaker(){
 
     setWindowIcon(QIcon(":/virus.png"));
-
+    playPause = true;
     setMinimumSize(500,500);
     myCentralWidget = new QWidget;
     BTavancer = new QPushButton("Avancer", myCentralWidget);
     BTreculer = new QPushButton("Reculer",myCentralWidget);
-    BTplay = new QPushButton("Play", myCentralWidget);
-
-    myTimer = new QTimer();
+    BTplay = new QPushButton(QIcon(":/play-button.png"),"", myCentralWidget);
+    BTplay->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
+    BTplay->setFlat(true);
+    myTimer = new QTimer(this);
     mySlider = new QSlider(Qt::Horizontal);
     mySlider->setMinimum(1);mySlider->setMaximum(10000);
+    mySlider->setValue(1000);
     myTimer->setInterval(mySlider->value());
 
     connect(myTimer,SIGNAL(timeout()),this,SLOT(slotAvancer()));
@@ -50,17 +52,16 @@ void fenAutomate::UImaker(){
 
 
 void fenAutomate::slotBtPlayStop(){
-    if(BTplay->text() == "Play"){
-        BTplay->setText("Pause");
+    if(playPause){
         BTplay->setIcon(QIcon(":/pause.png"));
-        //myTimer->start();
-        //connect(BTplay, SIGNAL(clicked()), ObjectName, SLOT(pause()));
-        // plus propre ?
+        myTimer->start(mySlider->value());
+        playPause = false;
     }else{
-        BTplay->setText("Play");
-        //myTimer->pause();
+        myTimer->stop();
         BTplay->setIcon(QIcon(":/play-button.png"));
+        playPause = true;
     }
+    BTplay->repaint();
 }
 
 
@@ -325,7 +326,7 @@ void fenAutomate2D::cellChange(int i, int j){
     // On prends l'item de la grille cliqué, on récupère la valeur correspondante dans l'etat initial, et on affiche
     // la couleur correspondante via la fonction dédiée dans l'automate
     maGrid->item(i,j)->setBackgroundColor(monSimu->getAutomate().colourize(monSimu->getInitialState()->getCellule(i,j)));
-
+    monSimu->reset();
 }
 
 
@@ -382,6 +383,7 @@ void fenAutomate2D::avancer(){
 void fenAutomate2D::reculer(){
     //monSimu->next();
     refreshGrid();
+     maGrid->repaint();
 }
 
 
