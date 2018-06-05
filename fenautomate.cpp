@@ -274,7 +274,7 @@ fenAutomate2D::fenAutomate2D(QString nom, Simulateur* s):fenAutomate(nom,s){
         }
     }
     resizeGrid();
-    connect(maGrid,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(slotGridClick(QModelIndex)));
+    connect(maGrid,SIGNAL(clicked(QModelIndex)),this,SLOT(slotGridClick(QModelIndex)));
     monSimu->reset();
 }
 
@@ -283,11 +283,12 @@ void fenAutomate2D::resizeGrid(){
     int size;
     unsigned int cols = monSimu->dernier().getNbCols();
     unsigned int rows = monSimu->dernier().getNbRows();
+    adaptGridSize();
     if(maGrid->size().width()/rows < maGrid->size().height()/cols)
-        size = (int) this->size().height()/cols-10;
+        size = (int) maGrid->size().height()/cols;
     else
-        size = (int) this->size().width()/rows -10;
-
+        size = (int) maGrid->size().width()/rows;
+    size = (size<1)? 1:size;
     for(unsigned int i(0);i<rows;i++){
        maGrid->setRowHeight(i,size);
     }
@@ -297,27 +298,26 @@ void fenAutomate2D::resizeGrid(){
 }
 
 void fenAutomate2D::cellChange(int i, int j){
-    if(monSimu->isAlive(i,j)){
+    monSimu->setEtatDepart(monSimu->dernier());
+    if(monSimu->isAlive(i,j))
         monSimu->setDead(i,j);
-        maGrid->item(i,j)->setBackgroundColor("white");
-    }else{
+    else
         monSimu->setAlive(i,j);
-        maGrid->item(i,j)->setBackgroundColor("green");
-    }
+    // On prends l'item de la grille cliqué, on récupère la valeur correspondante dans l'etat initial, et on affiche
+    // la couleur correspondante via la fonction dédiée dans l'automate
+    maGrid->item(i,j)->setBackgroundColor(monSimu->getAutomate().colourize(monSimu->getInitialState()->getCellule(i,j)));
 }
 
 
 void fenAutomate2D::adaptGridSize(){
-    QTableWidgetItem* temp;
     unsigned int cols = monSimu->dernier().getNbCols();
     unsigned int rows = monSimu->dernier().getNbRows();
     if ((maGrid->columnCount() != cols) || (maGrid->rowCount() != rows)){
         if(maGrid->columnCount() < cols){
             for(unsigned int i(maGrid->columnCount());i<cols;i++){
                 for(unsigned int j(0);j<maGrid->rowCount();j++){
-                 temp = new QTableWidgetItem("");
-                  maGrid->setItem(j,i,temp);
-
+                  maGrid->setItem(j,i,new QTableWidgetItem(""));
+                  maGrid->item(j,i)->setFlags(Qt::ItemIsEnabled);
                 }
             }
         }else{
@@ -329,6 +329,7 @@ void fenAutomate2D::adaptGridSize(){
             for(unsigned int i(maGrid->rowCount());i<rows;i++){
                 for(unsigned int j(0);j<maGrid->columnCount();j++){
                   maGrid->setItem(i,j,new QTableWidgetItem(""));
+                  maGrid->item(i,j)->setFlags(Qt::ItemIsEnabled);
                 }
             }
         }else{
@@ -339,13 +340,14 @@ void fenAutomate2D::adaptGridSize(){
     }
 }
 void fenAutomate2D::refreshGrid(){
-    int cols = (int) monSimu->dernier().getNbCols();
-    int rows = (int) monSimu->dernier().getNbRows();
+    Etat dernier = monSimu->dernier();
+    int cols = (int) dernier.getNbCols();
+    int rows = (int) dernier.getNbRows();
+    const Automate* monauto = &monSimu->getAutomate();
     adaptGridSize();
     for(int i(0);i<rows;i++){
         for(int j(0);j<cols;j++){
-            maGrid->item(i,j)->setBackgroundColor(monSimu->getAutomate().colourize(monSimu->dernier().getCellule(i,j)));
-            std::cout<<"("<<i<<","<<j<<")"<<" : MAJ"<<std::endl;
+            maGrid->item(i,j)->setBackgroundColor(monauto->colourize(dernier.getCellule(i,j)));
         }
     }
 }
@@ -353,6 +355,7 @@ void fenAutomate2D::refreshGrid(){
 void fenAutomate2D::avancer(){
     monSimu->next();
     refreshGrid();
+    maGrid->repaint();
 }
 
 
@@ -368,15 +371,7 @@ void fenAutomate2D::slotSizeChange(){
 
 
 void fenAutomate2D::slotGridClick(QModelIndex j){
-    if(monSimu->isAlive(j.row(),j.column()))
-        monSimu->setDead(j.row(),j.column());
-    else
-        monSimu->setAlive(j.row(),j.column());
-
-    // On prends l'item de la grille cliqué, on récupère la valeur correspondante dans l'etat initial, et on affiche
-    // la couleur correspondante via la fonction dédiée dans l'automate
-    maGrid->item(j.row(),j.column())->setBackgroundColor(monSimu->getAutomate().colourize(monSimu->dernier().getCellule(j.row(),j.column())));
-
+ cellChange(j.row(),j.column());
 }
 
 
