@@ -30,3 +30,5 @@
 *.exe
 *.out
 *.app
+
+/build-projetLO21-Desktop_Qt_5_10_1_MSVC2015_32bit-Debug
