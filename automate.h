@@ -2,6 +2,7 @@
 #define AUTOMATE_H
 #include <string>
 #include <vector>
+#include <QColor>
 #include <iostream>
 #include "etat.h"
 
@@ -36,6 +37,8 @@ public:
     // Pour une ligne r et une colonne c, dans l'Etat e, tue la cellule
     virtual void setDead(unsigned int r, unsigned int c, Etat* e) const = 0;
 
+    //
+    virtual const QColor& colourize(int value) const = 0;
     virtual ~Automate() = default;
 };
 
@@ -58,6 +61,7 @@ public:
     virtual void applyTransition(Etat* depart, Etat* arrivee) const;
     virtual bool isAlive(unsigned int r, unsigned int c, Etat* e) const{ if(e->getCellule(r,c)==0) return false; else return true;}
     virtual void setAlive(unsigned int r, unsigned int c, Etat* e) const{ e->setCellule(r,c,1);}
+    virtual const QColor& colourize(int value) const;
     virtual void setDead(unsigned int r, unsigned int c, Etat* e) const{ e->setCellule(r,c,0);}
     // nb: le test pour savoir si r,c ne sont pas outofbound se fait dans etat
 };
@@ -83,7 +87,7 @@ public:
     virtual bool isAlive(unsigned int r, unsigned int c, Etat* e) const{ if(e->getCellule(r,c)==0) return false; else return true;}
     virtual void setAlive(unsigned int r, unsigned int c, Etat* e) const{ e->setCellule(r,c,1);}
     virtual void setDead(unsigned int r, unsigned int c, Etat* e) const{ e->setCellule(r,c,0);}
-
+    virtual const QColor& colourize(int value)const;
 };
 
 short unsigned int NumBitToNum(const std::string& num); // Transforme les string de 0 et de 1 en int

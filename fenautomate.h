@@ -141,7 +141,7 @@ public:
 
 public slots:
     void slotSizeChange(); // Quand la taille de la fenêtre change, on appelle resizeGrid()
-    void slotGridClick(int i, int j); // Slop appellé quand on clique sur une case, les coordonees sont passés en argument par le signal
+    void slotGridClick(QModelIndex j); // Slop appellé quand on clique sur une case, les coordonees sont passés en argument par le signal
 
 };
 #endif // FENAUTOMATE_H

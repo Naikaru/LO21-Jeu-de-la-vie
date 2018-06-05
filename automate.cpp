@@ -164,3 +164,12 @@ Automate* Automate1D::copy() const{
     return temp;
 }
 
+const QColor& Automate1D::colourize(int value)const{
+    if (value == 0) return *(new QColor("White"));
+    else return *(new QColor("Black"));
+}
+
+ const QColor& Automate2D::colourize(int value)const {
+    if (value == 0) return *(new QColor("White"));
+    else return *(new QColor("Black"));
+}

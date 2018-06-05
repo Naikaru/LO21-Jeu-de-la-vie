@@ -44,7 +44,8 @@ Simulateur& Simulateur::operator=(const Simulateur& s){
 
 void Simulateur::build(unsigned int c){
     if (c >= nbMaxEtats) throw SimulateurException("Simulateur1D::build ->" + ERROR_BUFFER_LENGTH);
-    if (etats[c] == nullptr) etats[c] = new Etat(depart->getNbRows(),depart->getNbCols());
+    if (etats[c] != nullptr) delete etats[c];
+    etats[c] = new Etat(depart->getNbRows(),depart->getNbCols());
 }
 
 

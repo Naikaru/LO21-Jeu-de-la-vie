@@ -216,13 +216,13 @@ void fenAutomate1D::synchronizeNumBitToNum(const QString& n)
 {
     if(n=="") return;
 
-    std::string str = "";
+    QString str = "";
     for(unsigned int i(0); i<8; ++i)
     {
-        str+=numeroBit[i]->text().toLatin1();
+        str = str + numeroBit[i]->text();
     }
 
-    short unsigned int tmpNum = NumBitToNum(str);
+    short unsigned int tmpNum = NumBitToNum(str.toStdString());
     num->setValue(tmpNum);
 }
 
@@ -293,7 +293,7 @@ fenAutomate2D::fenAutomate2D(QString nom, Simulateur* s):fenAutomate(nom,s){
         }
     }
     resizeGrid();
-    connect(maGrid,SIGNAL(itemDoubleClicked(QTableWidgetItem*)),this,SLOT(slotGridClick(int,int)));
+    connect(maGrid,SIGNAL(doubleClicked(QModelIndex)),this,SLOT(slotGridClick(QModelIndex)));
     monSimu->reset();
 }
 
@@ -327,13 +327,16 @@ void fenAutomate2D::cellChange(int i, int j){
 
 
 void fenAutomate2D::adaptGridSize(){
+    QTableWidgetItem* temp;
     unsigned int cols = monSimu->dernier().getNbCols();
     unsigned int rows = monSimu->dernier().getNbRows();
     if ((maGrid->columnCount() != cols) || (maGrid->rowCount() != rows)){
         if(maGrid->columnCount() < cols){
             for(unsigned int i(maGrid->columnCount());i<cols;i++){
                 for(unsigned int j(0);j<maGrid->rowCount();j++){
-                  maGrid->setItem(j,i,new QTableWidgetItem(""));
+                 temp = new QTableWidgetItem("");
+                  maGrid->setItem(j,i,temp);
+
                 }
             }
         }else{
@@ -355,16 +358,13 @@ void fenAutomate2D::adaptGridSize(){
     }
 }
 void fenAutomate2D::refreshGrid(){
-    unsigned int cols = monSimu->dernier().getNbCols();
-    unsigned int rows = monSimu->dernier().getNbRows();
+    int cols = (int) monSimu->dernier().getNbCols();
+    int rows = (int) monSimu->dernier().getNbRows();
     adaptGridSize();
-    for(unsigned int i(0);i<rows;i++){
-        for(unsigned int j(0);j<cols;j++){
-            if(monSimu->isAlive(i,j)){
-                maGrid->itemAt(i,j)->setBackgroundColor("Black");
-            }else{
-                maGrid->itemAt(i,j)->setBackgroundColor("White");
-            }
+    for(int i(0);i<rows;i++){
+        for(int j(0);j<cols;j++){
+            maGrid->item(i,j)->setBackgroundColor(monSimu->getAutomate().colourize(monSimu->dernier().getCellule(i,j)));
+            std::cout<<"("<<i<<","<<j<<")"<<" : MAJ"<<std::endl;
         }
     }
 }
@@ -386,9 +386,16 @@ void fenAutomate2D::slotSizeChange(){
 }
 
 
-void fenAutomate2D::slotGridClick(int i, int j){
-    maGrid->itemAt(i,j)->setBackgroundColor("Black");
-    //cellChange(i,j);
+void fenAutomate2D::slotGridClick(QModelIndex j){
+    if(monSimu->isAlive(j.row(),j.column()))
+        monSimu->setDead(j.row(),j.column());
+    else
+        monSimu->setAlive(j.row(),j.column());
+
+    // On prends l'item de la grille cliqué, on récupère la valeur correspondante dans l'etat initial, et on affiche
+    // la couleur correspondante via la fonction dédiée dans l'automate
+    maGrid->item(j.row(),j.column())->setBackgroundColor(monSimu->getAutomate().colourize(monSimu->dernier().getCellule(j.row(),j.column())));
+
 }
 
 
