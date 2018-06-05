@@ -103,8 +103,6 @@ Q_OBJECT
     QTableWidget* states = nullptr;
 
     unsigned int dimension = 20;
-    QSpinBox* nbSim; // Nombre de générations
-    QHBoxLayout* simLaye;
 public:
     fenAutomate1D(QString nom, Simulateur* s);
     virtual ~fenAutomate1D(){}
@@ -114,7 +112,6 @@ public:
 public slots:
     void synchronizeNumToNumBit(int n);
     void synchronizeNumBitToNum(const QString& n);
-    void numberGeneration(int value);
 
     void simulate();
     void cellActivation(QModelIndex indx);

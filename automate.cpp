@@ -74,15 +74,41 @@ Automate1D& Automate1D::operator=(const Automate1D& a){
     return *this;
 }
 
-// Constructeur de automate2D
-Automate2D::Automate2D(unsigned short int min, unsigned short int max, unsigned short int exact)
+
+// Retourne un pointeur sur automate d'un automate1D
+Automate* Automate1D::copy() const{
+    Automate* temp = new Automate1D(*this);
+    return temp;
+}
+
+
+const QColor& Automate1D::colourize(int value)const{
+    if (value == 0) return *(new QColor("White"));
+    else return *(new QColor("Black"));
+}
+
+
+
+/**********************************************
+ ************       MODE 2D     ***************
+ **********************************************/
+
+
+
+/*********************************************
+**************  Jeu de la vie  ***************
+**********************************************/
+
+
+// Constructeur de GameOfLife
+GameOfLife::GameOfLife(unsigned short int min, unsigned short int max, unsigned short int exact)
     :minNeighbours(min),maxNeighbours(max),exactNeighbours(exact){}
 
-// Constructeur par recopie de automate2D
-Automate2D::Automate2D(const Automate2D &a):minNeighbours(a.minNeighbours),maxNeighbours(a.maxNeighbours),exactNeighbours(a.exactNeighbours){}
+// Constructeur par recopie de GameOfLife
+GameOfLife::GameOfLife(const GameOfLife &a):minNeighbours(a.minNeighbours),maxNeighbours(a.maxNeighbours),exactNeighbours(a.exactNeighbours){}
 
-// Operateur d'affectation de Automate2D
-Automate2D& Automate2D::operator=(const Automate2D& a){
+// Operateur d'affectation de GameOfLife
+GameOfLife& GameOfLife::operator=(const GameOfLife& a){
     minNeighbours = a.minNeighbours;
     maxNeighbours = a.maxNeighbours;
     exactNeighbours = a.exactNeighbours;
@@ -90,57 +116,82 @@ Automate2D& Automate2D::operator=(const Automate2D& a){
 }
 
 // Fonction qui compte le nombre de voisins d'une cellule dans une grille 2D
-unsigned short int Automate2D::countNeighbours(const Etat& e, unsigned short int row, unsigned short int col)
+unsigned short int GameOfLife::countNeighbours(const Etat& e, unsigned short int row, unsigned short int col)
 {
-    // Détermination des cas limites.
-    unsigned short int upRow;
-    unsigned short int downRow;
-    unsigned short int leftCol;
-    unsigned short int rightCol;
-
-    if(row==0)
-        upRow = row;
-    else
-        upRow = row-1;
-
-    if(row==e.getNbRows()-1)
-        downRow = row;
-    else
-        downRow = row+1;
-
-    if(col==0)
-        leftCol = col;
-    else
-        leftCol = col-1;
-
-    if(col==e.getNbCols()-1)
-        rightCol = col;
-    else
-        rightCol = col+1;
-
-
     unsigned short int total = 0;
+    if(row-1 >= 0)              // superior cell
+        total += e.getCellule(row-1,col);
+    if(row+1 < e.getNbRows())   // inferior cell
+        total += e.getCellule(row+1,col);
+    if(col-1 >= 0)              // left cell
+        total += e.getCellule(row,col-1);
+    if(col+1 < e.getNbCols())   // right cell
+        total += e.getCellule(row,col+1);
 
-    for(unsigned int i(upRow); i<=(downRow); ++i)
-        for(unsigned int j(leftCol); j<=(rightCol); ++j) // vérifier les domaines
-                 total += e.getCellule(i,j); // On considère d'abord que grid ne contient que 1 ou 0
+    if(typeN >= 1){ // Alors voisinage de Moore
+        // On se contente de checker les 4 cases suivantes correspondant aux coins
 
-    total -= e.getCellule(row, col); // On retire 1 si il a été comme voisin
+        if(row-1>=0 && col-1>=0)                // superior left cell
+            total += e.getCellule(row-1,col-1);
+        if(row-1>=0 && col+1 < e.getNbCols())   // superior right cell
+            total += e.getCellule(row-1,col+1);
+        if(row+1<e.getNbRows() && col-1>=0)     // inferior left cell
+            total += e.getCellule(row+1,col-1);
+        if(row+1<e.getNbRows() && col+1<e.getNbCols()) // inferior right cell
+            total += e.getCellule(row+1,col+1);
+    }
+
+    // Plus un voisinage est important, plus on va chercher les voisins loins
+    // Facile d'ajouter le voisinage de Moore d'ordre 2 (les 24 voisins)
+    // Il suffit de rajouter if(typeN >=2)
+
+    // Mais la solution avec la boucle pour compter est plus badass
+
+/*
+        // Détermination des cas limites.
+        unsigned short int upRow;
+        unsigned short int downRow;
+        unsigned short int leftCol;
+        unsigned short int rightCol;
+
+        if(row==0)
+            upRow = row;
+        else
+            upRow = row-1;
+
+        if(row==e.getNbRows()-1)
+            downRow = row;
+        else
+            downRow = row+1;
+
+        if(col==0)
+            leftCol = col;
+        else
+            leftCol = col-1;
+
+        if(col==e.getNbCols()-1)
+            rightCol = col;
+        else
+            rightCol = col+1;
+
+        for(unsigned int i(upRow); i<=(downRow); ++i)
+            for(unsigned int j(leftCol); j<=(rightCol); ++j) // vérifier les domaines
+                     total += e.getCellule(i,j); // On considère d'abord que grid ne contient que 1 ou 0
+
+        total -= e.getCellule(row, col); // On retire 1 si il a été comme voisin
+*/    
     return total;
 }
 
-// Fonction qui applique la transition de Automate2D
-void Automate2D::applyTransition(Etat* depart, Etat* arrivee) const {
+
+// Fonction qui applique la transition de GameOfLife
+void GameOfLife::applyTransition(Etat* depart, Etat* arrivee) const {
     if (depart->getNbRows() != arrivee->getNbRows() || depart->getNbCols() != arrivee->getNbCols())
         *depart = *arrivee;
 
-    for(unsigned int i(0); i<depart->getNbRows(); ++i)
-    {
-        for(unsigned int j(0); j<depart->getNbCols(); ++j)
-        {
-            //std::cout << "On s'occupe de la cellule : (" << i << "," << j << ") : ";
+    for(unsigned int i(0); i<depart->getNbRows(); ++i){
+        for(unsigned int j(0); j<depart->getNbCols(); ++j){
             unsigned short int nbNeighbours = countNeighbours(*depart, i, j);
-            //std::cout << nbNeighbours << " voisins." << std::endl;
             if(depart->getCellule(i,j)==1 && (nbNeighbours < minNeighbours || nbNeighbours > maxNeighbours))
                 arrivee->setCellule(i,j,0);
             else
@@ -152,24 +203,80 @@ void Automate2D::applyTransition(Etat* depart, Etat* arrivee) const {
     }
 }
 
-// Retourne un pointeur sur automate d'un automate2D
-Automate* Automate2D::copy() const{
-    Automate* temp = new Automate2D(*this);
+// Retourne un pointeur sur automate d'un GameOfLife
+Automate* GameOfLife::copy() const{
+    Automate* temp = new GameOfLife(*this);
     return temp;
 }
 
-// Retourne un pointeur sur automate d'un automate1D
-Automate* Automate1D::copy() const{
-    Automate* temp = new Automate1D(*this);
-    return temp;
-}
 
-const QColor& Automate1D::colourize(int value)const{
+ const QColor& GameOfLife::colourize(int value)const {
     if (value == 0) return *(new QColor("White"));
     else return *(new QColor("Black"));
 }
 
- const QColor& Automate2D::colourize(int value)const {
-    if (value == 0) return *(new QColor("White"));
-    else return *(new QColor("Black"));
+
+
+/**********************************************
+**************   Feu de Forêt   ***************
+***********************************************/
+
+// Constructeur de GameOfLife
+ForestFire::ForestFire(Neighbourhood n): typeN(n) {}
+
+
+// Constructeur par recopie de ForestFire
+ForestFire::ForestFire(const ForestFire &a):typeN(a.typeN) {}
+
+// Operateur d'affectation de ForestFire
+ForestFire& ForestFire::operator=(const ForestFire& a){
+    typeN = a.typeN;
+    return *this;
 }
+
+
+// Transtion : ici on tient directement compte du voisinage (<> GameOfLife où on délègue à uen fonction countNeighbours() )
+void ForestFire::applyTransition(const Etat2D& dep, Etat2D& dest) const
+{
+    if (dep.getNbRows() != dest.getNbRows() || dep.getNbCols() != dest.getNbCols())
+        dest = dep;
+
+    for(unsigned int i(0); i<dep.getNbRows(); ++i)
+    {
+        for(unsigned int j(0); j<dep.getNbCols(); ++j)
+        {
+            if(dep.getCellule(i,j) == fire){ 
+                if(i-1 >= 0 && dep.getCellule(i-1,j) == tree) 
+                    dest.set(i-1,j,2);
+                if(i+1 < dep.getNbRows() && dep.getCellule(i+1,j) == tree)
+                    dest.set(i+1,j,2);
+                if(j-1 >= 0 && dep.getCellule(i,j-1) == tree)
+                    dest.set(i,j-1,2);
+                if(j+1 < dep.getNbCols() && dep.getCellule(i,j+1) == tree)
+                    dest.set(i,j+1,2);
+                
+                if(typeN >= 1){ // Alors voisinage de Moore
+                    // On se contente de checker les 4 cases suivantes correspondant aux coins
+
+                    // superior left cell
+                    if(i-1>=0 && j-1>=0 && dep.getCellule(i-1,j-1) == tree)    
+                        dest.set(i-1,j-1,2);
+                    // inferior left cell
+                    if(i-1>=0 && j+1<e.getNbCols() && dep.getCellule(i-1,j+1,) == tree)   
+                        dest.set(i-1,j-1,2);
+                    // superior left cell
+                    if(i+1<e.getNbRows() && j-1>=0 && dep.getCellule(i+1,j-1,) == tree)     
+                        dest.set(i-1,j-1,2);
+                    // superior left cell
+                    if(i+1<e.getNbRows() && j+1<e.getNbCols() && dep.getCellule(i+1,j+1,) == tree) 
+                        dest.set(i-1,j-1,2);               
+                }
+
+                // From fire you become ashes
+                dest.setCellule(i,j,3);
+            }
+        }
+    }
+}
+
+

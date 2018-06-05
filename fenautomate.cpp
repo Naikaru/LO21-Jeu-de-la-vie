@@ -160,19 +160,7 @@ fenAutomate1D::fenAutomate1D(QString nom, Simulateur *s):
     simulation = new QPushButton("Simulation");
     connect(simulation, SIGNAL(clicked()), this, SLOT(simulate()));
 
-    nbSim = new QSpinBox();
-    nbSim->setRange(0,20);
-    nbSim->setValue(20);
-    nbSim->setAlignment(Qt::AlignCenter);
-
-    connect(nbSim, SIGNAL(valueChanged(int)), this, SLOT(numberGeneration(int)));
-
-    simLaye = new QHBoxLayout();
-
-    simLaye->addWidget(simulation);
-    simLaye->addWidget(nbSim);
-
-    monLayout->addLayout(simLaye, 15, 0, 5, 100);
+    monLayout->addWidget(simulation, 15, 0, 5, 100);
 
     states = new QTableWidget(dimension, dimension, this);
     states->setFixedSize(dimension*taille, dimension*taille);
@@ -197,8 +185,7 @@ fenAutomate1D::fenAutomate1D(QString nom, Simulateur *s):
     states->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     //interface->addWidget(states);
-    monLayout->addWidget(states, 20, 0, 20, 100);
-    this->setLayout(monLayout);
+    monLayout->addWidget(states, 20, 0, 70, 100);
 }
 
 
@@ -224,12 +211,6 @@ void fenAutomate1D::synchronizeNumBitToNum(const QString& n)
 
     short unsigned int tmpNum = NumBitToNum(str.toStdString());
     num->setValue(tmpNum);
-}
-
-
-void fenAutomate1D::numberGeneration(int value)
-{
-    nbSim->setValue(value);
 }
 
 
@@ -318,10 +299,10 @@ void fenAutomate2D::resizeGrid(){
 void fenAutomate2D::cellChange(int i, int j){
     if(monSimu->isAlive(i,j)){
         monSimu->setDead(i,j);
-        maGrid->itemAt(i,j)->setBackgroundColor("White");
+        maGrid->item(i,j)->setBackgroundColor("white");
     }else{
         monSimu->setAlive(i,j);
-        maGrid->itemAt(i,j)->setBackgroundColor("Black");
+        maGrid->item(i,j)->setBackgroundColor("green");
     }
 }
 
