@@ -13,7 +13,7 @@ Automatemaker::Automatemaker()
     btOK = new QPushButton("OK", this);
     btAnnuler = new QPushButton("Annuler", this);
     rows = new QSpinBox;
-    column = new QSpinBox; column->setValue(20);
+    column = new QSpinBox; column->setValue(10);
 
     minVoisins = new QSpinBox; minVoisins->setValue(2);
     minVoisins->setMinimum(0);
@@ -135,6 +135,7 @@ void Automatemaker::creatAuto(){
     // Si c'est un jeu de la vie
     if(choixAutomate->currentText() == "Jeu de la vie"){
        monAutomate = new GameOfLife(minVoisins->value(),maxVoisins->value(),exactVoisins->value());
+       std::cout << "Max : " << maxVoisins->value() << " et min : " << minVoisins->value() << "\n";
        monEtat = new Etat(rows->value(),column->value());
        monSimu = new Simulateur(monAutomate,monEtat,buffer->value());
        mafenetre = new fenAutomate2D("2D : "+ nomAutomate->text(),monSimu);
@@ -195,7 +196,7 @@ void Automatemaker::statusChanged(QString a){
                 //numeroAutomate->setEnabled(false);
                 //txtNumeroAutomate->setEnabled(false);
 
-                rows->setValue(20);
+                rows->setValue(10);
                 rows->setEnabled(true);
                 column->setEnabled(true);
             }

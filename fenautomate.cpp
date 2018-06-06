@@ -237,12 +237,14 @@ void fenAutomate1D::simulate(){
         else
             e->setCellule(0, i, 1);
     }
+    delete monSimu;
+    monSimu = new Simulateur(a, e);
+    //monSimu->reset();
 
-    Simulateur s(a, e);
     for(unsigned int i(0); i<dimension; ++i)
     {
-        s.next();
-        const Etat& tmpEtat = s.dernier();
+        monSimu->next();
+        const Etat& tmpEtat = monSimu->dernier();
         for(unsigned int j(0); j<dimension; ++j)
         {
             if(tmpEtat.getCellule(0,j) == 1)
@@ -276,7 +278,7 @@ fenAutomate2D::fenAutomate2D(QString nom, Simulateur* s):fenAutomate(nom,s){
     }
     resizeGrid();
     connect(maGrid,SIGNAL(clicked(QModelIndex)),this,SLOT(slotGridClick(QModelIndex)));
-    monSimu->reset();
+    //monSimu->reset();
 }
 
 
@@ -342,7 +344,7 @@ void fenAutomate2D::adaptGridSize(){
     }
 }
 void fenAutomate2D::refreshGrid(){
-    Etat dernier = monSimu->dernier();
+    const Etat& dernier = monSimu->dernier();
     int cols = (int) dernier.getNbCols();
     int rows = (int) dernier.getNbRows();
     const Automate* monauto = &monSimu->getAutomate();
@@ -364,7 +366,7 @@ void fenAutomate2D::avancer(){
 void fenAutomate2D::reculer(){
     //monSimu->next();
     refreshGrid();
-     maGrid->repaint();
+    maGrid->repaint();
 }
 
 

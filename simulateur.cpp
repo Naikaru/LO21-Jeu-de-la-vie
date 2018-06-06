@@ -5,11 +5,12 @@ std::string Simulateur::ERROR_BAD_START_STATE = "Erreur etat depart indefini";
 std::string Simulateur::ERROR_NO_INIT = "Simulateur non initialisé";
 
 
-Simulateur::Simulateur(const Automate* a, const Etat* dep, unsigned int buffer):myAutomat(a),depart(dep),nbMaxEtats(buffer)
+Simulateur::Simulateur(const Automate* a, const Etat* dep, unsigned int buffer):
+    myAutomat(a),depart(dep),nbMaxEtats(buffer), rang(0)
 {
     etats = new Etat*[nbMaxEtats];
     for(unsigned int i(0); i<nbMaxEtats;i++) etats[i] = nullptr;
-    rang = 0;
+    etats[0] = new Etat(*dep);
 }
 
 

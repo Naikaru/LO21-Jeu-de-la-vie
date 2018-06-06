@@ -46,7 +46,7 @@ Automate1D::Automate1D(const std::string& num) :
 {}
 
 // Fonction d'application de la transition de Automate1D
-void Automate1D::applyTransition(const Etat* depart, Etat* arrivee) const {
+void Automate1D::applyTransition(Etat* depart, Etat* arrivee) const {
     if(depart->getNbRows() != 1) throw AutomateException("Automate1D::applyTransition ->" + ERROR_BAD_ETAT);
     if(arrivee->getNbRows() != 1) throw AutomateException("Automate1D::applyTransition ->" + ERROR_BAD_ETAT);
 
@@ -186,7 +186,7 @@ unsigned short int GameOfLife::countNeighbours(const Etat& e, unsigned short int
 
 
 // Fonction qui applique la transition de GameOfLife
-void GameOfLife::applyTransition(const Etat* depart, Etat* arrivee) const {
+void GameOfLife::applyTransition(Etat* depart, Etat* arrivee) const {
     if (depart->getNbRows() != arrivee->getNbRows() || depart->getNbCols() != arrivee->getNbCols())
         *arrivee = *depart;
 
@@ -237,7 +237,7 @@ ForestFire& ForestFire::operator=(const ForestFire& a){
 
 
 // Transtion : ici on tient directement compte du voisinage (<> GameOfLife où on délègue à uen fonction countNeighbours() )
-void ForestFire::applyTransition(const Etat* depart, Etat* arrivee) const
+void ForestFire::applyTransition(Etat *depart, Etat* arrivee) const
 {
     if (depart->getNbRows() != arrivee->getNbRows() || depart->getNbCols() != arrivee->getNbCols())
         *arrivee = *depart;

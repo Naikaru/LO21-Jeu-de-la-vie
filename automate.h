@@ -25,7 +25,7 @@ public:
     virtual ~Automate() = default;
 
     // Applique la transition sur depart et stocke dans arrivee
-    virtual void applyTransition(const Etat* depart, Etat* arrivee) const = 0;
+    virtual void applyTransition(Etat* depart, Etat* arrivee) const = 0;
 
     // Renvoie un pointeur vers une copie de l'automate
     virtual Automate* copy() const = 0;
@@ -61,7 +61,7 @@ public:
     unsigned short int getNumero() const { return numero; }
     const std::string& getNumeroBit() const { return numeroBit; }
 
-    virtual void applyTransition(const Etat* depart, Etat* arrivee) const;
+    virtual void applyTransition(Etat *depart, Etat* arrivee) const;
     virtual const QColor& colourize(int value)const;
 };
 
@@ -73,7 +73,7 @@ std::string NumToNumBit(short unsigned int num); // Transforme les int en string
  **********************************************/
 
 // Définition du voisinage : Moore 8 voisins, VonNeumann : 4  voisins
-enum Neighbourhood { Moore, VonNeumann };
+enum Neighbourhood { VonNeumann, Moore };
 
 /***** Jeu de la vie *****/
 
@@ -85,7 +85,7 @@ private:
     unsigned short int exactNeighbours;
     Neighbourhood typeN;
 public:
-    GameOfLife(unsigned short int min=2, unsigned short int max=3, unsigned short int exact=3, Neighbourhood n=VonNeumann); // Constructeur, par défaut c'est un jeu de la vie
+    GameOfLife(unsigned short int min=2, unsigned short int max=3, unsigned short int exact=3, Neighbourhood n=Moore); // Constructeur, par défaut c'est un jeu de la vie
     virtual ~GameOfLife()=default;
     GameOfLife(const GameOfLife& a);// Constructeur de recopie
     GameOfLife& operator=(const GameOfLife& a); // operateur d'affectation
@@ -95,7 +95,7 @@ public:
     unsigned short int getExactNeighbours() const { return exactNeighbours; } // Accesseur
     unsigned short int getNeighbourhood() const { return typeN; }
     unsigned short int countNeighbours(const Etat& e, unsigned short int row, unsigned short int col) const;// Fonction qui compte les voisis d'une cellule
-    virtual void applyTransition(const Etat* depart, Etat* arrivee) const;
+    virtual void applyTransition(Etat* depart, Etat* arrivee) const;
     // nb: le test pour savoir si r,c ne sont pas outofbound se fait dans etat
     virtual const QColor& colourize(int value) const;
 };
@@ -110,13 +110,13 @@ class ForestFire : public Automate
 private:
     Neighbourhood typeN;
 public:
-    ForestFire(Neighbourhood n=VonNeumann);
+    ForestFire(Neighbourhood n=Moore);
     virtual ~ForestFire()=default;
     ForestFire(const ForestFire& a);
     ForestFire& operator=(const ForestFire& a);
     virtual Automate* copy() const;
     unsigned short int getNeighbourhood() const { return typeN; }
-    virtual void applyTransition(const Etat* depart, Etat* arrivee) const;
+    virtual void applyTransition(Etat* depart, Etat* arrivee) const;
     virtual const QColor& colourize(int value) const;
 };
 
