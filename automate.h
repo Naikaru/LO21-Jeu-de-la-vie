@@ -73,7 +73,7 @@ std::string NumToNumBit(short unsigned int num); // Transforme les int en string
  **********************************************/
 
 // Définition du voisinage : Moore 8 voisins, VonNeumann : 4  voisins
-enum Neighbourhood { Moore, VonNeumann }
+enum Neighbourhood { Moore, VonNeumann };
 
 /***** Jeu de la vie *****/
 
@@ -84,9 +84,8 @@ private:
     unsigned short int maxNeighbours;
     unsigned short int exactNeighbours;
     Neighbourhood typeN;
-    static unsigned short int countNeighbours(const Etat& e, unsigned short int row, unsigned short int col); // Fonction qui compte les voisis d'une cellule
 public:
-    GameOfLife(unsigned short int min=2, unsigned short int max=3, unsigned short int exact=3); // Constructeur, par défaut c'est un jeu de la vie
+    GameOfLife(unsigned short int min=2, unsigned short int max=3, unsigned short int exact=3, Neighbourhood n=VonNeumann); // Constructeur, par défaut c'est un jeu de la vie
     ~GameOfLife()=default;
     GameOfLife(const GameOfLife& a);// Constructeur de recopie
     GameOfLife& operator=(const GameOfLife& a); // operateur d'affectation
@@ -94,6 +93,8 @@ public:
     unsigned short int getMinNeighbours() const { return minNeighbours; } // Accesseur
     unsigned short int getMaxNeighbours() const { return maxNeighbours; } // Accesseur
     unsigned short int getExactNeighbours() const { return exactNeighbours; } // Accesseur
+    unsigned short int getNeighbourhood() const { return typeN; }
+    unsigned short int countNeighbours(const Etat& e, unsigned short int row, unsigned short int col); // Fonction qui compte les voisis d'une cellule
     virtual void applyTransition(Etat* depart, Etat* arrivee) const;
     // nb: le test pour savoir si r,c ne sont pas outofbound se fait dans etat
     virtual const QColor& colourize(int value) const;
@@ -107,13 +108,16 @@ enum stateForest {empty, tree, fire, ashes};
 class ForestFire : public Automate
 {
 private:
-  Neighbourhood typeN;
+    Neighbourhood typeN;
 public:
-  ForestFire() {}
-  virtual ForestFire();
+    ForestFire(Neighbourhood n) {}
+    virtual ~ForestFire();
+    ForestFire(const ForestFire& a);
+    ForestFire& operator=(const ForestFire& a);
 
-  virtual void applyTransition(const Etat2D& dep, Etat2D& dest) const;
-}
+    unsigned short int getNeighbourhood() const { return typeN; }
+    virtual void applyTransition(const Etat* dep, Etat* dest) const;
+};
 
 
 #endif // AUTOMATE_H

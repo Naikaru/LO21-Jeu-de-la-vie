@@ -101,8 +101,8 @@ const QColor& Automate1D::colourize(int value)const{
 
 
 // Constructeur de GameOfLife
-GameOfLife::GameOfLife(unsigned short int min, unsigned short int max, unsigned short int exact)
-    :minNeighbours(min),maxNeighbours(max),exactNeighbours(exact){}
+GameOfLife::GameOfLife(unsigned short int min, unsigned short int max, unsigned short int exact, Neighbourhood n)
+    :minNeighbours(min),maxNeighbours(max),exactNeighbours(exact), typeN(n) {}
 
 // Constructeur par recopie de GameOfLife
 GameOfLife::GameOfLife(const GameOfLife &a):minNeighbours(a.minNeighbours),maxNeighbours(a.maxNeighbours),exactNeighbours(a.exactNeighbours){}
@@ -112,6 +112,7 @@ GameOfLife& GameOfLife::operator=(const GameOfLife& a){
     minNeighbours = a.minNeighbours;
     maxNeighbours = a.maxNeighbours;
     exactNeighbours = a.exactNeighbours;
+    typeN = a.typeN;
     return *this;
 }
 
@@ -226,7 +227,7 @@ ForestFire::ForestFire(Neighbourhood n): typeN(n) {}
 
 
 // Constructeur par recopie de ForestFire
-ForestFire::ForestFire(const ForestFire &a):typeN(a.typeN) {}
+ForestFire::ForestFire(const ForestFire &a): typeN(a.typeN) {}
 
 // Operateur d'affectation de ForestFire
 ForestFire& ForestFire::operator=(const ForestFire& a){
@@ -236,44 +237,44 @@ ForestFire& ForestFire::operator=(const ForestFire& a){
 
 
 // Transtion : ici on tient directement compte du voisinage (<> GameOfLife où on délègue à uen fonction countNeighbours() )
-void ForestFire::applyTransition(const Etat2D& dep, Etat2D& dest) const
+void ForestFire::applyTransition(const Etat* dep, Etat* dest) const
 {
-    if (dep.getNbRows() != dest.getNbRows() || dep.getNbCols() != dest.getNbCols())
-        dest = dep;
+    if (dep->getNbRows() != dest->getNbRows() || dep->getNbCols() != dest->getNbCols())
+        *dest = *dep;
 
-    for(unsigned int i(0); i<dep.getNbRows(); ++i)
+    for(unsigned int i(0); i<dep->getNbRows(); ++i)
     {
-        for(unsigned int j(0); j<dep.getNbCols(); ++j)
+        for(unsigned int j(0); j<dep->getNbCols(); ++j)
         {
-            if(dep.getCellule(i,j) == fire){ 
-                if(i-1 >= 0 && dep.getCellule(i-1,j) == tree) 
-                    dest.set(i-1,j,2);
-                if(i+1 < dep.getNbRows() && dep.getCellule(i+1,j) == tree)
-                    dest.set(i+1,j,2);
-                if(j-1 >= 0 && dep.getCellule(i,j-1) == tree)
-                    dest.set(i,j-1,2);
-                if(j+1 < dep.getNbCols() && dep.getCellule(i,j+1) == tree)
-                    dest.set(i,j+1,2);
+            if(dep->getCellule(i,j) == fire){
+                if(i-1 >= 0 && dep->getCellule(i-1,j) == tree)
+                    dest->setCellule(i-1,j,2);
+                if(i+1 < dep->getNbRows() && dep->getCellule(i+1,j) == tree)
+                    dest->setCellule(i+1,j,2);
+                if(j-1 >= 0 && dep->getCellule(i,j-1) == tree)
+                    dest->setCellule(i,j-1,2);
+                if(j+1 < dep->getNbCols() && dep->getCellule(i,j+1) == tree)
+                    dest->setCellule(i,j+1,2);
                 
                 if(typeN >= 1){ // Alors voisinage de Moore
                     // On se contente de checker les 4 cases suivantes correspondant aux coins
 
                     // superior left cell
-                    if(i-1>=0 && j-1>=0 && dep.getCellule(i-1,j-1) == tree)    
-                        dest.set(i-1,j-1,2);
+                    if(i-1>=0 && j-1>=0 && dep->getCellule(i-1,j-1) == tree)
+                        dest->setCellule(i-1,j-1,2);
                     // inferior left cell
-                    if(i-1>=0 && j+1<e.getNbCols() && dep.getCellule(i-1,j+1,) == tree)   
-                        dest.set(i-1,j-1,2);
+                    if(i-1>=0 && j+1<dep->getNbCols() && dep->getCellule(i-1,j+1) == tree)
+                        dest->setCellule(i-1,j-1,2);
                     // superior left cell
-                    if(i+1<e.getNbRows() && j-1>=0 && dep.getCellule(i+1,j-1,) == tree)     
-                        dest.set(i-1,j-1,2);
+                    if(i+1<dep->getNbRows() && j-1>=0 && dep->getCellule(i+1,j-1) == tree)
+                        dest->setCellule(i-1,j-1,2);
                     // superior left cell
-                    if(i+1<e.getNbRows() && j+1<e.getNbCols() && dep.getCellule(i+1,j+1,) == tree) 
-                        dest.set(i-1,j-1,2);               
+                    if(i+1<dep->getNbRows() && j+1<dep->getNbCols() && dep->getCellule(i+1,j+1) == tree)
+                        dest->setCellule(i-1,j-1,2);
                 }
 
                 // From fire you become ashes
-                dest.setCellule(i,j,3);
+                dest->setCellule(i,j,3);
             }
         }
     }

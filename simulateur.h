@@ -3,19 +3,22 @@
 
 #include "automate.h"
 #include "etat.h"
+
 //   TODO  //
 //
 //
 //   FIN TODO  //
 
 // Classe qui correspond aux exceptions de simulateur
-class SimulateurException{
-    std::string info;
 
+class SimulateurException
+{
+    std::string info;
 public:
     SimulateurException(const std::string& message) : info(message) {}
     std::string getInfo() const { return info; }
 };
+
 
 class Simulateur
 {
