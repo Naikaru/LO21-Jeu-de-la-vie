@@ -117,7 +117,7 @@ GameOfLife& GameOfLife::operator=(const GameOfLife& a){
 }
 
 // Fonction qui compte le nombre de voisins d'une cellule dans une grille 2D
-unsigned short int GameOfLife::countNeighbours(const Etat& e, unsigned short int row, unsigned short int col)
+unsigned short int GameOfLife::countNeighbours(const Etat& e, unsigned short int row, unsigned short int col) const
 {
     unsigned short int total = 0;
     if(row-1 >= 0)              // superior cell

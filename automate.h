@@ -94,7 +94,7 @@ public:
     unsigned short int getMaxNeighbours() const { return maxNeighbours; } // Accesseur
     unsigned short int getExactNeighbours() const { return exactNeighbours; } // Accesseur
     unsigned short int getNeighbourhood() const { return typeN; }
-    unsigned short int countNeighbours(const Etat& e, unsigned short int row, unsigned short int col); // Fonction qui compte les voisis d'une cellule
+    unsigned short int countNeighbours(const Etat& e, unsigned short int row, unsigned short int col) const;// Fonction qui compte les voisis d'une cellule
     virtual void applyTransition(Etat* depart, Etat* arrivee) const;
     // nb: le test pour savoir si r,c ne sont pas outofbound se fait dans etat
     virtual const QColor& colourize(int value) const;
@@ -110,7 +110,7 @@ class ForestFire : public Automate
 private:
     Neighbourhood typeN;
 public:
-    ForestFire(Neighbourhood n) {}
+    ForestFire(Neighbourhood n=VonNeumann);
     virtual ~ForestFire();
     ForestFire(const ForestFire& a);
     ForestFire& operator=(const ForestFire& a);
