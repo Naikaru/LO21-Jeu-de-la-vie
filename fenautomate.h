@@ -57,7 +57,7 @@ protected:
     QTimer* myTimer;
     QWidget* myCentralWidget; // Il faut définir un widget pour le centre
    //
-
+     bool playPause;
     void UImaker(); // Fonction qui fait l'interface, pour eviter d'avoir 2x le même morceau de code pour les 2 constructeurs
 
 public:

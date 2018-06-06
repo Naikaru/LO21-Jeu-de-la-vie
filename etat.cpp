@@ -38,9 +38,9 @@ Etat& Etat::operator=(const Etat& e){
     grid.resize(nbRows);
     for(i=0; i<nbRows; i++) grid[i].resize(nbCols);
 
-    for(i=0;i<e.nbRows;i++){
+    for(i=0;i<e.nbRows;i++)
         for(j=0;j<e.nbCols;j++) grid[i][j] = e.grid[i][j];
-    }
+
     return *this;
 }
 
