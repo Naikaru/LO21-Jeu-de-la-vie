@@ -46,7 +46,7 @@ Automate1D::Automate1D(const std::string& num) :
 {}
 
 // Fonction d'application de la transition de Automate1D
-void Automate1D::applyTransition(Etat* depart, Etat* arrivee) const {
+void Automate1D::applyTransition(const Etat* depart, Etat* arrivee) const {
     if(depart->getNbRows() != 1) throw AutomateException("Automate1D::applyTransition ->" + ERROR_BAD_ETAT);
     if(arrivee->getNbRows() != 1) throw AutomateException("Automate1D::applyTransition ->" + ERROR_BAD_ETAT);
 
@@ -186,9 +186,9 @@ unsigned short int GameOfLife::countNeighbours(const Etat& e, unsigned short int
 
 
 // Fonction qui applique la transition de GameOfLife
-void GameOfLife::applyTransition(Etat* depart, Etat* arrivee) const {
+void GameOfLife::applyTransition(const Etat* depart, Etat* arrivee) const {
     if (depart->getNbRows() != arrivee->getNbRows() || depart->getNbCols() != arrivee->getNbCols())
-        *depart = *arrivee;
+        *arrivee = *depart;
 
     for(unsigned int i(0); i<depart->getNbRows(); ++i){
         for(unsigned int j(0); j<depart->getNbCols(); ++j){
@@ -211,7 +211,7 @@ Automate* GameOfLife::copy() const{
 }
 
 
- const QColor& GameOfLife::colourize(int value)const {
+const QColor& GameOfLife::colourize(int value)const {
     if (value == 0) return *(new QColor("White"));
     else return *(new QColor("Black"));
 }
@@ -237,44 +237,44 @@ ForestFire& ForestFire::operator=(const ForestFire& a){
 
 
 // Transtion : ici on tient directement compte du voisinage (<> GameOfLife où on délègue à uen fonction countNeighbours() )
-void ForestFire::applyTransition(const Etat* dep, Etat* dest) const
+void ForestFire::applyTransition(const Etat* depart, Etat* arrivee) const
 {
-    if (dep->getNbRows() != dest->getNbRows() || dep->getNbCols() != dest->getNbCols())
-        *dest = *dep;
+    if (depart->getNbRows() != arrivee->getNbRows() || depart->getNbCols() != arrivee->getNbCols())
+        *arrivee = *depart;
 
-    for(unsigned int i(0); i<dep->getNbRows(); ++i)
+    for(unsigned int i(0); i<depart->getNbRows(); ++i)
     {
-        for(unsigned int j(0); j<dep->getNbCols(); ++j)
+        for(unsigned int j(0); j<depart->getNbCols(); ++j)
         {
-            if(dep->getCellule(i,j) == fire){
-                if(i-1 >= 0 && dep->getCellule(i-1,j) == tree)
-                    dest->setCellule(i-1,j,2);
-                if(i+1 < dep->getNbRows() && dep->getCellule(i+1,j) == tree)
-                    dest->setCellule(i+1,j,2);
-                if(j-1 >= 0 && dep->getCellule(i,j-1) == tree)
-                    dest->setCellule(i,j-1,2);
-                if(j+1 < dep->getNbCols() && dep->getCellule(i,j+1) == tree)
-                    dest->setCellule(i,j+1,2);
+            if(depart->getCellule(i,j) == fire){
+                if(i-1 >= 0 && depart->getCellule(i-1,j) == tree)
+                    arrivee->setCellule(i-1,j,2);
+                if(i+1 < depart->getNbRows() && depart->getCellule(i+1,j) == tree)
+                    arrivee->setCellule(i+1,j,2);
+                if(j-1 >= 0 && depart->getCellule(i,j-1) == tree)
+                    arrivee->setCellule(i,j-1,2);
+                if(j+1 < depart->getNbCols() && depart->getCellule(i,j+1) == tree)
+                    arrivee->setCellule(i,j+1,2);
                 
                 if(typeN >= 1){ // Alors voisinage de Moore
                     // On se contente de checker les 4 cases suivantes correspondant aux coins
 
                     // superior left cell
-                    if(i-1>=0 && j-1>=0 && dep->getCellule(i-1,j-1) == tree)
-                        dest->setCellule(i-1,j-1,2);
+                    if(i-1>=0 && j-1>=0 && depart->getCellule(i-1,j-1) == tree)
+                        arrivee->setCellule(i-1,j-1,2);
                     // inferior left cell
-                    if(i-1>=0 && j+1<dep->getNbCols() && dep->getCellule(i-1,j+1) == tree)
-                        dest->setCellule(i-1,j-1,2);
+                    if(i-1>=0 && j+1<depart->getNbCols() && depart->getCellule(i-1,j+1) == tree)
+                        arrivee->setCellule(i-1,j-1,2);
                     // superior left cell
-                    if(i+1<dep->getNbRows() && j-1>=0 && dep->getCellule(i+1,j-1) == tree)
-                        dest->setCellule(i-1,j-1,2);
+                    if(i+1<depart->getNbRows() && j-1>=0 && depart->getCellule(i+1,j-1) == tree)
+                        arrivee->setCellule(i-1,j-1,2);
                     // superior left cell
-                    if(i+1<dep->getNbRows() && j+1<dep->getNbCols() && dep->getCellule(i+1,j+1) == tree)
-                        dest->setCellule(i-1,j-1,2);
+                    if(i+1<depart->getNbRows() && j+1<depart->getNbCols() && depart->getCellule(i+1,j+1) == tree)
+                        arrivee->setCellule(i-1,j-1,2);
                 }
 
                 // From fire you become ashes
-                dest->setCellule(i,j,3);
+                arrivee->setCellule(i,j,3);
             }
         }
     }
@@ -283,4 +283,17 @@ void ForestFire::applyTransition(const Etat* dep, Etat* dest) const
 Automate* ForestFire::copy() const{
     Automate* temp = new ForestFire(*this);
     return temp;
+}
+
+
+const QColor& ForestFire::colourize(int value) const
+{
+    switch(value){
+        case(0): return *(new QColor("White")); break;
+        case(1): return *(new QColor("Green")); break;
+        case(2): return *(new QColor("Red")); break;
+        case(3): return *(new QColor("Grey")); break;
+    default: return *(new QColor("Black")); break;
+    }
+
 }

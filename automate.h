@@ -25,7 +25,7 @@ public:
     virtual ~Automate() = default;
 
     // Applique la transition sur depart et stocke dans arrivee
-    virtual void applyTransition(Etat* depart, Etat* arrivee) const = 0;
+    virtual void applyTransition(const Etat* depart, Etat* arrivee) const = 0;
 
     // Renvoie un pointeur vers une copie de l'automate
     virtual Automate* copy() const = 0;
@@ -54,14 +54,14 @@ private:
 public:
     Automate1D(unsigned short int num);
     Automate1D(const std::string& num);
-    ~Automate1D()= default;
+    virtual ~Automate1D()= default;
     Automate1D(const Automate1D& a);
     Automate1D& operator=(const Automate1D& a);
     virtual Automate* copy() const;
     unsigned short int getNumero() const { return numero; }
     const std::string& getNumeroBit() const { return numeroBit; }
 
-    virtual void applyTransition(Etat* depart, Etat* arrivee) const;
+    virtual void applyTransition(const Etat* depart, Etat* arrivee) const;
     virtual const QColor& colourize(int value)const;
 };
 
@@ -86,7 +86,7 @@ private:
     Neighbourhood typeN;
 public:
     GameOfLife(unsigned short int min=2, unsigned short int max=3, unsigned short int exact=3, Neighbourhood n=VonNeumann); // Constructeur, par défaut c'est un jeu de la vie
-    ~GameOfLife()=default;
+    virtual ~GameOfLife()=default;
     GameOfLife(const GameOfLife& a);// Constructeur de recopie
     GameOfLife& operator=(const GameOfLife& a); // operateur d'affectation
     virtual Automate* copy() const;
@@ -95,7 +95,7 @@ public:
     unsigned short int getExactNeighbours() const { return exactNeighbours; } // Accesseur
     unsigned short int getNeighbourhood() const { return typeN; }
     unsigned short int countNeighbours(const Etat& e, unsigned short int row, unsigned short int col) const;// Fonction qui compte les voisis d'une cellule
-    virtual void applyTransition(Etat* depart, Etat* arrivee) const;
+    virtual void applyTransition(const Etat* depart, Etat* arrivee) const;
     // nb: le test pour savoir si r,c ne sont pas outofbound se fait dans etat
     virtual const QColor& colourize(int value) const;
 };
@@ -111,12 +111,13 @@ private:
     Neighbourhood typeN;
 public:
     ForestFire(Neighbourhood n=VonNeumann);
-    virtual ~ForestFire();
+    virtual ~ForestFire()=default;
     ForestFire(const ForestFire& a);
     ForestFire& operator=(const ForestFire& a);
     virtual Automate* copy() const;
     unsigned short int getNeighbourhood() const { return typeN; }
-    virtual void applyTransition(const Etat* dep, Etat* dest) const;
+    virtual void applyTransition(const Etat* depart, Etat* arrivee) const;
+    virtual const QColor& colourize(int value) const;
 };
 
 

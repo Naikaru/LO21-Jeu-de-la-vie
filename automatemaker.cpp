@@ -134,7 +134,7 @@ void Automatemaker::creatAuto(){
     }
     // Si c'est un jeu de la vie
     if(choixAutomate->currentText() == "Jeu de la vie"){
-       monAutomate = new Automate2D(minVoisins->value(),maxVoisins->value(),exactVoisins->value());
+       monAutomate = new GameOfLife(minVoisins->value(),maxVoisins->value(),exactVoisins->value());
        monEtat = new Etat(rows->value(),column->value());
        monSimu = new Simulateur(monAutomate,monEtat,buffer->value());
        mafenetre = new fenAutomate2D("2D : "+ nomAutomate->text(),monSimu);
