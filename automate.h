@@ -114,7 +114,7 @@ public:
     virtual ~ForestFire();
     ForestFire(const ForestFire& a);
     ForestFire& operator=(const ForestFire& a);
-
+    virtual Automate* copy() const;
     unsigned short int getNeighbourhood() const { return typeN; }
     virtual void applyTransition(const Etat* dep, Etat* dest) const;
 };

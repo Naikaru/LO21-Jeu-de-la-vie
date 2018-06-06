@@ -280,4 +280,7 @@ void ForestFire::applyTransition(const Etat* dep, Etat* dest) const
     }
 }
 
-
+Automate* ForestFire::copy() const{
+    Automate* temp = new ForestFire(*this);
+    return temp;
+}
