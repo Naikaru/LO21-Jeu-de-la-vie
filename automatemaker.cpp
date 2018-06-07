@@ -135,10 +135,9 @@ void Automatemaker::creatAuto(){
     // Si c'est un jeu de la vie
     if(choixAutomate->currentText() == "Jeu de la vie"){
        monAutomate = new GameOfLife(minVoisins->value(),maxVoisins->value(),exactVoisins->value());
-       std::cout << "Max : " << maxVoisins->value() << " et min : " << minVoisins->value() << "\n";
        monEtat = new Etat(rows->value(),column->value());
        monSimu = new Simulateur(monAutomate,monEtat,buffer->value());
-       mafenetre = new fenAutomate2D("2D : "+ nomAutomate->text(),monSimu);
+       mafenetre = new fenAutomate2D("GameOfLife : "+ nomAutomate->text(),monSimu);
       }
     // Si c'est un automate 1D
     else if(choixAutomate->currentText() == "Automate 1D"){
@@ -148,6 +147,14 @@ void Automatemaker::creatAuto(){
         monSimu = new Simulateur(monAutomate,monEtat,buffer->value());
         mafenetre = new fenAutomate1D("1D : "+ nomAutomate->text(),monSimu);
      }
+    // Si c'est un Feu de Forêts
+    else if(choixAutomate->currentText() == "Feu de forêts"){
+        monAutomate = new ForestFire();
+        monEtat = new Etat(rows->value(),column->value());
+        //monEtat->setAllTabValue(1);
+        monSimu = new Simulateur(monAutomate, monEtat, buffer->value());
+        mafenetre = new fenAutomate2D("ForestFire : "+ nomAutomate->text(),monSimu);
+    }
     else return;
     this->hide(); // On cache la fenêtre de choix
     emit newAuto(mafenetre); // Et on envoie un signal pour créer un nouvel automate
@@ -177,7 +184,8 @@ void Automatemaker::statusChanged(QString a){
                 rows->setValue(1);
                 rows->setEnabled(false);
                 column->setEnabled(true);
-            }else if (a == "Jeu de la vie"){
+            }
+            else if (a == "Jeu de la vie"){
                 minVoisinsLabel->setVisible(true);
                 minVoisins->setVisible(true);
                 maxVoisinsLabel->setVisible(true);
@@ -200,10 +208,28 @@ void Automatemaker::statusChanged(QString a){
                 rows->setEnabled(true);
                 column->setEnabled(true);
             }
+            else if (a == "Feu de forêts"){
+                minVoisinsLabel->setVisible(false);
+                minVoisins->setVisible(false);
+                maxVoisinsLabel->setVisible(false);
+                maxVoisins->setVisible(false);
+                exactVoisinsLabel->setVisible(false);
+                exactVoisins->setVisible(false);
+                numeroAutomateLabel->setVisible(false);
+                numeroAutomate->setVisible(false);
+                txtNumeroAutomateLabel->setVisible(false);
+                txtNumeroAutomate->setVisible(false);
+
+                rows->setValue(10);
+                rows->setEnabled(true);
+                column->setEnabled(true);
+                column->setEnabled(true);
+            }
 }
 
 // Fonction initialise la combobox
 void Automatemaker::setAutomateList(){
-    choixAutomate->addItem("Jeu de la vie");
     choixAutomate->addItem("Automate 1D");
+    choixAutomate->addItem("Jeu de la vie");
+    choixAutomate->addItem("Feu de forêts");
 }

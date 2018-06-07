@@ -6,6 +6,8 @@
 #include "automate.h"
 #include "etat.h"
 #include "simulateur.h"
+#include <cstdlib>
+#include <ctime>
 
 #include <QLabel>
 #include <QSpinBox>
@@ -53,6 +55,7 @@ protected:
     QPushButton* BTavancer;
     QPushButton* BTreculer;
     QPushButton* BTplay;
+    QPushButton* BTinit;
     QSlider* mySlider;
     QTimer* myTimer;
     QWidget* myCentralWidget; // Il faut définir un widget pour le centre
@@ -72,6 +75,7 @@ public:
         delete BTavancer;
         delete BTreculer;
         delete BTplay;
+        delete BTinit;
         delete mySlider;
         delete myTimer;
         delete myCentralWidget;
@@ -82,7 +86,7 @@ public slots:
     void slotReculer();
     void slotTimerIntervalChange(int i);
     void slotBtPlayStop();
-
+    void slotBtInit();
 };
 
 
@@ -123,6 +127,7 @@ public slots:
 class fenAutomate2D : public fenAutomate{
 Q_OBJECT
     QTableWidget* maGrid; // La grille affichée
+    unsigned short int probability;
 
 public:
     fenAutomate2D(QString nom, Simulateur* s);
@@ -135,10 +140,10 @@ public:
     void refreshGrid();
     void cellChange(int i, int j); // Fonction qui change la valeur de la cellule en (i,j) (vie si mort, mort si vie) dans la simu et sur la grille
     void adaptGridSize();
+    void initialize(); // test d'initialisation, à passer en slot : initialisation aléatoire ou symétrique
 
 public slots:
     void slotSizeChange(); // Quand la taille de la fenêtre change, on appelle resizeGrid()
     void slotGridClick(QModelIndex j); // Slop appellé quand on clique sur une case, les coordonees sont passés en argument par le signal
-
 };
 #endif // FENAUTOMATE_H

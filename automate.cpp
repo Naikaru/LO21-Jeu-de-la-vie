@@ -74,6 +74,14 @@ Automate1D& Automate1D::operator=(const Automate1D& a){
     return *this;
 }
 
+void Automate1D::changeStatus(unsigned int r, unsigned int c, Etat *e) const
+{
+    if(e->getCellule(r,c) == 0)
+        e->setCellule(r,c,1);
+    else
+        e->setCellule(r,c,0);
+}
+
 
 // Retourne un pointeur sur automate d'un automate1D
 Automate* Automate1D::copy() const{
@@ -82,7 +90,7 @@ Automate* Automate1D::copy() const{
 }
 
 
-const QColor& Automate1D::colourize(int value)const{
+const QColor& Automate1D::colorize(int value)const{
     if (value == 0) return *(new QColor("White"));
     else return *(new QColor("Black"));
 }
@@ -204,6 +212,16 @@ void GameOfLife::applyTransition(Etat* depart, Etat* arrivee) const {
     }
 }
 
+
+void GameOfLife::changeStatus(unsigned int r, unsigned int c, Etat *e) const
+{
+    if(e->getCellule(r,c) == 0)
+        e->setCellule(r,c,1);
+    else
+        e->setCellule(r,c,0);
+}
+
+
 // Retourne un pointeur sur automate d'un GameOfLife
 Automate* GameOfLife::copy() const{
     Automate* temp = new GameOfLife(*this);
@@ -211,7 +229,7 @@ Automate* GameOfLife::copy() const{
 }
 
 
-const QColor& GameOfLife::colourize(int value)const {
+const QColor& GameOfLife::colorize(int value)const {
     if (value == 0) return *(new QColor("White"));
     else return *(new QColor("Black"));
 }
@@ -280,13 +298,29 @@ void ForestFire::applyTransition(Etat *depart, Etat* arrivee) const
     }
 }
 
+
+void ForestFire::changeStatus(unsigned int r, unsigned int c, Etat *e) const
+{
+    unsigned int st = e->getCellule(r,c);
+    if(st == empty)
+        e->setCellule(r,c,tree);
+    else if(st == tree)
+        e->setCellule(r,c,fire);
+    else if(st == fire)
+        e->setCellule(r,c,ashes);
+    else if(st == ashes)
+        e->setCellule(r,c,empty);
+}
+
+
+// Retourne un pointeur sur Automate (polymoprhisme)
 Automate* ForestFire::copy() const{
     Automate* temp = new ForestFire(*this);
     return temp;
 }
 
 
-const QColor& ForestFire::colourize(int value) const
+const QColor& ForestFire::colorize(int value) const
 {
     switch(value){
         case(0): return *(new QColor("White")); break;

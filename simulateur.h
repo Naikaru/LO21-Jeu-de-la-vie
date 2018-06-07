@@ -44,17 +44,21 @@ public:
      // l'element dans la case (R,C) est mis en vie en utilisant la définition de "en vie" de l'automate
      void setAlive(unsigned int r, unsigned int c){
          if(etats == nullptr || etats[rang%nbMaxEtats]==nullptr) throw SimulateurException("Simulateur::setAlive"+ERROR_NO_INIT);
-         myAutomat->setAlive(r,c,getInitialState());}
+         myAutomat->setAlive(r,c,getInitialState()); }
 
      // l'element dans la case (R,C) est tué, en utilisant la def. de l'automate
      void setDead(unsigned int r, unsigned int c){
          if(etats == nullptr || etats[rang%nbMaxEtats]==nullptr) throw SimulateurException("Simulateur::setDead"+ERROR_NO_INIT);
-         myAutomat->setDead(r,c,getInitialState());}
+         myAutomat->setDead(r,c,getInitialState()); }
 
      // renvoie vrai si l'element dans la case (R,C) est en vie, en utilisant la def de l'automate
      bool isAlive(unsigned int r, unsigned int c){
          if(etats == nullptr || etats[rang%nbMaxEtats]==nullptr) throw SimulateurException("Simulateur::isAlive"+ERROR_NO_INIT);
-         return myAutomat->isAlive(r,c,getInitialState());}
+         return myAutomat->isAlive(r,c,getInitialState()); }
+
+     void changeStatus(unsigned int r, unsigned int c) {
+         if(etats == nullptr || etats[rang%nbMaxEtats]==nullptr) throw SimulateurException("Simulateur::changeStatus"+ERROR_NO_INIT);
+         myAutomat->changeStatus(r,c,getInitialState()); }
 
      const Automate& getAutomate(){ return *myAutomat;}
      void setEtatDepart(const Etat& e); // Définit l'état de départ sur l'etat passé en param

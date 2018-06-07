@@ -39,8 +39,11 @@ public:
     // Pour une ligne r et une colonne c, dans l'Etat e, tue la cellule
     virtual void setDead(unsigned int r, unsigned int c, Etat* e) const{ e->setCellule(r,c,0);}
 
+    // Pour changer le contenu d'une case après click de l'utilisateur
+    virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const = 0;
+
     //
-    virtual const QColor& colourize(int value) const = 0;
+    virtual const QColor& colorize(int value) const = 0;
 };
 
 
@@ -62,7 +65,8 @@ public:
     const std::string& getNumeroBit() const { return numeroBit; }
 
     virtual void applyTransition(Etat *depart, Etat* arrivee) const;
-    virtual const QColor& colourize(int value)const;
+    virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
+    virtual const QColor& colorize(int value)const;
 };
 
 short unsigned int NumBitToNum(const std::string& num); // Transforme les string de 0 et de 1 en int
@@ -97,7 +101,8 @@ public:
     unsigned short int countNeighbours(const Etat& e, unsigned short int row, unsigned short int col) const;// Fonction qui compte les voisis d'une cellule
     virtual void applyTransition(Etat* depart, Etat* arrivee) const;
     // nb: le test pour savoir si r,c ne sont pas outofbound se fait dans etat
-    virtual const QColor& colourize(int value) const;
+    virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
+    virtual const QColor& colorize(int value) const;
 };
 
 
@@ -117,7 +122,8 @@ public:
     virtual Automate* copy() const;
     unsigned short int getNeighbourhood() const { return typeN; }
     virtual void applyTransition(Etat* depart, Etat* arrivee) const;
-    virtual const QColor& colourize(int value) const;
+    virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
+    virtual const QColor& colorize(int value) const;
 };
 
 
