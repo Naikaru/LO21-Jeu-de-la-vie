@@ -67,14 +67,15 @@ void Simulateur::next(){
     if (depart==nullptr) throw SimulateurException("Simulateur1D::next->"+ERROR_BAD_START_STATE);
     rang++;
     build(rang%nbMaxEtats);
-    myAutomat->applyTransition(etats[(rang - 1) % nbMaxEtats], etats[rang%nbMaxEtats]);
+    myAutomat->applyTransition(*etats[(rang - 1) % nbMaxEtats], *etats[rang%nbMaxEtats]);
 }
 
 
 const Etat& Simulateur::dernier() const{
     if(etats[rang%nbMaxEtats] != nullptr)
-    return *etats[rang%nbMaxEtats];
-    else return *depart;
+        return *etats[rang%nbMaxEtats];
+    else
+        return *depart;
 }
 
 

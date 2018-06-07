@@ -374,11 +374,11 @@ void fenAutomate2D::refreshGrid(){
     const Etat& dernier = monSimu->dernier();
     int cols = (int) dernier.getNbCols();
     int rows = (int) dernier.getNbRows();
-    const Automate* monauto = &monSimu->getAutomate();
+    const Automate* monAuto = &monSimu->getAutomate();
     adaptGridSize();
     for(int i(0);i<rows;i++){
         for(int j(0);j<cols;j++){
-            maGrid->item(i,j)->setBackgroundColor(monauto->colorize(dernier.getCellule(i,j)));
+            maGrid->item(i,j)->setBackgroundColor(monAuto->colorize(dernier.getCellule(i,j)));
         }
     }
 }
@@ -409,9 +409,13 @@ void fenAutomate2D::slotGridClick(QModelIndex j){
 
 void fenAutomate2D::initialize(){
     std::srand(std::time(NULL));
+    Etat* e = monSimu->getInitialState();
     const Automate* monAuto = &monSimu->getAutomate();
     for(unsigned int i(0); i < maGrid->rowCount(); ++i)
         for(unsigned int j(0); j < maGrid->columnCount(); ++j)
             if(probability >= std::rand()%100)
-                maGrid->item(i,j)->setBackgroundColor(monAuto->colorize(1));
+                e->setCellule(i,j,1);
+                //maGrid->item(i,j)->setBackgroundColor(monAuto->colorize(1));
+    monSimu->reset();
+    refreshGrid();
 }

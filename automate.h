@@ -25,7 +25,7 @@ public:
     virtual ~Automate() = default;
 
     // Applique la transition sur depart et stocke dans arrivee
-    virtual void applyTransition(Etat* depart, Etat* arrivee) const = 0;
+    virtual void applyTransition(const Etat& depart, Etat& arrivee) const = 0;
 
     // Renvoie un pointeur vers une copie de l'automate
     virtual Automate* copy() const = 0;
@@ -64,7 +64,7 @@ public:
     unsigned short int getNumero() const { return numero; }
     const std::string& getNumeroBit() const { return numeroBit; }
 
-    virtual void applyTransition(Etat *depart, Etat* arrivee) const;
+    virtual void applyTransition(const Etat& depart, Etat& arrivee) const;
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
     virtual const QColor& colorize(int value)const;
 };
@@ -77,7 +77,7 @@ std::string NumToNumBit(short unsigned int num); // Transforme les int en string
  **********************************************/
 
 // Définition du voisinage : Moore 8 voisins, VonNeumann : 4  voisins
-enum Neighbourhood { VonNeumann, Moore };
+enum Neighbourhood { VonNeumann=0, Moore=1 };
 
 /***** Jeu de la vie *****/
 
@@ -99,7 +99,7 @@ public:
     unsigned short int getExactNeighbours() const { return exactNeighbours; } // Accesseur
     unsigned short int getNeighbourhood() const { return typeN; }
     unsigned short int countNeighbours(const Etat& e, unsigned short int row, unsigned short int col) const;// Fonction qui compte les voisis d'une cellule
-    virtual void applyTransition(Etat* depart, Etat* arrivee) const;
+    virtual void applyTransition(const Etat& depart, Etat &arrivee) const;
     // nb: le test pour savoir si r,c ne sont pas outofbound se fait dans etat
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
     virtual const QColor& colorize(int value) const;
@@ -121,7 +121,7 @@ public:
     ForestFire& operator=(const ForestFire& a);
     virtual Automate* copy() const;
     unsigned short int getNeighbourhood() const { return typeN; }
-    virtual void applyTransition(Etat* depart, Etat* arrivee) const;
+    virtual void applyTransition(const Etat& depart, Etat& arrivee) const;
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
     virtual const QColor& colorize(int value) const;
 };

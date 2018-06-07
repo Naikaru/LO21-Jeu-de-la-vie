@@ -46,20 +46,20 @@ Automate1D::Automate1D(const std::string& num) :
 {}
 
 // Fonction d'application de la transition de Automate1D
-void Automate1D::applyTransition(Etat* depart, Etat* arrivee) const {
-    if(depart->getNbRows() != 1) throw AutomateException("Automate1D::applyTransition ->" + ERROR_BAD_ETAT);
-    if(arrivee->getNbRows() != 1) throw AutomateException("Automate1D::applyTransition ->" + ERROR_BAD_ETAT);
+void Automate1D::applyTransition(const Etat& depart, Etat& arrivee) const {
+    if(depart.getNbRows() != 1) throw AutomateException("Automate1D::applyTransition ->" + ERROR_BAD_ETAT);
+    if(arrivee.getNbRows() != 1) throw AutomateException("Automate1D::applyTransition ->" + ERROR_BAD_ETAT);
 
-    if (depart->getNbCols() != arrivee->getNbCols()) arrivee->setCols(depart->getNbCols());
+    if (depart.getNbCols() != arrivee.getNbCols()) arrivee.setCols(depart.getNbCols());
 
-    for (unsigned int i = 0; i < depart->getNbCols(); i++)
+    for (unsigned int i = 0; i < depart.getNbCols(); i++)
     {
         unsigned short int conf(0);
-        if (i > 0) conf += depart->getCellule(0, i - 1) * 4;
-            conf += depart->getCellule(0, i) * 2;
-        if (i < depart->getNbCols()-1) conf += depart->getCellule(0,i + 1);
+        if (i > 0) conf += depart.getCellule(0, i - 1) * 4;
+            conf += depart.getCellule(0, i) * 2;
+        if (i < depart.getNbCols()-1) conf += depart.getCellule(0,i + 1);
 
-        arrivee->setCellule(0, i, numeroBit[7-conf]-'0');
+        arrivee.setCellule(0, i, numeroBit[7-conf]-'0');
     }
 }
 
@@ -137,7 +137,7 @@ unsigned short int GameOfLife::countNeighbours(const Etat& e, unsigned short int
     if(col+1 < e.getNbCols())   // right cell
         total += e.getCellule(row,col+1);
 
-    if(typeN >= 1){ // Alors voisinage de Moore
+    if(typeN == Moore){ // Alors voisinage de Moore
         // On se contente de checker les 4 cases suivantes correspondant aux coins
 
         if(row-1>=0 && col-1>=0)                // superior left cell
@@ -194,19 +194,23 @@ unsigned short int GameOfLife::countNeighbours(const Etat& e, unsigned short int
 
 
 // Fonction qui applique la transition de GameOfLife
-void GameOfLife::applyTransition(Etat* depart, Etat* arrivee) const {
-    if (depart->getNbRows() != arrivee->getNbRows() || depart->getNbCols() != arrivee->getNbCols())
-        *arrivee = *depart;
+void GameOfLife::applyTransition(const Etat& depart, Etat& arrivee) const {
+    if (depart.getNbRows() != arrivee.getNbRows() || depart.getNbCols() != arrivee.getNbCols())
+        arrivee = depart;
 
-    for(unsigned int i(0); i<depart->getNbRows(); ++i){
-        for(unsigned int j(0); j<depart->getNbCols(); ++j){
-            unsigned short int nbNeighbours = countNeighbours(*depart, i, j);
-            if(depart->getCellule(i,j)==1 && (nbNeighbours < minNeighbours || nbNeighbours > maxNeighbours))
-                arrivee->setCellule(i,j,0);
-            else
-            {
-                if(nbNeighbours == exactNeighbours)
-                    arrivee->setCellule(i,j,1);
+    for(unsigned int i(0); i<depart.getNbRows(); ++i){
+        for(unsigned int j(0); j<depart.getNbCols(); ++j){
+            unsigned short int nbNeighbours = countNeighbours(depart, i, j);
+            if(depart.getCellule(i,j)==1){
+                if(nbNeighbours < minNeighbours || nbNeighbours > maxNeighbours)
+                    arrivee.setCellule(i,j,0);
+                else
+                    arrivee.setCellule(i,j,1);
+            }
+            else{
+                if(nbNeighbours == exactNeighbours){
+                    arrivee.setCellule(i,j,1);
+                }
             }
         }
     }
@@ -255,44 +259,51 @@ ForestFire& ForestFire::operator=(const ForestFire& a){
 
 
 // Transtion : ici on tient directement compte du voisinage (<> GameOfLife où on délègue à uen fonction countNeighbours() )
-void ForestFire::applyTransition(Etat *depart, Etat* arrivee) const
+void ForestFire::applyTransition(const Etat& depart, Etat& arrivee) const
 {
-    if (depart->getNbRows() != arrivee->getNbRows() || depart->getNbCols() != arrivee->getNbCols())
-        *arrivee = *depart;
+    unsigned int nbRows = depart.getNbRows();
+    unsigned int nbCols = depart.getNbCols();
 
-    for(unsigned int i(0); i<depart->getNbRows(); ++i)
+    if (nbRows != arrivee.getNbRows() || nbCols != arrivee.getNbCols())
+        arrivee = depart;
+
+    for(unsigned int i(0); i<nbRows; ++i)
     {
-        for(unsigned int j(0); j<depart->getNbCols(); ++j)
+        for(unsigned int j(0); j<nbCols; ++j)
         {
-            if(depart->getCellule(i,j) == fire){
-                if(i-1 >= 0 && depart->getCellule(i-1,j) == tree)
-                    arrivee->setCellule(i-1,j,2);
-                if(i+1 < depart->getNbRows() && depart->getCellule(i+1,j) == tree)
-                    arrivee->setCellule(i+1,j,2);
-                if(j-1 >= 0 && depart->getCellule(i,j-1) == tree)
-                    arrivee->setCellule(i,j-1,2);
-                if(j+1 < depart->getNbCols() && depart->getCellule(i,j+1) == tree)
-                    arrivee->setCellule(i,j+1,2);
-                
+            if(depart.getCellule(i,j) == fire){
+                if((i>=1) && (depart.getCellule(i-1,j) == tree))
+                    arrivee.setCellule(i-1,j,2);
+
+                if((i+1<nbRows) && (depart.getCellule(i+1,j) == tree))
+                    arrivee.setCellule(i+1,j,2);
+
+                if((j>=1) && (depart.getCellule(i,j-1) == tree))
+                    arrivee.setCellule(i,j-1,2);
+
+                if((j+1<nbCols) && (depart.getCellule(i,j+1) == tree))
+                    arrivee.setCellule(i,j+1,2);
+
                 if(typeN >= 1){ // Alors voisinage de Moore
                     // On se contente de checker les 4 cases suivantes correspondant aux coins
 
                     // superior left cell
-                    if(i-1>=0 && j-1>=0 && depart->getCellule(i-1,j-1) == tree)
-                        arrivee->setCellule(i-1,j-1,2);
+                    if((i>=1) && (j>=1) && (depart.getCellule(i-1,j-1) == tree))
+                        arrivee.setCellule(i-1,j-1,2);
+                    // superior right cell
+                    if((i>=1) && (j+1<nbCols) && (depart.getCellule(i-1,j+1) == tree))
+                        arrivee.setCellule(i-1,j+1,2);
                     // inferior left cell
-                    if(i-1>=0 && j+1<depart->getNbCols() && depart->getCellule(i-1,j+1) == tree)
-                        arrivee->setCellule(i-1,j-1,2);
-                    // superior left cell
-                    if(i+1<depart->getNbRows() && j-1>=0 && depart->getCellule(i+1,j-1) == tree)
-                        arrivee->setCellule(i-1,j-1,2);
-                    // superior left cell
-                    if(i+1<depart->getNbRows() && j+1<depart->getNbCols() && depart->getCellule(i+1,j+1) == tree)
-                        arrivee->setCellule(i-1,j-1,2);
+                    if((i+1<nbRows) && (j>=1) && (depart.getCellule(i+1,j-1) == tree))
+                        arrivee.setCellule(i+1,j-1,2);
+                    // inferior right cell
+                    if((i+1<nbRows) && (j+1<nbCols) && (depart.getCellule(i+1,j+1) == tree))
+                        arrivee.setCellule(i+1,j+1,2);
                 }
-
                 // From fire you become ashes
-                arrivee->setCellule(i,j,3);
+                arrivee.setCellule(i,j,3);
+            }else{
+                arrivee.setCellule(i,j, depart.getCellule(i,j));
             }
         }
     }

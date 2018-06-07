@@ -1,11 +1,12 @@
 #include "etat.h"
 std::string Etat::ERROR_BAD_INDEX = "Index passe en argument incorrect";
 
-Etat::Etat(unsigned short int Rows, unsigned short int Cols):nbRows(Rows),nbCols(Cols)
+Etat::Etat(unsigned short int Rows, unsigned short int Cols):
+    nbRows(Rows),nbCols(Cols), grid(Rows, std::vector<int>(Cols, 0))
 {
-    unsigned short int i;
-    grid.resize(nbRows);
-    for(i=0; i<nbRows; i++) grid[i].resize(nbCols);
+//    unsigned short int i;
+//    grid.resize(nbRows);
+//    for(i=0; i<nbRows; i++) grid[i].resize(nbCols);
 }
 
 int Etat::getCellule(unsigned short int i, unsigned short int j) const{
@@ -18,15 +19,11 @@ void Etat::setCellule(unsigned short int i,unsigned short int j, int val){
     grid[i][j] = val;
 }
 
-Etat::Etat(const Etat &e):nbRows(e.nbRows),nbCols(e.nbCols)
+Etat::Etat(const Etat &e):nbRows(e.nbRows),nbCols(e.nbCols), grid(e.nbRows, std::vector<int>(e.nbCols,0))
 {
-    unsigned short int i,j;
-    grid.resize(nbRows);
-    for(i=0; i<nbRows; i++) grid[i].resize(nbCols);
-
-    for(i=0;i<e.nbRows;i++){
-        for(j=0;j<e.nbCols;j++) grid[i][j] = e.grid[i][j];
-    }
+    for(unsigned int i=0;i<e.nbRows;i++)
+        for(unsigned int j=0;j<e.nbCols;j++)
+            grid[i][j] = e.grid[i][j];
 }
 
 Etat& Etat::operator=(const Etat& e){
@@ -39,7 +36,8 @@ Etat& Etat::operator=(const Etat& e){
     for(i=0; i<nbRows; i++) grid[i].resize(nbCols);
 
     for(i=0;i<e.nbRows;i++)
-        for(j=0;j<e.nbCols;j++) grid[i][j] = e.grid[i][j];
+        for(j=0;j<e.nbCols;j++)
+            grid[i][j] = e.grid[i][j];
 
     return *this;
 }
