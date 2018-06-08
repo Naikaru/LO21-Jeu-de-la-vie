@@ -60,7 +60,8 @@ protected:
     QTimer* myTimer;
     QWidget* myCentralWidget; // Il faut définir un widget pour le centre
    //
-     bool playPause;
+    unsigned short int probability;
+    bool playPause;
     void UImaker(); // Fonction qui fait l'interface, pour eviter d'avoir 2x le même morceau de code pour les 2 constructeurs
 
 public:
@@ -68,6 +69,7 @@ public:
     fenAutomate(QString nom, Simulateur* s);
     virtual void avancer() = 0;
     virtual void reculer() = 0;
+    virtual void initialize() = 0;
     virtual ~fenAutomate(){
         if(monSimu != nullptr)
         delete monSimu;
@@ -84,9 +86,9 @@ public:
 public slots:
     void slotAvancer();
     void slotReculer();
+    void slotInit();
     void slotTimerIntervalChange(int i);
     void slotBtPlayStop();
-    void slotBtInit();
 };
 
 
@@ -112,6 +114,7 @@ public:
     virtual ~fenAutomate1D(){}
     virtual void avancer(){ return; }
     virtual void reculer(){ return; }
+    virtual void initialize();
 
 public slots:
     void synchronizeNumToNumBit(int n);
@@ -127,7 +130,6 @@ public slots:
 class fenAutomate2D : public fenAutomate{
 Q_OBJECT
     QTableWidget* maGrid; // La grille affichée
-    unsigned short int probability;
 
 public:
     fenAutomate2D(QString nom, Simulateur* s);
@@ -137,10 +139,10 @@ public:
     void resizeGrid(); // Redimensionne la grille pour que ça soit joli par rapport à la dimension de la fenêtre (uniquement)
     virtual void avancer(); // Fonction qui fait avancer la simulation
     virtual void reculer(); // Fonction qui fait reculer la simulation
+    virtual void initialize(); // test d'initialisation, à passer en slot : initialisation aléatoire ou symétrique
     void refreshGrid();
     void cellChange(int i, int j); // Fonction qui change la valeur de la cellule en (i,j) (vie si mort, mort si vie) dans la simu et sur la grille
     void adaptGridSize();
-    void initialize(); // test d'initialisation, à passer en slot : initialisation aléatoire ou symétrique
 
 public slots:
     void slotSizeChange(); // Quand la taille de la fenêtre change, on appelle resizeGrid()

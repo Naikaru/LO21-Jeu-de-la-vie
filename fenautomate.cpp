@@ -1,15 +1,14 @@
 #include "fenautomate.h"
 
-fenAutomate::fenAutomate(Simulateur* s):monSimu(s)
+fenAutomate::fenAutomate(Simulateur* s):monSimu(s), probability(60)
 {
     setWindowTitle("Automate anonyme");
     UImaker();
 }
 
 
-fenAutomate::fenAutomate(QString nom, Simulateur* s)
+fenAutomate::fenAutomate(QString nom, Simulateur* s): monSimu(s), probability(60)
 {
-    monSimu = s;
     setWindowTitle(nom);
     UImaker();
 }
@@ -40,12 +39,13 @@ void fenAutomate::UImaker(){
     connect(mySlider,SIGNAL(sliderMoved(int)),this,SLOT(slotTimerIntervalChange(int)));
     connect(BTavancer,SIGNAL(clicked()),this,SLOT(slotAvancer()));
     connect(BTreculer,SIGNAL(clicked()),this,SLOT(slotReculer()));
-    //connect(BTinit, SIGNAL(clicked()), this, SLOT(initialize()));
+    connect(BTinit, SIGNAL(clicked()),this,SLOT(slotInit()));
 
     QHBoxLayout* BTLayout = new QHBoxLayout;
     BTLayout->addWidget(BTreculer);
     BTLayout->addWidget(BTplay);
     BTLayout->addWidget(BTavancer);
+    BTLayout->addWidget(BTinit);
 
     monLayout = new QGridLayout;
     monLayout->addLayout(BTLayout,90,0,5,100);
@@ -84,19 +84,9 @@ void fenAutomate::slotReculer(){
     reculer();
 }
 
-
-void fenAutomate::slotBtInit(){
-/*
-    std::srand(std::time(NULL));
-    const Automate* monAuto = &monSimu->getAutomate();
-    for(unsigned int i(0); i < maGrid->rowCount(); ++i)
-        for(unsigned int j(0); j < maGrid->columnCount(); ++j)
-            if(probability >= std::rand()%100)
-                maGrid->item(i,j)->setBackgroundColor(monAuto->colorize(1));
-*/
+void fenAutomate::slotInit(){
+    initialize();
 }
-
-
 
 
 
@@ -245,6 +235,27 @@ void fenAutomate1D::cellActivation(QModelIndex indx)
 }
 
 
+void fenAutomate1D::initialize()
+{
+    std::srand(std::time(NULL));
+    for(unsigned int i(0); i<dimension; ++i)
+    {
+        if(probability >= std::rand()%100)
+            depart->item(0,i)->setBackgroundColor("green");
+        else
+            depart->item(0,i)->setBackgroundColor("white");
+    }
+/*
+    Etat* e = monSimu->getInitialState();
+    const Automate* monAuto = &monSimu->getAutomate();
+    for(unsigned int i(0); i < maGrid->rowCount(); ++i)
+        for(unsigned int j(0); j < maGrid->columnCount(); ++j)
+                //maGrid->item(i,j)->setBackgroundColor(monAuto->colorize(1));
+    monSimu->reset();
+    refreshGrid();
+*/
+}
+
 void fenAutomate1D::simulate(){
     unsigned int rule = num->value();
     Automate* a = new Automate1D(rule);
@@ -284,7 +295,7 @@ void fenAutomate1D::simulate(){
 
 
 
-fenAutomate2D::fenAutomate2D(QString nom, Simulateur* s):fenAutomate(nom,s), probability(60) {
+fenAutomate2D::fenAutomate2D(QString nom, Simulateur* s):fenAutomate(nom,s) {
     maGrid = new QTableWidget(s->getInitialState()->getNbRows(),s->getInitialState()->getNbCols());
     monLayout->addWidget(maGrid,0,0,90,100);
     maGrid->horizontalHeader()->hide();
@@ -298,7 +309,6 @@ fenAutomate2D::fenAutomate2D(QString nom, Simulateur* s):fenAutomate(nom,s), pro
           maGrid->setItem(i,j,new QTableWidgetItem(""));
         }
     }
-    initialize();
     resizeGrid();
     connect(maGrid,SIGNAL(clicked(QModelIndex)),this,SLOT(slotGridClick(QModelIndex)));
     //monSimu->reset();
@@ -371,7 +381,6 @@ void fenAutomate2D::adaptGridSize(){
     }
 }
 
-
 void fenAutomate2D::refreshGrid(){
     const Etat& dernier = monSimu->dernier();
     int cols = (int) dernier.getNbCols();
@@ -415,10 +424,13 @@ void fenAutomate2D::initialize(){
     Etat* e = monSimu->getInitialState();
     const Automate* monAuto = &monSimu->getAutomate();
     for(unsigned int i(0); i < maGrid->rowCount(); ++i)
-        for(unsigned int j(0); j < maGrid->columnCount(); ++j)
+        for(unsigned int j(0); j < maGrid->columnCount(); ++j){
             if(probability >= std::rand()%100)
                 e->setCellule(i,j,1);
                 //maGrid->item(i,j)->setBackgroundColor(monAuto->colorize(1));
+            else
+                e->setCellule(i,j,0);
+        }
     monSimu->reset();
     refreshGrid();
 }
