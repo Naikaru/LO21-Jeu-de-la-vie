@@ -264,8 +264,8 @@ void ForestFire::applyTransition(const Etat& depart, Etat& arrivee) const
     unsigned int nbRows = depart.getNbRows();
     unsigned int nbCols = depart.getNbCols();
 
-    if (nbRows != arrivee.getNbRows() || nbCols != arrivee.getNbCols())
-        arrivee = depart;
+    //if (nbRows != arrivee.getNbRows() || nbCols != arrivee.getNbCols())
+    arrivee = depart;
 
     for(unsigned int i(0); i<nbRows; ++i)
     {
@@ -302,8 +302,6 @@ void ForestFire::applyTransition(const Etat& depart, Etat& arrivee) const
                 }
                 // From fire you become ashes
                 arrivee.setCellule(i,j,3);
-            }else{
-                arrivee.setCellule(i,j, depart.getCellule(i,j));
             }
         }
     }

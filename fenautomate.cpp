@@ -370,6 +370,8 @@ void fenAutomate2D::adaptGridSize(){
         }
     }
 }
+
+
 void fenAutomate2D::refreshGrid(){
     const Etat& dernier = monSimu->dernier();
     int cols = (int) dernier.getNbCols();
@@ -382,6 +384,7 @@ void fenAutomate2D::refreshGrid(){
         }
     }
 }
+
 
 void fenAutomate2D::avancer(){
     monSimu->next();
