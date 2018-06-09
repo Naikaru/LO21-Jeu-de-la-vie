@@ -1,16 +1,16 @@
 <RCC>
     <qresource prefix="/">
-        <file>rubbish-bin.png</file>
-        <file>plus.png</file>
-        <file>error.png</file>
-        <file>cascad.png</file>
-        <file>close-all.png</file>
-        <file>close-one.png</file>
-        <file>bacteria(1).png</file>
-        <file>bacteria.png</file>
-        <file>virus(1).png</file>
-        <file>virus.png</file>
-        <file>pause.png</file>
-        <file>play-button.png</file>
+        <file>img/play-button.png</file>
+        <file>img/pause.png</file>
+        <file>img/virus(1).png</file>
+        <file>img/virus.png</file>
+        <file>img/bacteria(1).png</file>
+        <file>img/bacteria.png</file>
+        <file>img/close-all.png</file>
+        <file>img/close-one.png</file>
+        <file>img/cascad.png</file>
+        <file>img/error.png</file>
+        <file>img/plus.png</file>
+        <file>img/rubbish-bin.png</file>
     </qresource>
 </RCC>
