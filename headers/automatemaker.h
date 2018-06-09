@@ -15,6 +15,12 @@
 #include "headers/fenautomate.h"
 #include "headers/automate.h"
 #include <QMessageBox>
+#include "headers/gameoflife.h"
+#include "headers/forestfire.h"
+#include "headers/fenautomate1d.h"
+#include "headers/fenautomate2d.h"
+#include "headers/forestfire.h"
+#include "headers/automate1d.h"
 
 //   TODO  //
 //
