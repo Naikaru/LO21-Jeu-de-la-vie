@@ -1,13 +1,13 @@
 #include "headers/fenautomate.h"
 
-fenAutomate::fenAutomate(Simulateur* s):monSimu(s), probability(60)
+fenAutomate::fenAutomate(Simulateur* s):monSimu(s)
 {
     setWindowTitle("Automate anonyme");
     UImaker();
 }
 
 
-fenAutomate::fenAutomate(QString nom, Simulateur* s): monSimu(s), probability(60)
+fenAutomate::fenAutomate(QString nom, Simulateur* s): monSimu(s)
 {
     setWindowTitle(nom);
     UImaker();
@@ -25,6 +25,10 @@ void fenAutomate::UImaker(){
     BTreculer = new QPushButton(QIcon(":/img/backward.png"),"",myCentralWidget);
     BTplay = new QPushButton(QIcon(":/img/play-button.png"),"", myCentralWidget);
     BTinit = new QPushButton(QIcon(":/img/shuffle.png"),"", myCentralWidget);
+    choixInit = new QComboBox();
+    choixInit->addItem("Random");
+    choixInit->addItem("Symetric");
+
     BTplay->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
     BTplay->setFlat(true);
     BTreculer->setFlat(true);
@@ -51,6 +55,7 @@ void fenAutomate::UImaker(){
     BTLayout->addWidget(BTplay);
     BTLayout->addWidget(BTavancer);
     BTLayout->addWidget(BTinit);
+    BTLayout->addWidget(choixInit);
 
     monLayout = new QGridLayout;
     monLayout->addLayout(BTLayout,90,0,5,100);

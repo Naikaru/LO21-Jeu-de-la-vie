@@ -169,10 +169,8 @@ fenAutomate1D::fenAutomate1D(QString nom, Simulateur *s): fenAutomate(nom,s)
     monLayout->addWidget(maGrid,0,0,90,100);
     maGrid->horizontalHeader()->hide();
     maGrid->verticalHeader()->hide();
-    maGrid->setFixedSize(1000, 500);
 
     unsigned int cols = monSimu->dernier().getNbCols();
-    //unsigned int rows = monSimu->dernier().getNbRows();
 
     for(unsigned int j(0);j<cols;j++){
       maGrid->setItem(0,j,new QTableWidgetItem(""));
@@ -187,7 +185,6 @@ fenAutomate1D::fenAutomate1D(QString nom, Simulateur *s): fenAutomate(nom,s)
 
 void fenAutomate1D::resizeGrid(){
     unsigned int cols = monSimu->dernier().getNbCols();
-    //unsigned int rows = monSimu->dernier().getNbRows();
     unsigned int rows = maGrid->rowCount();
 
     //adaptGridSize();
@@ -295,6 +292,7 @@ void fenAutomate1D::slotSizeChange(){
 void fenAutomate1D::initialize()
 {
     std::srand(std::time(NULL));
+    unsigned short int probability = std::rand()%100;
     Etat* e = monSimu->getInitialState();
     const Automate* monAuto = &monSimu->getAutomate();
     for(unsigned int j(0); j < maGrid->columnCount(); ++j){

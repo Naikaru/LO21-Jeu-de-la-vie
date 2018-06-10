@@ -21,6 +21,7 @@
 #include <QSize>
 #include <QTimer>
 #include <QSlider>
+#include <QComboBox>
 #include <QSizePolicy>
 
 //   TODO  //
@@ -56,11 +57,11 @@ protected:
     QPushButton* BTreculer;
     QPushButton* BTplay;
     QPushButton* BTinit;
+    QComboBox* choixInit;
     QSlider* mySlider;
     QTimer* myTimer;
     QWidget* myCentralWidget; // Il faut définir un widget pour le centre
    //
-    unsigned short int probability;
     bool playPause;
     void UImaker(); // Fonction qui fait l'interface, pour eviter d'avoir 2x le même morceau de code pour les 2 constructeurs
 
@@ -78,6 +79,7 @@ public:
         delete BTreculer;
         delete BTplay;
         delete BTinit;
+        delete choixInit;
         delete mySlider;
         delete myTimer;
         delete myCentralWidget;

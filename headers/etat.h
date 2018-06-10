@@ -33,7 +33,7 @@ class Etat
     unsigned short int nbCols;
 
 public:
-    Etat( unsigned short int Rows=1,unsigned short int Cols=10);
+    Etat(unsigned short int Rows=10,unsigned short int Cols=10);
     Etat(const Etat& e);
     Etat& operator=(const Etat& e);
 
