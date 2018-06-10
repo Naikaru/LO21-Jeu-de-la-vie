@@ -11,7 +11,7 @@ class abstractAutomateFactory
 protected:
     abstractAutomateFactory(std::string n):nom(n){}
 public:
-    virtual ~abstractAutomateFactory();
+    virtual ~abstractAutomateFactory() = default;
     virtual fenAutomate* getfenAutomate() = 0;
     std::string getNom() {return nom;}
 };

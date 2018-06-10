@@ -6,7 +6,10 @@
 #include <QColor>
 #include <iostream>
 #include "headers/etat.h"
-#include "automate.h"
+#include "headers/automate.h"
+#include "headers/fenautomate.h"
+#include "headers/fenautomate1d.h"
+#include "headers/abstractautomatefactory.h"
 
 class Automate1D : public Automate
 {
@@ -16,7 +19,7 @@ private:
     static std::string ERROR_BAD_ETAT;
 
 public:
-    Automate1D(unsigned short int num);
+    Automate1D(unsigned short int num = 6);
     Automate1D(const std::string& num);
     virtual ~Automate1D()= default;
     Automate1D(const Automate1D& a);
@@ -33,4 +36,10 @@ public:
 short unsigned int NumBitToNum(const std::string& num); // Transforme les string de 0 et de 1 en int
 std::string NumToNumBit(short unsigned int num); // Transforme les int en string de 0 et 1
 
+class Automate1DFactory : public abstractAutomateFactory{
+public:
+    Automate1DFactory():abstractAutomateFactory("Automate 1D"){}
+    virtual fenAutomate* getfenAutomate();
+    virtual ~Automate1DFactory() = default;
+};
 #endif // AUTOMATE1D_H

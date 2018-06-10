@@ -57,4 +57,6 @@ public slots:
     void cellActivation(QModelIndex indx);
 };
 
+
+
 #endif // FENAUTOMATE1D_H

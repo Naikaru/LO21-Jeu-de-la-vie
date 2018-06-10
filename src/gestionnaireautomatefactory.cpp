@@ -6,10 +6,13 @@ std::string gestionnaireAutomateFactory::ERROR_BAD_INDEX = "Index incorrect";
 
 gestionnaireAutomateFactory::gestionnaireAutomateFactory()
 {
-    //automateFactoryTab.push_back(new );
+    automateFactoryTab.push_back(new Automate1DFactory);
+    automateFactoryTab.push_back(new ForestFireFactory);
+    automateFactoryTab.push_back(new GameOfLifeFactory);
+
 }
 
-const gestionnaireAutomateFactory* gestionnaireAutomateFactory::getInstance(){
+gestionnaireAutomateFactory* gestionnaireAutomateFactory::getInstance(){
     if(instance == nullptr) instance = new gestionnaireAutomateFactory;
     return instance;
 }

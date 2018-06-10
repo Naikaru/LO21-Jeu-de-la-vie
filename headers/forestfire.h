@@ -6,7 +6,10 @@
 #include <QColor>
 #include <iostream>
 #include "headers/etat.h"
-#include "automate.h"
+#include "headers/automate.h"
+#include "headers/abstractautomatefactory.h"
+#include "headers/fenautomate.h"
+#include "headers/fenautomate2d.h"
 
 enum stateForest {empty, tree, fire, ashes};
 
@@ -26,4 +29,10 @@ public:
     virtual const QColor& colorize(int value) const;
 };
 
+class ForestFireFactory : public abstractAutomateFactory{
+public:
+    ForestFireFactory():abstractAutomateFactory("Feu de foret"){}
+    virtual fenAutomate* getfenAutomate();
+    virtual ~ForestFireFactory() = default;
+};
 #endif // FORESTFIRE_H

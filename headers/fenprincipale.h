@@ -36,7 +36,7 @@ public slots:
     void new_Automate(fenAutomate* newFenAutomate);
 private:
     // Zone du milieu
-    Automatemaker* maker; // Singleton qui créer des automates
+    Automatemaker* maker;
     QMdiArea* myMDI; // Zone du milieu
     QToolBar* leftToolBar; // Barre du côté
     QAction *actionNewAutomate; // Action importante

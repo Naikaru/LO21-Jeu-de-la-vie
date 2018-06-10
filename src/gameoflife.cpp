@@ -129,3 +129,11 @@ const QColor& GameOfLife::colorize(int value)const {
     if (value == 0) return *(new QColor("White"));
     else return *(new QColor("Black"));
 }
+
+fenAutomate* GameOfLifeFactory::getfenAutomate(){
+    Automate* monAutomate = new GameOfLife();
+    Etat* monEtat = new Etat();
+    Simulateur* monSimu = new Simulateur(monAutomate,monEtat);
+    fenAutomate* mafenetre = new fenAutomate2D("GameOfLife : Nouvel Automate",monSimu);
+    return mafenetre;
+}

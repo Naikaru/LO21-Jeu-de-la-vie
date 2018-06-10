@@ -4,6 +4,9 @@
 #include "headers/abstractautomatefactory.h"
 #include <vector>
 #include <cstdio>
+#include "automate1d.h"
+#include "forestfire.h"
+#include "gameoflife.h"
 
 class gestionnaireAutomateFactoryException{
     std::string error;
@@ -21,7 +24,7 @@ class gestionnaireAutomateFactory
     gestionnaireAutomateFactory();
     ~gestionnaireAutomateFactory();
 public:
-    static const gestionnaireAutomateFactory* getInstance();
+    static gestionnaireAutomateFactory* getInstance();
     static void deleteInstance();
     std::vector<std::string> getNameList();
     abstractAutomateFactory* getAutomateFactory(std::string name);

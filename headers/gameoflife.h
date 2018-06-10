@@ -6,7 +6,10 @@
 #include <QColor>
 #include <iostream>
 #include "headers/etat.h"
-#include "automate.h"
+#include "headers/automate.h"
+#include "headers/fenautomate.h"
+#include "headers/fenautomate2d.h"
+#include "headers/abstractautomatefactory.h"
 
 class GameOfLife : public Automate
 {
@@ -32,4 +35,10 @@ public:
     virtual const QColor& colorize(int value) const;
 };
 
+class GameOfLifeFactory : public abstractAutomateFactory{
+public:
+    GameOfLifeFactory():abstractAutomateFactory("Jeu de la vie"){}
+    virtual fenAutomate* getfenAutomate();
+    virtual ~GameOfLifeFactory() = default;
+};
 #endif // GAMEOFLIFE_H

@@ -96,3 +96,11 @@ const QColor& ForestFire::colorize(int value) const
     }
 
 }
+
+fenAutomate* ForestFireFactory::getfenAutomate(){
+    Automate* monAutomate = new ForestFire();
+    Etat* monEtat = new Etat();
+    Simulateur* monSimu = new Simulateur(monAutomate, monEtat);
+    fenAutomate* mafenetre = new fenAutomate2D("ForestFire : Nouvel Automate",monSimu);
+    return mafenetre;
+}

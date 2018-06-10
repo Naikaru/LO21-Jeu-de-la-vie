@@ -94,3 +94,12 @@ const QColor& Automate1D::colorize(int value)const{
     if (value == 0) return *(new QColor("White"));
     else return *(new QColor("Black"));
 }
+
+fenAutomate* Automate1DFactory::getfenAutomate(){
+    Automate* monAutomate = new Automate1D(); // valeurs du constructeur par défaut
+    Etat* monEtat = new Etat(1); // 6 Colonnes par défaut
+    //monEtat->setAllTabValue(0);
+    Simulateur* monSimu = new Simulateur(monAutomate,monEtat); // 4 etats dans le buffer par defaut
+    fenAutomate* mafenetre = new fenAutomate1D("1D : Nouvel Automate",monSimu);
+    return mafenetre;
+}

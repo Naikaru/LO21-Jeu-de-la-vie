@@ -63,7 +63,7 @@ void FenPrincipale::new_Automate(fenAutomate* newFenAutomate){
 
 
 void FenPrincipale::ajouter_automate(fenAutomate* newFenAutomate){
-
+     maker->hide();
      QMdiSubWindow* newSubWindow = new QMdiSubWindow; // On crée une nouvelle sub window
      newSubWindow->setWidget(newFenAutomate); // on set l'automate sur la window
      newSubWindow->setAttribute(Qt::WA_DeleteOnClose); // On appelle le destructeur si elle est fermée
@@ -75,7 +75,7 @@ void FenPrincipale::ajouter_automate(fenAutomate* newFenAutomate){
 
     // Deux nouveaux boutons/actions: pour prendre le focus et pour fermer l'automate
     QPushButton* actionShowAutomate = new QPushButton(newFenAutomate->windowTitle(),myWidget); // On crée une nouvelle action
-    QPushButton* actionCloseAutomate = new QPushButton(QIcon(":/rubbish-bin.png"),"",myWidget); // On crée une nouvelle action
+    QPushButton* actionCloseAutomate = new QPushButton(QIcon(":/img/rubbish-bin.png"),"",myWidget); // On crée une nouvelle action
 
     newLayout->addWidget(actionCloseAutomate); // On ajoute nos actions au layour
     newLayout->addWidget(actionShowAutomate);

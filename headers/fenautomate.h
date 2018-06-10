@@ -21,6 +21,7 @@
 #include <QSize>
 #include <QTimer>
 #include <QSlider>
+#include <QSizePolicy>
 
 //   TODO  //
 // Dans fenAutomate

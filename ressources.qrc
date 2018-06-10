@@ -12,5 +12,9 @@
         <file>img/error.png</file>
         <file>img/plus.png</file>
         <file>img/rubbish-bin.png</file>
+        <file>img/arrows-couple-counterclockwise-rotating-symbol.png</file>
+        <file>img/shuffle.png</file>
+        <file>img/fast-forward-2.png</file>
+        <file>img/backward.png</file>
     </qresource>
 </RCC>

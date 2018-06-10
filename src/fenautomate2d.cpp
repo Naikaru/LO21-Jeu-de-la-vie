@@ -14,6 +14,7 @@ fenAutomate2D::fenAutomate2D(QString nom, Simulateur* s):fenAutomate(nom,s) {
     for(unsigned int i(0);i<rows;i++){
         for(unsigned int j(0);j<cols;j++){
           maGrid->setItem(i,j,new QTableWidgetItem(""));
+          maGrid->item(i,j)->setFlags(Qt::ItemIsEnabled);
         }
     }
     resizeGrid();
