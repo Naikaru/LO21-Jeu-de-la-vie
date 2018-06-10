@@ -28,7 +28,7 @@ public:
     static void deleteInstance();
     std::vector<std::string> getNameList();
     abstractAutomateFactory* getAutomateFactory(std::string name);
-    abstractAutomateFactory* getAutomateFactory(int index);
+    abstractAutomateFactory* getAutomateFactory(unsigned int index);
 };
 
 #endif // GESTIONNAIREAUTOMATEFACTORY_H

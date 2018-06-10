@@ -40,21 +40,29 @@ Q_OBJECT
     QTableWidget* depart;
     QPushButton* simulation;
     QTableWidget* states = nullptr;
+    QTableWidget* maGrid;
 
     unsigned int dimension = 20;
 public:
     fenAutomate1D(QString nom, Simulateur* s);
     virtual ~fenAutomate1D(){}
-    virtual void avancer(){ return; }
-    virtual void reculer(){ return; }
+    virtual void avancer();
+    virtual void reculer();
     virtual void initialize();
+    void addStep();
+    void adaptGridSize();
+    void resizeGrid();
+    void refreshGrid();
+    void cellChange(unsigned int i, unsigned int j);
+
 
 public slots:
     void synchronizeNumToNumBit(int n);
     void synchronizeNumBitToNum(const QString& n);
 
-    void simulate();
-    void cellActivation(QModelIndex indx);
+    //void simulate();
+
+    void slotGridClick(QModelIndex j); // Slop appellé quand on clique sur une case, les coordonees sont passés en argument par le signal
 };
 
 

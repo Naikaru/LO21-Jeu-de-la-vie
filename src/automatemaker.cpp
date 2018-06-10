@@ -65,6 +65,6 @@ void Automatemaker::creatAuto(){
 void Automatemaker::setAutomateList(){
     gestionnaireAutomateFactory* maFactory = gestionnaireAutomateFactory::getInstance();
     std::vector<std::string> tableauDeNoms = maFactory->getNameList();
-    for(int i(0);i<tableauDeNoms.size();i++)
+    for(unsigned int i(0);i<tableauDeNoms.size();i++)
         choixAutomate->addItem(QString::fromStdString(tableauDeNoms[i]));
 }

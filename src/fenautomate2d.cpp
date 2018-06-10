@@ -41,14 +41,10 @@ void fenAutomate2D::resizeGrid(){
     }
 }
 
-void fenAutomate2D::cellChange(int i, int j){
+void fenAutomate2D::cellChange(unsigned int i, unsigned int j){
+    // Changement direct de l'utilisateur => Réinitialisation
     monSimu->setEtatDepart(monSimu->dernier());
-    /*
-    if(monSimu->isAlive(i,j))
-        monSimu->setDead(i,j);
-    else
-        monSimu->setAlive(i,j);
-    */
+    // Changement d'état déterminé par la méthode Automate->changeStatus (polymorphisme)
     monSimu->changeStatus(i,j);
 
     // On prends l'item de la grille cliqué, on récupère la valeur correspondante dans l'etat initial, et on affiche

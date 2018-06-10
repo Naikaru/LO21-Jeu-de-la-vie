@@ -26,18 +26,18 @@ void gestionnaireAutomateFactory::deleteInstance(){
 
 std::vector<std::string> gestionnaireAutomateFactory::getNameList(){
     std::vector<std::string>* temp = new std::vector<std::string>;
-    for (int i(0);i<automateFactoryTab.size(); i++){
+    for (unsigned int i(0);i<automateFactoryTab.size(); i++){
         temp->push_back(automateFactoryTab[i]->getNom());
     }
     return *temp;
 }
 
 abstractAutomateFactory* gestionnaireAutomateFactory::getAutomateFactory(std::string name){
-    for (int i(0);i<automateFactoryTab.size(); i++)
+    for (unsigned int i(0);i<automateFactoryTab.size(); i++)
         if(name == automateFactoryTab[i]->getNom())return automateFactoryTab[i];
     throw new gestionnaireAutomateFactoryException("gestionnaireAutomateFactory::getAutomateFactory(std::string name)->"+ERROR_NOT_FOUND);
 }
-abstractAutomateFactory* gestionnaireAutomateFactory::getAutomateFactory(int index){
+abstractAutomateFactory* gestionnaireAutomateFactory::getAutomateFactory(unsigned int index){
     if (index<automateFactoryTab.size()) return automateFactoryTab[index];
     throw new gestionnaireAutomateFactoryException("gestionnaireAutomateFactory::getAutomateFactory(int index)->"+ERROR_BAD_INDEX);
 }

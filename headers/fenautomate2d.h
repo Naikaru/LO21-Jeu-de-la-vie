@@ -39,7 +39,7 @@ public:
     virtual void reculer(); // Fonction qui fait reculer la simulation
     virtual void initialize(); // test d'initialisation, à passer en slot : initialisation aléatoire ou symétrique
     void refreshGrid();
-    void cellChange(int i, int j); // Fonction qui change la valeur de la cellule en (i,j) (vie si mort, mort si vie) dans la simu et sur la grille
+    void cellChange(unsigned int i, unsigned int j); // Fonction qui change la valeur de la cellule en (i,j) (vie si mort, mort si vie) dans la simu et sur la grille
     void adaptGridSize();
 
 public slots:
