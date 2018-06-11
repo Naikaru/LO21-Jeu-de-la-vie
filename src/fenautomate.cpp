@@ -17,6 +17,30 @@ fenAutomate::fenAutomate(QString nom, Simulateur* s): monSimu(s)
 void fenAutomate::UImaker(){
 
     setWindowIcon(QIcon(":/img/virus.png"));
+    QMenu *menuSettings = menuBar()->addMenu("&Settings");
+
+    // Dimensionnement de la grille
+    QMenu *menuDimensions = menuSettings->addMenu(QIcon(":/img/layout.png"), "Dimensions");
+
+    QAction* actionRedimensionner = new QAction("Redimensionnement",this);
+    menuDimensions->addAction(actionRedimensionner);
+    connect(actionRedimensionner, SIGNAL(triggered()),this,SLOT(slotRedimensionner()));
+
+    QAction* actionAjouterColonne = new QAction("Ajouter une colonne",this);
+    menuDimensions->addAction(actionAjouterColonne);
+    connect(actionAjouterColonne,SIGNAL(triggered()),this,SLOT(slotAjoutColonne()));
+
+    // Modification des règles de transition
+
+    QAction* actionRules = new QAction(QIcon(":/img/rules.png"),"Règles",this);
+    menuSettings->addAction(actionRules);
+
+    //Automate* monAuto = const_cast<Automate*>(&(monSimu->getAutomate()));
+    QWidget* rulesMaker = monSimu->getAutomate().changeRules();
+    connect(actionRules,SIGNAL(triggered()),rulesMaker,SLOT(show()));
+
+
+    // Configuration des fonctionnalités l'IHM
     playPause = true;
     setMinimumSize(500,500);
     myCentralWidget = new QWidget;
@@ -79,6 +103,18 @@ void fenAutomate::slotBtPlayStop(){
 }
 
 
+void fenAutomate::slotAjoutColonne(){
+    monSimu->setEtatDepart(monSimu->dernier());
+    monSimu->addCol();  // Met l'état de départ du Simu à jour
+    monSimu->reset();   // Réset le simu avec l'état de départ
+    addCols(1);         // Méthode qui met la grille d'affichage à jour.
+}
+
+void fenAutomate::slotRedimensionner(){
+    redimensionner();
+}
+
+
 void fenAutomate::slotTimerIntervalChange(int i){
     if(myTimer==nullptr) return;
     myTimer->setInterval(i);
@@ -97,3 +133,5 @@ void fenAutomate::slotReculer(){
 void fenAutomate::slotInit(){
     initialize();
 }
+
+

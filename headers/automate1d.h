@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <QColor>
 #include <iostream>
 #include "headers/etat.h"
 #include "headers/automate.h"
@@ -19,7 +18,7 @@ private:
     static std::string ERROR_BAD_ETAT;
 
 public:
-    Automate1D(unsigned short int num = 6);
+    Automate1D(unsigned short int num = 42);
     Automate1D(const std::string& num);
     virtual ~Automate1D()= default;
     Automate1D(const Automate1D& a);
@@ -31,6 +30,13 @@ public:
     virtual void applyTransition(const Etat& depart, Etat& arrivee) const;
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
     virtual const QColor& colorize(int value)const;
+    virtual QWidget* changeRules() const { QWidget* newRules = new QWidget(); return newRules; }
+
+//public slots:
+//    virtual void slotMinChanged(int) { return; }
+//    virtual void slotMaxChanged(int) { return; }
+//    virtual void makeRulesChange() { return; }
+
 };
 
 short unsigned int NumBitToNum(const std::string& num); // Transforme les string de 0 et de 1 en int

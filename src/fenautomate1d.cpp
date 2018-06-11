@@ -188,7 +188,7 @@ void fenAutomate1D::resizeGrid(){
     unsigned int rows = maGrid->rowCount();
 
     //adaptGridSize();
-    int size = (int) 1000/cols;
+    int size = (int) 500/cols;
 
     for(unsigned int i(0);i<rows;i++){
        maGrid->setRowHeight(i,size);
@@ -201,38 +201,6 @@ void fenAutomate1D::resizeGrid(){
 }
 
 
-void fenAutomate1D::adaptGridSize(){
-    unsigned int cols = monSimu->dernier().getNbCols();
-    unsigned int rows = monSimu->dernier().getNbRows();
-
-    if ((maGrid->columnCount() != cols) || (maGrid->rowCount() != rows)){
-        if(maGrid->columnCount() < cols){
-            for(unsigned int i(maGrid->columnCount());i<cols;i++){
-                for(unsigned int j(0);j<maGrid->rowCount();j++){
-                  maGrid->setItem(j,i,new QTableWidgetItem(""));
-                  maGrid->item(j,i)->setFlags(Qt::ItemIsEnabled);
-                }
-            }
-        }else{
-            for(unsigned int i(maGrid->columnCount()-1);i<cols;i--){
-                maGrid->removeColumn(i);
-            }
-        }
-        if(maGrid->rowCount() < rows){
-            for(unsigned int i(maGrid->rowCount());i<rows;i++){
-                for(unsigned int j(0);j<maGrid->columnCount();j++){
-                  maGrid->setItem(i,j,new QTableWidgetItem(""));
-                  maGrid->item(i,j)->setFlags(Qt::ItemIsEnabled);
-                }
-            }
-        }else{
-            for(unsigned int i(maGrid->rowCount()-1);i<rows;i--){
-                maGrid->removeRow(i);
-            }
-        }
-    }
-}
-
 
 
 void fenAutomate1D::addStep(){
@@ -241,16 +209,18 @@ void fenAutomate1D::addStep(){
     const Automate* monAuto = &monSimu->getAutomate();
     int row = (int) maGrid->rowCount();
 
+    // On introduit une nouvelle ligne correspondant à la génération suivante
     maGrid->setRowCount(row+1);
     for(unsigned int j(0); j<cols; ++j){
         maGrid->setItem(row,j, new QTableWidgetItem(""));
         maGrid->item(row,j)->setFlags(Qt::ItemIsEnabled);
+        // Chercher un moyen de rendre inaccessibled les cases maGrid->item(row-1,j)
         maGrid->item(row,j)->setBackgroundColor(monAuto->colorize(dernier.getCellule(0,j)));
         // un état de Automate1D n'a qu'une seule ligne. donc getCellule(0,j)
-        maGrid->setRowHeight(row, (int) 1000/cols);
+        maGrid->setRowHeight(row, (int) 500/cols);
     }
+    maGrid->scrollToBottom();
 }
-
 
 
 void fenAutomate1D::slotGridClick(QModelIndex j){
@@ -283,23 +253,32 @@ void fenAutomate1D::reculer(){
     //maGrid->repaint();
 }
 
-/*
-void fenAutomate1D::slotSizeChange(){
-    resizeGrid();
-}
-*/
 
 void fenAutomate1D::initialize()
 {
     std::srand(std::time(NULL));
-    unsigned short int probability = std::rand()%100;
+    unsigned short int probability = (std::rand()*std::rand())%100;
     Etat* e = monSimu->getInitialState();
-    const Automate* monAuto = &monSimu->getAutomate();
-    for(unsigned int j(0); j < maGrid->columnCount(); ++j){
-        if(probability >= std::rand()%100)
-            e->setCellule(0,j,1);
-        else
-            e->setCellule(0,j,0);
+    unsigned int cols = maGrid->columnCount();
+
+    if(choixInit->currentText().toStdString() == "Random"){
+        for(unsigned int j(0); j < cols; ++j){
+            if(probability >= std::rand()%100)
+                e->setCellule(0,j,1);
+            else
+                e->setCellule(0,j,0);
+        }
+    }
+    else if(choixInit->currentText().toStdString() == "Symetric") {
+        for(unsigned int j(0); j <= (int) cols/2; ++j) {
+            if(probability >= std::rand()%100){
+                e->setCellule(0,j,1);
+                e->setCellule(0,cols-1-j,1);
+            }else{
+                e->setCellule(0,j,0);
+                e->setCellule(0,cols-1-j,0);
+            }
+        }
     }
     monSimu->reset();
     refreshGrid();
@@ -311,8 +290,64 @@ void fenAutomate1D::refreshGrid(){
     unsigned int cols = (int) dernier.getNbCols();
     unsigned int row = maGrid->rowCount();
     const Automate* monAuto = &monSimu->getAutomate();
-    adaptGridSize();
+    //adaptGridSize();
     for(int j(0);j<cols;j++){
         maGrid->item(row-1,j)->setBackgroundColor(monAuto->colorize(dernier.getCellule(0,j)));
     }
+}
+
+
+void fenAutomate1D::addCols(unsigned int c){
+    unsigned int cols = maGrid->columnCount();
+    unsigned int row = maGrid->rowCount() - 1;
+    maGrid->setColumnCount(cols+c);
+    for(unsigned int j(cols); j<cols+c; ++j){
+        maGrid->setItem(row,j, new QTableWidgetItem(""));
+        maGrid->item(row,j)->setFlags(Qt::ItemIsEnabled);
+        maGrid->item(row,j)->setBackgroundColor(monSimu->getAutomate().colorize(monSimu->dernier().getCellule(0,j)));
+    }
+    resizeGrid();
+}
+
+void fenAutomate1D::redimensionner(){
+    QWidget* widgetDimensions = new QWidget();
+    QFormLayout* mainLayout = new QFormLayout();
+
+    dimCols = new QSpinBox(widgetDimensions);
+    dimCols->setRange(1,100);
+    dimCols->setValue(monSimu->dernier().getNbCols());
+
+    QPushButton* BtOk = new QPushButton("Valider");
+    connect(BtOk, SIGNAL(clicked()), this, SLOT(slotUpdateDimensions()));
+
+    QPushButton* BtCancel = new QPushButton("Annuler");
+    connect(BtCancel, SIGNAL(clicked()), this,SLOT(quit()));
+
+    QHBoxLayout* hlayout = new QHBoxLayout();
+    hlayout->addWidget(BtOk);
+    hlayout->addWidget(BtCancel);
+
+    mainLayout->addRow("Nombres de colonnes :", dimCols);
+    mainLayout->addRow(hlayout);
+
+    widgetDimensions->setLayout(mainLayout);
+    widgetDimensions->show();
+}
+
+void fenAutomate1D::slotUpdateDimensions(){
+    monSimu->setEtatDepart(monSimu->dernier());
+    unsigned int newDimCols = dimCols->value();
+
+    monSimu->redim(1, newDimCols);  // Met l'état de départ du Simu à jour
+    monSimu->reset();   // Réset le simu avec l'état de départ
+
+
+    if(newDimCols < maGrid->columnCount()){
+        for(unsigned int j(maGrid->columnCount()); j>=newDimCols; --j)
+            maGrid->removeColumn(j);
+    }
+    else if(newDimCols > maGrid->columnCount())
+        addCols(newDimCols - maGrid->columnCount());
+
+    resizeGrid();
 }

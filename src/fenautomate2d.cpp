@@ -25,9 +25,9 @@ fenAutomate2D::fenAutomate2D(QString nom, Simulateur* s):fenAutomate(nom,s) {
 
 void fenAutomate2D::resizeGrid(){
     int size;
-    unsigned int cols = monSimu->dernier().getNbCols();
-    unsigned int rows = monSimu->dernier().getNbRows();
-    adaptGridSize();
+    unsigned int cols = maGrid->columnCount();
+    unsigned int rows = maGrid->rowCount();
+
     if(maGrid->size().width()/rows < maGrid->size().height()/cols)
         size = (int) maGrid->size().height()/cols;
     else
@@ -54,43 +54,12 @@ void fenAutomate2D::cellChange(unsigned int i, unsigned int j){
 }
 
 
-void fenAutomate2D::adaptGridSize(){
-    unsigned int cols = monSimu->dernier().getNbCols();
-    unsigned int rows = monSimu->dernier().getNbRows();
-    if ((maGrid->columnCount() != cols) || (maGrid->rowCount() != rows)){
-        if(maGrid->columnCount() < cols){
-            for(unsigned int i(maGrid->columnCount());i<cols;i++){
-                for(unsigned int j(0);j<maGrid->rowCount();j++){
-                  maGrid->setItem(j,i,new QTableWidgetItem(""));
-                  maGrid->item(j,i)->setFlags(Qt::ItemIsEnabled);
-                }
-            }
-        }else{
-            for(unsigned int i(maGrid->columnCount()-1);i<cols;i--){
-                maGrid->removeColumn(i);
-            }
-        }
-        if(maGrid->rowCount() < rows){
-            for(unsigned int i(maGrid->rowCount());i<rows;i++){
-                for(unsigned int j(0);j<maGrid->columnCount();j++){
-                  maGrid->setItem(i,j,new QTableWidgetItem(""));
-                  maGrid->item(i,j)->setFlags(Qt::ItemIsEnabled);
-                }
-            }
-        }else{
-            for(unsigned int i(maGrid->rowCount()-1);i<rows;i--){
-                maGrid->removeRow(i);
-            }
-        }
-    }
-}
-
 void fenAutomate2D::refreshGrid(){
     const Etat& dernier = monSimu->dernier();
     int cols = (int) dernier.getNbCols();
     int rows = (int) dernier.getNbRows();
     const Automate* monAuto = &monSimu->getAutomate();
-    adaptGridSize();
+
     for(int i(0);i<rows;i++){
         for(int j(0);j<cols;j++){
             maGrid->item(i,j)->setBackgroundColor(monAuto->colorize(dernier.getCellule(i,j)));
@@ -124,9 +93,11 @@ void fenAutomate2D::slotGridClick(QModelIndex j){
 }
 
 void fenAutomate2D::initialize(){
+    monSimu->setEtatDepart(monSimu->dernier());
     std::srand(std::time(NULL));
-    unsigned short int probability = std::rand()%100;
+    unsigned short int probability = (std::rand()*std::rand())%100;
     Etat* e = monSimu->getInitialState();
+
     if(choixInit->currentText().toStdString() == "Random"){
         for(unsigned int i(0); i < maGrid->rowCount(); ++i)
             for(unsigned int j(0); j < maGrid->columnCount(); ++j){
@@ -152,8 +123,91 @@ void fenAutomate2D::initialize(){
             }
         }
     }
+
     monSimu->reset();
     // On remet l'état de départ avec les changements.
     refreshGrid();
-    // On met les couleurs de la grille à jour.
+    // On met les couleurs de la grille à jour
+    maGrid->repaint();
+}
+
+void fenAutomate2D::addCols(unsigned int c){
+    unsigned int cols = maGrid->columnCount();
+    maGrid->setColumnCount(cols+c);
+    for(unsigned int i(0); i<maGrid->rowCount(); ++i){
+        for(unsigned int j(cols); j<cols+c; ++j){
+            maGrid->setItem(i,j, new QTableWidgetItem(""));
+            maGrid->item(i,j)->setFlags(Qt::ItemIsEnabled);
+            maGrid->item(i,j)->setBackgroundColor(monSimu->getAutomate().colorize(monSimu->dernier().getCellule(i,j)));
+        }
+    }
+    resizeGrid();
+}
+
+void fenAutomate2D::addRows(unsigned int r){
+    unsigned int rows = maGrid->rowCount();
+    maGrid->setRowCount(rows+r);
+    for(unsigned int j(0); j<maGrid->columnCount(); ++j){
+        for(unsigned int i(rows); i<rows+r; ++i){
+            maGrid->setItem(i,j, new QTableWidgetItem(""));
+            maGrid->item(i,j)->setFlags(Qt::ItemIsEnabled);
+            maGrid->item(i,j)->setBackgroundColor(monSimu->getAutomate().colorize(monSimu->dernier().getCellule(i,j)));
+        }
+    }
+    resizeGrid();
+}
+
+void fenAutomate2D::redimensionner(){
+    QWidget* widgetDimensions = new QWidget();
+    QFormLayout* mainLayout = new QFormLayout();
+
+    dimRows = new QSpinBox(widgetDimensions);
+    dimRows->setRange(1,100);
+    dimRows->setValue(monSimu->dernier().getNbRows());
+    dimCols = new QSpinBox(widgetDimensions);
+    dimCols->setRange(1,100);
+    dimCols->setValue(monSimu->dernier().getNbCols());
+
+
+    QPushButton* BtOk = new QPushButton("Valider");
+    connect(BtOk, SIGNAL(clicked()), this, SLOT(slotUpdateDimensions()));
+
+    QPushButton* BtCancel = new QPushButton("Annuler");
+    connect(BtCancel, SIGNAL(clicked()), this,SLOT(quit()));
+
+    QHBoxLayout* hlayout = new QHBoxLayout();
+    hlayout->addWidget(BtOk);
+    hlayout->addWidget(BtCancel);
+
+    mainLayout->addRow("Nombres de lignes :", dimRows);
+    mainLayout->addRow("Nombres de colonnes :", dimCols);
+    mainLayout->addRow(hlayout);
+
+    widgetDimensions->setLayout(mainLayout);
+    widgetDimensions->show();
+}
+
+void fenAutomate2D::slotUpdateDimensions(){
+    monSimu->setEtatDepart(monSimu->dernier());
+    unsigned int newDimRows = dimRows->value();
+    unsigned int newDimCols = dimCols->value();
+
+    monSimu->redim(newDimRows, newDimCols);  // Met l'état de départ du Simu à jour
+    monSimu->reset();   // Réset le simu avec l'état de départ
+
+    if(newDimRows < maGrid->rowCount()){
+        for(unsigned int i(maGrid->rowCount()); i>=newDimRows; --i)
+            maGrid->removeRow(i);
+    }
+    else if(newDimRows > maGrid->rowCount())
+        addRows(newDimRows - maGrid->rowCount());
+
+    if(newDimCols < maGrid->columnCount()){
+        for(unsigned int j(maGrid->columnCount()); j>=newDimCols; --j)
+            maGrid->removeColumn(j);
+    }
+    else if(newDimCols > maGrid->columnCount())
+        addCols(newDimCols - maGrid->columnCount());
+
+    resizeGrid();
 }

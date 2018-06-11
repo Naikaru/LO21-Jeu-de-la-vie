@@ -60,6 +60,14 @@ public:
          if(etats == nullptr || etats[rang%nbMaxEtats]==nullptr) throw SimulateurException("Simulateur::changeStatus"+ERROR_NO_INIT);
          myAutomat->changeStatus(r,c,getInitialState()); }
 
+     void addCol(){
+         getInitialState()->addCols(1); // Méthode de Etat
+     }
+
+     void redim(unsigned int i, unsigned int j){
+         getInitialState()->redimGrid(i,j); // Méthode de Etat
+     }
+
      const Automate& getAutomate(){ return *myAutomat;}
      void setEtatDepart(const Etat& e); // Définit l'état de départ sur l'etat passé en param
      void run(unsigned int nbSteps); // génère les n prochains états

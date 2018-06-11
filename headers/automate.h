@@ -1,11 +1,15 @@
 #ifndef AUTOMATE_H
 #define AUTOMATE_H
 
+#include <iostream>
 #include <string>
 #include <vector>
-#include <QColor>
-#include <iostream>
 #include "headers/etat.h"
+
+#include <QObject>
+#include <QWidget>
+#include <QColor>
+
 
 // Classe qui gère les exceptions des automates
 class AutomateException {
@@ -44,6 +48,16 @@ public:
 
     //
     virtual const QColor& colorize(int value) const = 0;
+
+    virtual QWidget* changeRules() const = 0;
+
+    /*
+public slots:
+    virtual void slotMinChanged(int);
+    virtual void slotMaxChanged(int);
+    virtual void makeRulesChange();
+
+    */
 };
 
 

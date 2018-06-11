@@ -50,20 +50,20 @@ void Etat::destroyGrid(){
 }
 
 // redim(nbLignes,nbColonnes)
-void Etat::redimGrid(unsigned short int j,unsigned short int i){
-    if(nbRows < j){ // Si on doit ajouter des lignes
-        if(nbCols<i){ // On commence par mettre à jour le nombre de colonnes
-            addCols(i-nbCols);
+void Etat::redimGrid(unsigned short int i,unsigned short int j){
+    if(nbRows < i){ // Si on doit ajouter des lignes
+        if(nbCols<j){ // On commence par mettre à jour le nombre de colonnes
+            addCols(j-nbCols);
         }else{
-            rmCols(nbCols-i);
+            rmCols(nbCols-j);
         }
-        addRows(j-nbRows);
+        addRows(i-nbRows);
     }else{ // Si on doit enlever des lignes
-        rmRows(nbRows-j); // On les enlève
-        if(nbCols<i){ // et ensuite on mets à jour le nombre de colonnes
-            addCols(i-nbCols);
+        rmRows(nbRows-i); // On les enlève
+        if(nbCols<j){ // et ensuite on mets à jour le nombre de colonnes
+            addCols(j-nbCols);
         }else{
-            rmCols(nbCols-i);
+            rmCols(nbCols-j);
         }
     }
 }

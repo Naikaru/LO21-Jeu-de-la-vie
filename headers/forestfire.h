@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <QColor>
 #include <iostream>
 #include "headers/etat.h"
 #include "headers/automate.h"
@@ -27,6 +26,13 @@ public:
     virtual void applyTransition(const Etat& depart, Etat& arrivee) const;
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
     virtual const QColor& colorize(int value) const;
+    virtual QWidget* changeRules() const { QWidget* newRules = new QWidget(); return newRules; }
+
+//public slots:
+//    virtual void slotMinChanged(int) { return; }
+//    virtual void slotMaxChanged(int) { return; }
+//    virtual void makeRulesChange() { return; }
+
 };
 
 class ForestFireFactory : public abstractAutomateFactory{

@@ -16,5 +16,7 @@
         <file>img/shuffle.png</file>
         <file>img/fast-forward-2.png</file>
         <file>img/backward.png</file>
+        <file>img/layout.png</file>
+        <file>img/rules.png</file>
     </qresource>
 </RCC>

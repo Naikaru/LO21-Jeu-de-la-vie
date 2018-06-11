@@ -3,13 +3,20 @@
 
 #include <string>
 #include <vector>
-#include <QColor>
 #include <iostream>
 #include "headers/etat.h"
 #include "headers/automate.h"
 #include "headers/fenautomate.h"
 #include "headers/fenautomate2d.h"
 #include "headers/abstractautomatefactory.h"
+
+#include <QHBoxLayout>
+#include <QFormLayout>
+#include <QSpinBox>
+#include <QLabel>
+#include <QComboBox>
+#include <QPushButton>
+
 
 class GameOfLife : public Automate
 {
@@ -18,6 +25,12 @@ private:
     unsigned short int maxNeighbours;
     unsigned short int exactNeighbours;
     Neighbourhood typeN;
+
+//    QSpinBox* minVoisins;
+//    QSpinBox* maxVoisins;
+//    QSpinBox* exactVoisins;
+//    QComboBox* voisinage;
+
 public:
     GameOfLife(unsigned short int min=2, unsigned short int max=3, unsigned short int exact=3, Neighbourhood n=Moore); // Constructeur, par défaut c'est un jeu de la vie
     virtual ~GameOfLife()=default;
@@ -33,6 +46,14 @@ public:
     // nb: le test pour savoir si r,c ne sont pas outofbound se fait dans etat
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
     virtual const QColor& colorize(int value) const;
+    virtual QWidget* changeRules() const;
+
+    /*
+public slots:
+    virtual void slotMinChanged(int value);
+    virtual void slotMaxChanged(int value);
+    virtual void makeRulesChange();
+    */
 };
 
 class GameOfLifeFactory : public abstractAutomateFactory{
@@ -40,5 +61,6 @@ public:
     GameOfLifeFactory():abstractAutomateFactory("Jeu de la vie"){}
     virtual fenAutomate* getfenAutomate();
     virtual ~GameOfLifeFactory() = default;
+
 };
 #endif // GAMEOFLIFE_H

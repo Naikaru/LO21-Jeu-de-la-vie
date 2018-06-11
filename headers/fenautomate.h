@@ -1,11 +1,15 @@
 #ifndef FENAUTOMATE_H
 #define FENAUTOMATE_H
-#include <QWidget>
-#include <QMainWindow>
-#include <QPushButton>
 #include "automate.h"
 #include "headers/etat.h"
 #include "headers/simulateur.h"
+
+#include <QWidget>
+#include <QMainWindow>
+#include <QPushButton>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
 #include <cstdlib>
 #include <ctime>
 #include <QLabel>
@@ -15,6 +19,7 @@
 #include <QTableView>
 #include <QTableWidget>
 #include <QGridLayout>
+#include <QFormLayout>
 #include <QHBoxLayout>
 #include <QHeaderView>
 #include <QTableWidgetItem>
@@ -47,8 +52,8 @@
 // 3 boutons pour l'instant : BTavancer, BTreculer, BTplay
 class fenAutomate : public QMainWindow
 {
-
 Q_OBJECT
+
 protected:
    // Elements de la fenêtre
     Simulateur* monSimu;
@@ -61,6 +66,8 @@ protected:
     QSlider* mySlider;
     QTimer* myTimer;
     QWidget* myCentralWidget; // Il faut définir un widget pour le centre
+
+    QTableWidget* maGrid; // La grille affichée.
    //
     bool playPause;
     void UImaker(); // Fonction qui fait l'interface, pour eviter d'avoir 2x le même morceau de code pour les 2 constructeurs
@@ -68,9 +75,7 @@ protected:
 public:
     fenAutomate(Simulateur* s);
     fenAutomate(QString nom, Simulateur* s);
-    virtual void avancer() = 0;
-    virtual void reculer() = 0;
-    virtual void initialize() = 0;
+
     virtual ~fenAutomate(){
         if(monSimu != nullptr)
         delete monSimu;
@@ -85,12 +90,26 @@ public:
         delete myCentralWidget;
     }
 
+    virtual void avancer() = 0;
+    virtual void reculer() = 0;
+    virtual void initialize() = 0;
+    virtual void resizeGrid() = 0;
+    virtual void refreshGrid() = 0;
+    virtual void addCols(unsigned int c=1) = 0;
+    virtual void redimensionner() = 0;
+
 public slots:
+    void slotAjoutColonne();
+    void slotRedimensionner();
+
     void slotAvancer();
     void slotReculer();
     void slotInit();
     void slotTimerIntervalChange(int i);
     void slotBtPlayStop();
+
+    virtual void cellChange(unsigned int i, unsigned int j) = 0;
+
 };
 
 #endif // FENAUTOMATE_H
