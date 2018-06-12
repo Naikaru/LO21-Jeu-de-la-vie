@@ -12,10 +12,17 @@
 
 class Automate1D : public Automate
 {
+Q_OBJECT
+
 private:
     unsigned short int numero;
     std::string numeroBit;
     static std::string ERROR_BAD_ETAT;
+
+    // Elements nécessaires à la réinitialisation des attributs
+    QSpinBox* numRule; // numéro
+    QLineEdit* numBitRule[8];
+    QIntValidator* zeroOneValidator;
 
 public:
     Automate1D(unsigned short int num = 42);
@@ -30,13 +37,12 @@ public:
     virtual void applyTransition(const Etat& depart, Etat& arrivee) const;
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
     virtual const QColor& colorize(int value)const;
-    virtual QWidget* changeRules() const { QWidget* newRules = new QWidget(); return newRules; }
+    virtual void changeRules();
 
-//public slots:
-//    virtual void slotMinChanged(int) { return; }
-//    virtual void slotMaxChanged(int) { return; }
-//    virtual void makeRulesChange() { return; }
-
+public slots:
+    void slotUpdateRules();
+    void slotNumToNumBit(int n);
+    void slotNumBitToNum(const QString& n);
 };
 
 short unsigned int NumBitToNum(const std::string& num); // Transforme les string de 0 et de 1 en int

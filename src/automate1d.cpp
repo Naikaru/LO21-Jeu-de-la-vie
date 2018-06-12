@@ -95,6 +95,97 @@ const QColor& Automate1D::colorize(int value)const{
     else return *(new QColor("Black"));
 }
 
+
+void Automate1D::changeRules() {
+    QWidget* newRules = new QWidget();
+
+    newRules->setWindowTitle("Règles de transitions"); // Nom de la fenêtre
+    newRules->setMinimumSize(400,100); // Size choisie au pif
+
+    QFormLayout* mainLayout = new QFormLayout();
+
+    numRule = new QSpinBox(newRules);
+    numRule->setRange(0,255);
+
+    mainLayout->addRow("Numéro de la règle :", numRule);
+
+
+    QIntValidator* zeroOneValidator = new QIntValidator();
+    zeroOneValidator->setRange(0,1);
+
+    QHBoxLayout* numeroc = new QHBoxLayout();
+    QVBoxLayout* bitc[8];
+    QLabel* numeroBitLabel[8];
+
+    for (unsigned int i(0); i<8; ++i){
+        std::string tmpNumBit = NumToNumBit(7-i);
+
+        bitc[i] = new QVBoxLayout();
+        numeroBitLabel[i] = new QLabel(tmpNumBit.substr(5).c_str(),newRules);
+
+        numBitRule[i] = new QLineEdit();
+        numBitRule[i]->setText("0");
+        numBitRule[i]->setAlignment(Qt::AlignCenter);
+        numBitRule[i]->setFixedWidth(25);
+        numBitRule[i]->setValidator(zeroOneValidator);
+
+        bitc[i]->addWidget(numeroBitLabel[i]);
+        bitc[i]->addWidget(numBitRule[i]);
+
+        numeroc->addLayout(bitc[i]);
+    }
+    mainLayout->addRow(numeroc);
+
+    connect(numRule, SIGNAL(valueChanged(int)), this, SLOT(slotNumToNumBit(int)));
+    for(unsigned int i(0); i<8; ++i)
+    {
+        connect(numBitRule[i], SIGNAL(textChanged(QString)), this, SLOT(slotNumBitToNum(QString)));
+    }
+
+    QPushButton* btOK = new QPushButton("Changer");
+    connect(btOK,SIGNAL(clicked()),this,SLOT(slotUpdateRules()));
+
+    QPushButton* btAnnuler = new QPushButton("Annuler");
+    connect(btAnnuler,SIGNAL(clicked()),newRules,SLOT(close()));
+
+    QHBoxLayout* monHorizontalLayout = new QHBoxLayout();
+    monHorizontalLayout->addWidget(btOK);
+    monHorizontalLayout->addWidget(btAnnuler);
+    mainLayout->addRow(monHorizontalLayout);
+    newRules->setLayout(mainLayout);
+    newRules->show();
+}
+
+
+void Automate1D::slotUpdateRules(){
+
+}
+
+void Automate1D::slotNumToNumBit(int n)
+{
+    std::string tmpNumBit = NumToNumBit(n);
+    for(unsigned int i(0); i<tmpNumBit.size(); ++i)
+    {
+        numBitRule[i]->setText(QString(tmpNumBit[i]));
+    }
+}
+
+
+void Automate1D::slotNumBitToNum(const QString& n)
+{
+    if(n=="") return;
+
+    std::string str = "";
+    for(unsigned int i(0); i<8; ++i)
+    {
+        str+=numBitRule[i]->text().toLatin1();
+    }
+
+    short unsigned int tmpNum = NumBitToNum(str);
+    numRule->setValue(tmpNum);
+}
+
+
 fenAutomate* Automate1DFactory::getfenAutomate(){
     Automate* monAutomate = new Automate1D(); // valeurs du constructeur par défaut
     Etat* monEtat = new Etat(1); // 6 Colonnes par défaut

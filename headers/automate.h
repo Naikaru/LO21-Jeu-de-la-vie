@@ -10,6 +10,17 @@
 #include <QWidget>
 #include <QColor>
 
+#include <QFormLayout>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+
+#include <QSpinBox>
+#include <QLabel>
+#include <QLineEdit>
+#include <QComboBox>
+#include <QPushButton>
+#include <QIntValidator>
+
 
 // Classe qui gère les exceptions des automates
 class AutomateException {
@@ -22,8 +33,10 @@ class AutomateException {
 };
 
 // Classe abstraite automate / interface automate
-class Automate
+class Automate : public QObject
 {
+Q_OBJECT
+
 public:
     Automate() = default;
     virtual ~Automate() = default;
@@ -46,18 +59,11 @@ public:
     // Pour changer le contenu d'une case après click de l'utilisateur
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const = 0;
 
-    //
+    // Permet le renvoie d'une couleur associé à une état (symbolisé par une valeur entière)
     virtual const QColor& colorize(int value) const = 0;
 
-    virtual QWidget* changeRules() const = 0;
-
-    /*
-public slots:
-    virtual void slotMinChanged(int);
-    virtual void slotMaxChanged(int);
-    virtual void makeRulesChange();
-
-    */
+    // Permet de changer les règles de transtions (par polymorphisme)
+    virtual void changeRules() = 0;
 };
 
 

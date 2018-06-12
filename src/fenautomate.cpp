@@ -22,22 +22,20 @@ void fenAutomate::UImaker(){
     // Dimensionnement de la grille
     QMenu *menuDimensions = menuSettings->addMenu(QIcon(":/img/layout.png"), "Dimensions");
 
+    // Redimensionnement complet
     QAction* actionRedimensionner = new QAction("Redimensionnement",this);
     menuDimensions->addAction(actionRedimensionner);
     connect(actionRedimensionner, SIGNAL(triggered()),this,SLOT(slotRedimensionner()));
 
+    // Ajout d'une colonne
     QAction* actionAjouterColonne = new QAction("Ajouter une colonne",this);
     menuDimensions->addAction(actionAjouterColonne);
     connect(actionAjouterColonne,SIGNAL(triggered()),this,SLOT(slotAjoutColonne()));
 
     // Modification des règles de transition
-
     QAction* actionRules = new QAction(QIcon(":/img/rules.png"),"Règles",this);
     menuSettings->addAction(actionRules);
-
-    //Automate* monAuto = const_cast<Automate*>(&(monSimu->getAutomate()));
-    QWidget* rulesMaker = monSimu->getAutomate().changeRules();
-    connect(actionRules,SIGNAL(triggered()),rulesMaker,SLOT(show()));
+    connect(actionRules,SIGNAL(triggered()),this,SLOT(slotChangeRules()));
 
 
     // Configuration des fonctionnalités l'IHM
@@ -114,6 +112,9 @@ void fenAutomate::slotRedimensionner(){
     redimensionner();
 }
 
+void fenAutomate::slotChangeRules(){
+    const_cast<Automate*>(&monSimu->getAutomate())->changeRules();
+}
 
 void fenAutomate::slotTimerIntervalChange(int i){
     if(myTimer==nullptr) return;

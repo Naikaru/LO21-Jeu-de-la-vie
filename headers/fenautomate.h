@@ -99,8 +99,9 @@ public:
     virtual void redimensionner() = 0;
 
 public slots:
-    void slotAjoutColonne();
     void slotRedimensionner();
+    void slotAjoutColonne();
+    void slotChangeRules();
 
     void slotAvancer();
     void slotReculer();

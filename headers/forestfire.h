@@ -26,13 +26,10 @@ public:
     virtual void applyTransition(const Etat& depart, Etat& arrivee) const;
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
     virtual const QColor& colorize(int value) const;
-    virtual QWidget* changeRules() const { QWidget* newRules = new QWidget(); return newRules; }
+    virtual void changeRules() {}
 
 //public slots:
-//    virtual void slotMinChanged(int) { return; }
-//    virtual void slotMaxChanged(int) { return; }
-//    virtual void makeRulesChange() { return; }
-
+//    slotUpdateRules();
 };
 
 class ForestFireFactory : public abstractAutomateFactory{

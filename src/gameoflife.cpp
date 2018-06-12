@@ -130,7 +130,8 @@ const QColor& GameOfLife::colorize(int value)const {
     else return *(new QColor("Black"));
 }
 
-QWidget* GameOfLife::changeRules() const {
+
+void GameOfLife::changeRules(){
     QWidget* newRules = new QWidget();
 
     newRules->setWindowTitle("Règles de transitions"); // Nom de la fenêtre
@@ -141,40 +142,39 @@ QWidget* GameOfLife::changeRules() const {
     QHBoxLayout* monHorizontalLayout = new QHBoxLayout();
 
     // Nombre de voisins minimum pour la survie d'une cellule :
-    QSpinBox* minVoisins = new QSpinBox(newRules);
+    minVoisins = new QSpinBox(newRules);
     minVoisins->setValue(2);
     minVoisins->setMinimum(0);
     minVoisins->setMaximum(3); // Car maxVoisins par défaut sur 3
     minVoisins->size().setWidth(25);
     minVoisins->setAlignment(Qt::AlignCenter);
-    //connect(minVoisins, SIGNAL(valueChanged(int)), newRules, SLOT(slotMinChanged()));
+    connect(minVoisins, SIGNAL(valueChanged(int)), this, SLOT(slotMinChanged()));
 
     // Nombre de voisins minimum pour la survie d'une cellule :
-    QSpinBox* maxVoisins = new QSpinBox(newRules);
+    maxVoisins = new QSpinBox(newRules);
     maxVoisins->setValue(3);
     maxVoisins->setMinimum(2); // Car minVoisins par défaut sur 2
     maxVoisins->setMaximum(8);
     maxVoisins->size().setWidth(25);
     maxVoisins->setAlignment(Qt::AlignCenter);
-    //connect(minVoisins, SIGNAL(valueChanged(int)), newRules, SLOT(slotMaxChanged()));
+    connect(minVoisins, SIGNAL(valueChanged(int)), this, SLOT(slotMaxChanged()));
 
     // Nombre de voisins pour la naissance spontannée d'une cellule
-    QSpinBox* exactVoisins = new QSpinBox(newRules);
+    exactVoisins = new QSpinBox(newRules);
     exactVoisins->setValue(3);
     exactVoisins->setRange(0,8);
     exactVoisins->size().setWidth(25);
     exactVoisins->setAlignment(Qt::AlignCenter);
 
-    QComboBox* voisinage = new QComboBox(newRules);
-    voisinage->addItem("Moore", QVariant());
+    voisinage = new QComboBox(newRules);
     voisinage->addItem("Von Neumann");
-    //connect(voisinage,SIGNAL(currentTextChanged(QString)),newRules,SLOT(slotChoixVoisinage()));
+    voisinage->addItem("Moore");
 
     QPushButton* btOK = new QPushButton("Changer", newRules);
+    connect(btOK,SIGNAL(clicked()),this,SLOT(slotUpdateRules()));
+
     QPushButton* btAnnuler = new QPushButton("Annuler", newRules);
-    //S'il click sur annuler on cache la fenêtre
-    //connect(btOK,SIGNAL(clicked()),newRules,SLOT(makeRulesChange()));
-    //connect(btAnnuler,SIGNAL(clicked()),newRules,SLOT(close()));
+    connect(btAnnuler,SIGNAL(clicked()),newRules,SLOT(close()));
 
     monHorizontalLayout->addWidget(btOK);
     monHorizontalLayout->addWidget(btAnnuler);
@@ -186,28 +186,30 @@ QWidget* GameOfLife::changeRules() const {
     monVerticalLayout->addRow(monHorizontalLayout);
 
     newRules->setLayout(monVerticalLayout);
-
-    return newRules;
+    newRules->show();
 }
 
 
-//void GameOfLife::makeRulesChange(){
-//    /*
-//    minNeighbours = minVoisins->value();
-//    maxNeighbours = maxVoisins->value();
-//    exactNeighbours = exactVoisins->value();
-//    typeN = voisinage->currentIndex();
-//    */
-//}
+ // Redéfinition des règles de transition
+void GameOfLife::slotUpdateRules(){
+    minNeighbours = minVoisins->value();
+    maxNeighbours = maxVoisins->value();
+    exactNeighbours = exactVoisins->value();
+    if(voisinage->currentText().toStdString() == "Von Neumann")
+        typeN = VonNeumann;
+    else if(voisinage->currentText().toStdString() == "Moore")
+        typeN = Moore;
+}
 
-// // Mise à jour des contraintes sur maxVoisins
-//void GameOfLife::slotMinChanged(int value){
-//    //maxVoisins->setMinimum(value);
-//}
 
-//void GameOfLife::slotMaxChanged(int value){
-//    //minVoisins->setMaximum(value);
-//}
+ // Mise à jour des contraintes sur maxVoisins
+void GameOfLife::slotMinChanged(int value){
+    maxVoisins->setMinimum(value);
+}
+
+void GameOfLife::slotMaxChanged(int value){
+    minVoisins->setMaximum(value);
+}
 
 
 fenAutomate* GameOfLifeFactory::getfenAutomate(){

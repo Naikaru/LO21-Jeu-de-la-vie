@@ -173,7 +173,7 @@ void fenAutomate2D::redimensionner(){
     connect(BtOk, SIGNAL(clicked()), this, SLOT(slotUpdateDimensions()));
 
     QPushButton* BtCancel = new QPushButton("Annuler");
-    connect(BtCancel, SIGNAL(clicked()), this,SLOT(quit()));
+    connect(BtCancel, SIGNAL(clicked()), this,SLOT(close()));
 
     QHBoxLayout* hlayout = new QHBoxLayout();
     hlayout->addWidget(BtOk);

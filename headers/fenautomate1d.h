@@ -29,18 +29,6 @@
 // Classe qui correspond à la fenêtre d'un automate 1D
 class fenAutomate1D : public fenAutomate{
 Q_OBJECT
-    QSpinBox* num; // numéro
-    QLineEdit* numeroBit[8]; // un QLineEdit par bit
-    QLabel* numl;
-    QLabel* numeroBitl[8];
-    QVBoxLayout* numc;
-    QVBoxLayout* bitc[8];
-    QHBoxLayout* numeroc;
-    QIntValidator* zeroOneValidator;
-    QTableWidget* depart;
-    QPushButton* simulation;
-    QTableWidget* states = nullptr;
-
     QSpinBox* dimCols;
     unsigned int dimension = 20;
 public:
@@ -59,8 +47,6 @@ public:
     void addStep();
 
 public slots:
-    void synchronizeNumToNumBit(int n);
-    void synchronizeNumBitToNum(const QString& n);
     void slotUpdateDimensions();
     void slotGridClick(QModelIndex j); // Slop appellé quand on clique sur une case, les coordonees sont passés en argument par le signal
 };
