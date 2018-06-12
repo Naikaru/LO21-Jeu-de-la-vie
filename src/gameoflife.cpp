@@ -167,8 +167,8 @@ void GameOfLife::changeRules(){
     exactVoisins->setAlignment(Qt::AlignCenter);
 
     voisinage = new QComboBox(newRules);
-    voisinage->addItem("Von Neumann");
     voisinage->addItem("Moore");
+    voisinage->addItem("Von Neumann");
 
     QPushButton* btOK = new QPushButton("Changer", newRules);
     connect(btOK,SIGNAL(clicked()),this,SLOT(slotUpdateRules()));
@@ -199,6 +199,8 @@ void GameOfLife::slotUpdateRules(){
         typeN = VonNeumann;
     else if(voisinage->currentText().toStdString() == "Moore")
         typeN = Moore;
+    QMessageBox::information(newRules, "Transition Rules Modifications", "Les règles de transitions ont bien été modifiées (<strong>FAUX</strong>)");
+    // emit reinitialize(); ?
 }
 
 

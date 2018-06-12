@@ -97,6 +97,50 @@ const QColor& ForestFire::colorize(int value) const
 
 }
 
+
+void ForestFire::changeRules(){
+    newRules = new QWidget();
+
+    newRules->setWindowTitle("Règles de transitions"); // Nom de la fenêtre
+    newRules->setMinimumSize(200,50); // Size choisie au pif
+
+    // DEBUT INITIALISATION DES CHAMPS
+    QFormLayout* monVerticalLayout = new QFormLayout();
+    QHBoxLayout* monHorizontalLayout = new QHBoxLayout();
+
+    voisinage = new QComboBox(newRules);
+    voisinage->addItem("Moore");
+    voisinage->addItem("Von Neumann");
+    monVerticalLayout->addRow("Type de voisinage :", voisinage);
+
+    QPushButton* btOK = new QPushButton("Changer", newRules);
+    connect(btOK,SIGNAL(clicked()),this,SLOT(slotUpdateRules()));
+
+    QPushButton* btAnnuler = new QPushButton("Annuler", newRules);
+    connect(btAnnuler,SIGNAL(clicked()),newRules,SLOT(close()));
+
+    monHorizontalLayout->addWidget(btOK);
+    monHorizontalLayout->addWidget(btAnnuler);
+
+    monVerticalLayout->addRow(monHorizontalLayout);
+
+    newRules->setLayout(monVerticalLayout);
+    newRules->show();
+}
+
+
+ // Redéfinition des règles de transition
+void ForestFire::slotUpdateRules(){
+    if(voisinage->currentText().toStdString() == "Von Neumann")
+        typeN = VonNeumann;
+    else if(voisinage->currentText().toStdString() == "Moore")
+        typeN = Moore;
+    QMessageBox::information(newRules, "Transition Rules Modifications", "Les règles de transitions ont bien été modifiées (<strong>FAUX</strong>)");
+    // emit reinitialize(); ?
+}
+
+
+
 fenAutomate* ForestFireFactory::getfenAutomate(){
     Automate* monAutomate = new ForestFire();
     Etat* monEtat = new Etat();

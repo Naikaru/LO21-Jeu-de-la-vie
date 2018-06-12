@@ -30,7 +30,6 @@
 class fenAutomate1D : public fenAutomate{
 Q_OBJECT
     QSpinBox* dimCols;
-    unsigned int dimension = 20;
 public:
     fenAutomate1D(QString nom, Simulateur* s);
     virtual ~fenAutomate1D(){}

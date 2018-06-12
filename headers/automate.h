@@ -20,6 +20,7 @@
 #include <QComboBox>
 #include <QPushButton>
 #include <QIntValidator>
+#include <QMessageBox>
 
 
 // Classe qui gère les exceptions des automates

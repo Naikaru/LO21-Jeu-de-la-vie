@@ -14,8 +14,13 @@ enum stateForest {empty, tree, fire, ashes};
 
 class ForestFire : public Automate
 {
+   Q_OBJECT
+
 private:
     Neighbourhood typeN;
+
+    QWidget* newRules;
+    QComboBox* voisinage;
 public:
     ForestFire(Neighbourhood n=Moore);
     virtual ~ForestFire()=default;
@@ -26,10 +31,10 @@ public:
     virtual void applyTransition(const Etat& depart, Etat& arrivee) const;
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
     virtual const QColor& colorize(int value) const;
-    virtual void changeRules() {}
+    virtual void changeRules();
 
-//public slots:
-//    slotUpdateRules();
+public slots:
+    void slotUpdateRules();
 };
 
 class ForestFireFactory : public abstractAutomateFactory{

@@ -97,18 +97,18 @@ const QColor& Automate1D::colorize(int value)const{
 
 
 void Automate1D::changeRules() {
-    QWidget* newRules = new QWidget();
+    newRules = new QWidget();
 
     newRules->setWindowTitle("Règles de transitions"); // Nom de la fenêtre
-    newRules->setMinimumSize(400,100); // Size choisie au pif
+    newRules->setMinimumSize(250,100); // Size choisie au pif
 
     QFormLayout* mainLayout = new QFormLayout();
 
     numRule = new QSpinBox(newRules);
     numRule->setRange(0,255);
+    numRule->setValue(numero);
 
     mainLayout->addRow("Numéro de la règle :", numRule);
-
 
     QIntValidator* zeroOneValidator = new QIntValidator();
     zeroOneValidator->setRange(0,1);
@@ -158,7 +158,8 @@ void Automate1D::changeRules() {
 
 
 void Automate1D::slotUpdateRules(){
-
+    numero = numRule->value();
+    QMessageBox::information(newRules, "Transition Rules Modifications", "Les règles de transitions ont bien été modifiées (<strong>FAUX</strong>)");
 }
 
 void Automate1D::slotNumToNumBit(int n)

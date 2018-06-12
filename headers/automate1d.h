@@ -20,9 +20,9 @@ private:
     static std::string ERROR_BAD_ETAT;
 
     // Elements nécessaires à la réinitialisation des attributs
-    QSpinBox* numRule; // numéro
-    QLineEdit* numBitRule[8];
-    QIntValidator* zeroOneValidator;
+    QWidget* newRules;
+    QSpinBox* numRule; // numéro de la règle en int
+    QLineEdit* numBitRule[8];  // numéro de la règle en "string" binaire
 
 public:
     Automate1D(unsigned short int num = 42);

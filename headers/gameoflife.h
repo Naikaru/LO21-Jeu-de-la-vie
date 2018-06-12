@@ -12,12 +12,14 @@
 
 class GameOfLife : public Automate
 {
+
 private:
     unsigned short int minNeighbours;
     unsigned short int maxNeighbours;
     unsigned short int exactNeighbours;
     Neighbourhood typeN;
 
+    QWidget* newRules;
     QSpinBox* minVoisins;
     QSpinBox* maxVoisins;
     QSpinBox* exactVoisins;
