@@ -159,6 +159,7 @@ void Automate1D::changeRules() {
 
 void Automate1D::slotUpdateRules(){
     numero = numRule->value();
+    numeroBit = NumToNumBit(numero);
     QMessageBox::information(newRules, "Transition Rules Modifications", "Les règles de transitions ont bien été modifiées (<strong>FAUX</strong>)");
 }
 

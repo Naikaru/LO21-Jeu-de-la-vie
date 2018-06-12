@@ -12,6 +12,7 @@
 
 class GameOfLife : public Automate
 {
+    Q_OBJECT
 
 private:
     unsigned short int minNeighbours;

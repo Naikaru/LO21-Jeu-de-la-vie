@@ -132,7 +132,7 @@ const QColor& GameOfLife::colorize(int value)const {
 
 
 void GameOfLife::changeRules(){
-    QWidget* newRules = new QWidget();
+    newRules = new QWidget();
 
     newRules->setWindowTitle("Règles de transitions"); // Nom de la fenêtre
     newRules->setMinimumSize(200,100); // Size choisie au pif
@@ -148,7 +148,7 @@ void GameOfLife::changeRules(){
     minVoisins->setMaximum(3); // Car maxVoisins par défaut sur 3
     minVoisins->size().setWidth(25);
     minVoisins->setAlignment(Qt::AlignCenter);
-    connect(minVoisins, SIGNAL(valueChanged(int)), this, SLOT(slotMinChanged()));
+    connect(minVoisins, SIGNAL(valueChanged(int)), this, SLOT(slotMinChanged(int)));
 
     // Nombre de voisins minimum pour la survie d'une cellule :
     maxVoisins = new QSpinBox(newRules);
@@ -157,7 +157,7 @@ void GameOfLife::changeRules(){
     maxVoisins->setMaximum(8);
     maxVoisins->size().setWidth(25);
     maxVoisins->setAlignment(Qt::AlignCenter);
-    connect(minVoisins, SIGNAL(valueChanged(int)), this, SLOT(slotMaxChanged()));
+    connect(minVoisins, SIGNAL(valueChanged(int)), this, SLOT(slotMaxChanged(int)));
 
     // Nombre de voisins pour la naissance spontannée d'une cellule
     exactVoisins = new QSpinBox(newRules);
@@ -196,11 +196,10 @@ void GameOfLife::slotUpdateRules(){
     maxNeighbours = maxVoisins->value();
     exactNeighbours = exactVoisins->value();
     if(voisinage->currentText().toStdString() == "Von Neumann")
-        typeN = VonNeumann;
+        typeN = VonNeumann  ;
     else if(voisinage->currentText().toStdString() == "Moore")
         typeN = Moore;
     QMessageBox::information(newRules, "Transition Rules Modifications", "Les règles de transitions ont bien été modifiées (<strong>FAUX</strong>)");
-    // emit reinitialize(); ?
 }
 
 

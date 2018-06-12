@@ -43,7 +43,7 @@ void fenAutomate1D::resizeGrid(){
 void fenAutomate1D::addStep(){
     const Etat& dernier = monSimu->dernier(); // On récupère le dernier état
     int cols = (int) dernier.getNbCols();  // nb de colonnes de l'état
-    const Automate* monAuto = &monSimu->getAutomate();
+    const Automate* monAuto = monSimu->getAutomate();
     int row = (int) maGrid->rowCount();
 
     // On introduit une nouvelle ligne correspondant à la génération suivante
@@ -73,7 +73,7 @@ void fenAutomate1D::cellChange(unsigned int i, unsigned int j)
 
     // On prends l'item de la grille cliqué, on récupère la valeur correspondante dans l'etat initial, et on affiche
     // la couleur correspondante via la fonction dédiée dans l'automate
-    maGrid->item(i,j)->setBackgroundColor(monSimu->getAutomate().colorize(monSimu->getInitialState()->getCellule(0,j)));
+    maGrid->item(i,j)->setBackgroundColor(monSimu->getAutomate()->colorize(monSimu->getInitialState()->getCellule(0,j)));
     monSimu->reset();
 }
 
@@ -126,7 +126,7 @@ void fenAutomate1D::refreshGrid(){
     const Etat& dernier = monSimu->dernier();
     unsigned int cols = (int) dernier.getNbCols();
     unsigned int row = maGrid->rowCount();
-    const Automate* monAuto = &monSimu->getAutomate();
+    const Automate* monAuto = monSimu->getAutomate();
     //adaptGridSize();
     for(int j(0);j<cols;j++){
         maGrid->item(row-1,j)->setBackgroundColor(monAuto->colorize(dernier.getCellule(0,j)));
@@ -141,7 +141,7 @@ void fenAutomate1D::addCols(unsigned int c){
     for(unsigned int j(cols); j<cols+c; ++j){
         maGrid->setItem(row,j, new QTableWidgetItem(""));
         maGrid->item(row,j)->setFlags(Qt::ItemIsEnabled);
-        maGrid->item(row,j)->setBackgroundColor(monSimu->getAutomate().colorize(monSimu->dernier().getCellule(0,j)));
+        maGrid->item(row,j)->setBackgroundColor(monSimu->getAutomate()->colorize(monSimu->dernier().getCellule(0,j)));
     }
     resizeGrid();
 }

@@ -26,7 +26,7 @@ class Simulateur
     static std::string ERROR_BUFFER_LENGTH;
     static std::string ERROR_BAD_START_STATE;
     static std::string ERROR_NO_INIT;
-    const Automate* myAutomat;
+    Automate* myAutomat;
     Etat** etats;
     const Etat* depart;
     unsigned int nbMaxEtats;
@@ -34,7 +34,7 @@ class Simulateur
 
 public:
 
-    Simulateur(const Automate* a, const Etat* dep, unsigned int buffer = 2);
+    Simulateur(/*const*/ Automate* a, const Etat* dep, unsigned int buffer = 2);
     Simulateur(const Simulateur& s);
     Simulateur& operator=(const Simulateur& s);
      ~Simulateur();
@@ -68,7 +68,7 @@ public:
          getInitialState()->redimGrid(i,j); // Méthode de Etat
      }
 
-     const Automate& getAutomate(){ return *myAutomat;}
+     Automate* getAutomate(){ return myAutomat;}
      void setEtatDepart(const Etat& e); // Définit l'état de départ sur l'etat passé en param
      void run(unsigned int nbSteps); // génère les n prochains états
      void next(); // génère le prochain état

@@ -113,7 +113,7 @@ void fenAutomate::slotRedimensionner(){
 }
 
 void fenAutomate::slotChangeRules(){
-    const_cast<Automate*>(&monSimu->getAutomate())->changeRules();
+    monSimu->getAutomate()->changeRules();
 }
 
 void fenAutomate::slotTimerIntervalChange(int i){
