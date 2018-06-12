@@ -37,7 +37,8 @@ public:
     }
     virtual void avancer(); // Fonction qui fait avancer la simulation
     virtual void reculer(); // Fonction qui fait reculer la simulation
-    virtual void initialize(); // test d'initialisation, à passer en slot : initialisation aléatoire ou symétrique
+    virtual void initialize(); // initialisation, à passer en méthode de Automate !
+    virtual void reinitialize(); // Remise à 0 de la grille (et du Simu mais géré par la classe mère).
 
     virtual void resizeGrid(); // Redimensionne la grille pour que ça soit joli par rapport à la dimension de la fenêtre (uniquement)
     virtual void refreshGrid();

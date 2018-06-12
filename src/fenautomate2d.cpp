@@ -131,6 +131,14 @@ void fenAutomate2D::initialize(){
     maGrid->repaint();
 }
 
+
+void fenAutomate2D::reinitialize(){
+    for(unsigned int i(0); i<maGrid->rowCount(); ++i)
+        for(unsigned int j(0); j<maGrid->columnCount(); ++j)
+            maGrid->item(i,j)->setBackgroundColor("white");
+    maGrid->repaint();
+}
+
 void fenAutomate2D::addCols(unsigned int c){
     unsigned int cols = maGrid->columnCount();
     maGrid->setColumnCount(cols+c);
@@ -196,14 +204,14 @@ void fenAutomate2D::slotUpdateDimensions(){
     monSimu->reset();   // Réset le simu avec l'état de départ
 
     if(newDimRows < maGrid->rowCount()){
-        for(unsigned int i(maGrid->rowCount()); i>=newDimRows; --i)
+        for(unsigned int i(maGrid->rowCount()-1); i>=newDimRows; --i)
             maGrid->removeRow(i);
     }
     else if(newDimRows > maGrid->rowCount())
         addRows(newDimRows - maGrid->rowCount());
 
     if(newDimCols < maGrid->columnCount()){
-        for(unsigned int j(maGrid->columnCount()); j>=newDimCols; --j)
+        for(unsigned int j(maGrid->columnCount()-1); j>=newDimCols; --j)
             maGrid->removeColumn(j);
     }
     else if(newDimCols > maGrid->columnCount())

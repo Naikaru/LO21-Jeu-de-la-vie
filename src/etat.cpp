@@ -98,10 +98,10 @@ void Etat::rmCols(unsigned int i){
     nbCols = nbCols - i;
 }
 
-void Etat::setAllTabValue(int v){
-    int i,j;
-    for(i=0;i<nbRows;i++){
-        for(j=0;i<nbCols;j++) grid[i][j] = v;
+void Etat::setAllTabValue(unsigned int v){
+    for(unsigned int i(0); i<nbRows ; ++i){
+        for(unsigned int j(0); j<nbCols; ++j)
+                setCellule(i,j,v);
     }
 }
 void Etat::setCols(unsigned int i){

@@ -50,12 +50,14 @@ void fenAutomate::UImaker(){
     choixInit = new QComboBox();
     choixInit->addItem("Random");
     choixInit->addItem("Symetric");
+    BTreset = new QPushButton(QIcon(":/img/reset-button.png"),"", myCentralWidget);
 
     BTplay->setSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
     BTplay->setFlat(true);
     BTreculer->setFlat(true);
     BTavancer->setFlat(true);
     BTinit->setFlat(true);
+    BTreset->setFlat(true);
 
     myTimer = new QTimer(this);
     mySlider = new QSlider(Qt::Horizontal);
@@ -71,11 +73,13 @@ void fenAutomate::UImaker(){
     connect(BTavancer,SIGNAL(clicked()),this,SLOT(slotAvancer()));
     connect(BTreculer,SIGNAL(clicked()),this,SLOT(slotReculer()));
     connect(BTinit, SIGNAL(clicked()),this,SLOT(slotInit()));
+    connect(BTreset, SIGNAL(clicked()),this,SLOT(slotReset()));
 
     QHBoxLayout* BTLayout = new QHBoxLayout;
     BTLayout->addWidget(BTreculer);
     BTLayout->addWidget(BTplay);
     BTLayout->addWidget(BTavancer);
+    BTLayout->addWidget(BTreset);
     BTLayout->addWidget(BTinit);
     BTLayout->addWidget(choixInit);
 
@@ -135,4 +139,13 @@ void fenAutomate::slotInit(){
     initialize();
 }
 
+void fenAutomate::slotReset(){
+    monSimu->setEtatDepart(monSimu->dernier());
+    Etat* e = monSimu->getInitialState(); // Renvoie l'attribut depart
+    e->setAllTabValue(0); // On remet à 0 cet état de départ
+    monSimu->reset();   // On réinitialise le simulateur
+    // Sorte de DP Adaptateur
+    reinitialize();
+    // Il s'agit avec reinitialize() de modifier la grille en conséquence, si on est en 1D ou 2D
+}
 

@@ -122,6 +122,21 @@ void fenAutomate1D::initialize()
 }
 
 
+void fenAutomate1D::reinitialize(){
+    for(unsigned int i(maGrid->rowCount()-1); i>0; --i){
+        maGrid->removeRow(i);
+        // delete toutes les lignes, qui avaient de toute façon uniquement un caractère visuel pour le 1D
+    }
+    maGrid->repaint();
+    for(unsigned int j(0); j<maGrid->columnCount(); ++j){
+        maGrid->item(0,j)->setBackgroundColor("white");
+        // Le blanc est tout le temps la référence d'une grille vide
+        // Sinon
+        //maGrid->item(0,j)->setBackgroundColor(monSimu->getAutomate()->colorize(monSimu->dernier().getCellule(0,j)));
+    }
+    maGrid->repaint();
+}
+
 void fenAutomate1D::refreshGrid(){
     const Etat& dernier = monSimu->dernier();
     unsigned int cols = (int) dernier.getNbCols();
@@ -180,7 +195,7 @@ void fenAutomate1D::slotUpdateDimensions(){
 
 
     if(newDimCols < maGrid->columnCount()){
-        for(unsigned int j(maGrid->columnCount()); j>=newDimCols; --j)
+        for(unsigned int j(maGrid->columnCount()-1); j>=newDimCols; --j)
             maGrid->removeColumn(j);
     }
     else if(newDimCols > maGrid->columnCount())

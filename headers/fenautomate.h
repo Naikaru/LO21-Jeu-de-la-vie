@@ -62,6 +62,7 @@ protected:
     QPushButton* BTreculer;
     QPushButton* BTplay;
     QPushButton* BTinit;
+    QPushButton* BTreset;
     QComboBox* choixInit;
     QSlider* mySlider;
     QTimer* myTimer;
@@ -93,6 +94,7 @@ public:
     virtual void avancer() = 0;
     virtual void reculer() = 0;
     virtual void initialize() = 0;
+    virtual void reinitialize() = 0;
     virtual void resizeGrid() = 0;
     virtual void refreshGrid() = 0;
     virtual void addCols(unsigned int c=1) = 0;
@@ -106,6 +108,7 @@ public slots:
     void slotAvancer();
     void slotReculer();
     void slotInit();
+    void slotReset();
     void slotTimerIntervalChange(int i);
     void slotBtPlayStop();
 

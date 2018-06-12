@@ -18,5 +18,6 @@
         <file>img/backward.png</file>
         <file>img/layout.png</file>
         <file>img/rules.png</file>
+        <file>img/reset-button.png</file>
     </qresource>
 </RCC>

@@ -38,6 +38,7 @@ public:
     virtual void addCols(unsigned int c=1);
     virtual void redimensionner();
     virtual void initialize();
+    virtual void reinitialize();
 
     virtual void resizeGrid();
     virtual void refreshGrid();

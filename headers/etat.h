@@ -60,8 +60,7 @@ public:
 
     void setCols(unsigned int i); // retire/ajoute des colonnes pour arriver à i colonnes
     void setRows(unsigned int i); // retire/ajoute des lignes pour arrives à i lignes
-    void setAllTabValue(int v); // mets la valeur v dans toute la grille
-
+    void setAllTabValue(unsigned int v); // mets la valeur v dans toute la grille
 };
 
 #endif // ETAT_H
