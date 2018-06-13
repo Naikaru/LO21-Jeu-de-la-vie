@@ -91,37 +91,6 @@ void fenAutomate1D::reculer(){
 }
 
 
-void fenAutomate1D::initialize()
-{
-    std::srand(std::time(NULL));
-    unsigned short int probability = (std::rand()*std::rand())%100;
-    Etat* e = monSimu->getInitialState();
-    unsigned int cols = maGrid->columnCount();
-
-    if(choixInit->currentText().toStdString() == "Random"){
-        for(unsigned int j(0); j < cols; ++j){
-            if(probability >= std::rand()%100)
-                e->setCellule(0,j,1);
-            else
-                e->setCellule(0,j,0);
-        }
-    }
-    else if(choixInit->currentText().toStdString() == "Symetric") {
-        for(unsigned int j(0); j <= (int) cols/2; ++j) {
-            if(probability >= std::rand()%100){
-                e->setCellule(0,j,1);
-                e->setCellule(0,cols-1-j,1);
-            }else{
-                e->setCellule(0,j,0);
-                e->setCellule(0,cols-1-j,0);
-            }
-        }
-    }
-    monSimu->reset();
-    refreshGrid();
-}
-
-
 void fenAutomate1D::reinitialize(){
     for(unsigned int i(maGrid->rowCount()-1); i>0; --i){
         maGrid->removeRow(i);

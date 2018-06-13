@@ -93,7 +93,6 @@ public:
 
     virtual void avancer() = 0;
     virtual void reculer() = 0;
-    virtual void initialize() = 0;
     virtual void reinitialize() = 0;
     virtual void resizeGrid() = 0;
     virtual void refreshGrid() = 0;

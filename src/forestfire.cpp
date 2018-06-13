@@ -98,6 +98,38 @@ const QColor& ForestFire::colorize(int value) const
 }
 
 
+void ForestFire::initRandom(Etat* e) {
+    std::srand(std::time(NULL));
+    unsigned int probability = ((std::rand()%100)*(std::rand()%100))%100; // On met des modulos car exponentiation rapide plus performante
+    for(unsigned int i(0); i < e->getNbRows(); ++i){
+        for(unsigned int j(0); j < e->getNbCols(); ++j){
+            if(probability >= std::rand()%100)
+                e->setCellule(i,j,1);
+            else
+                e->setCellule(i,j,0);
+        }
+    }
+}
+
+
+void ForestFire::initSymetric(Etat* e) {
+    std::srand(std::time(NULL));
+    unsigned int probability = ((std::rand()%100)*(std::rand()%100))%100; // On met des modulos car exponentiation rapide plus performante
+    unsigned int cols = e->getNbCols();
+    for(unsigned int i(0); i < e->getNbRows(); ++i) {
+        for(unsigned int j(0); j <= (int) cols/2; ++j) {
+            if(probability >= std::rand()%100){
+                e->setCellule(i,j,1);
+                e->setCellule(i,cols-1-j,1);
+            }else{
+                e->setCellule(i,j,0);
+                e->setCellule(i,cols-1-j,0);
+            }
+        }
+    }
+}
+
+
 void ForestFire::changeRules(){
     newRules = new QWidget();
 
@@ -113,10 +145,10 @@ void ForestFire::changeRules(){
     voisinage->addItem("Von Neumann");
     monVerticalLayout->addRow("Type de voisinage :", voisinage);
 
-    QPushButton* btOK = new QPushButton("Changer", newRules);
+    QPushButton* btOK = new QPushButton("Changer");
     connect(btOK,SIGNAL(clicked()),this,SLOT(slotUpdateRules()));
 
-    QPushButton* btAnnuler = new QPushButton("Annuler", newRules);
+    QPushButton* btAnnuler = new QPushButton("Annuler");
     connect(btAnnuler,SIGNAL(clicked()),newRules,SLOT(close()));
 
     monHorizontalLayout->addWidget(btOK);
@@ -135,7 +167,7 @@ void ForestFire::slotUpdateRules(){
         typeN = VonNeumann;
     else if(voisinage->currentText().toStdString() == "Moore")
         typeN = Moore;
-    QMessageBox::information(newRules, "Transition Rules Modifications", "Les règles de transitions ont bien été modifiées (<strong>FAUX</strong>)");
+    QMessageBox::information(newRules, "Transition Rules Modifications", "Les règles de transitions ont bien été modifiées");
     // emit reinitialize(); ?
 }
 

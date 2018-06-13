@@ -37,7 +37,6 @@ public:
     virtual void reculer();
     virtual void addCols(unsigned int c=1);
     virtual void redimensionner();
-    virtual void initialize();
     virtual void reinitialize();
 
     virtual void resizeGrid();

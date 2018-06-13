@@ -136,7 +136,19 @@ void fenAutomate::slotReculer(){
 }
 
 void fenAutomate::slotInit(){
-    initialize();
+    monSimu->setEtatDepart(monSimu->dernier());
+    Etat* e = monSimu->getInitialState();
+
+    if(choixInit->currentText().toStdString() == "Random")
+        monSimu->getAutomate()->initRandom(e);
+    else if(choixInit->currentText().toStdString() == "Symetric")
+        monSimu->getAutomate()->initSymetric(e);
+
+    monSimu->reset();
+    // On remet l'état de départ avec les changements.
+    refreshGrid();
+    // On met les couleurs de la grille à jour conformément à 1D ou 2D
+    maGrid->repaint();
 }
 
 void fenAutomate::slotReset(){

@@ -41,6 +41,8 @@ public:
     // nb: le test pour savoir si r,c ne sont pas outofbound se fait dans etat
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
     virtual const QColor& colorize(int value) const;
+    virtual void initRandom(Etat* e);
+    virtual void initSymetric(Etat* e);
     virtual void changeRules();
 
 public slots:

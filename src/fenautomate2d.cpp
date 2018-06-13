@@ -92,45 +92,6 @@ void fenAutomate2D::slotGridClick(QModelIndex j){
 
 }
 
-void fenAutomate2D::initialize(){
-    monSimu->setEtatDepart(monSimu->dernier());
-    std::srand(std::time(NULL));
-    unsigned short int probability = (std::rand()*std::rand())%100;
-    Etat* e = monSimu->getInitialState();
-
-    if(choixInit->currentText().toStdString() == "Random"){
-        for(unsigned int i(0); i < maGrid->rowCount(); ++i)
-            for(unsigned int j(0); j < maGrid->columnCount(); ++j){
-                if(probability >= std::rand()%100)
-                    e->setCellule(i,j,1);
-                else
-                    e->setCellule(i,j,0);
-            }
-    }
-    else if(choixInit->currentText().toStdString() == "Symetric") {
-        unsigned short int boundary = (maGrid->rowCount() <= maGrid->colorCount())? maGrid->rowCount():maGrid->colorCount();
-        // La symétrie n'est possible que sur la partie carrée de la matrice.
-        for(unsigned int i(0); i < boundary; ++i){
-            for (unsigned int j(i); j < boundary; ++j){
-                if(probability >= std::rand()%100){
-                    e->setCellule(i,j,1);
-                    e->setCellule(j,i,1);
-                }
-                else{
-                    e->setCellule(i,j,0);
-                    e->setCellule(j,i,0);
-                }
-            }
-        }
-    }
-
-    monSimu->reset();
-    // On remet l'état de départ avec les changements.
-    refreshGrid();
-    // On met les couleurs de la grille à jour
-    maGrid->repaint();
-}
-
 
 void fenAutomate2D::reinitialize(){
     for(unsigned int i(0); i<maGrid->rowCount(); ++i)

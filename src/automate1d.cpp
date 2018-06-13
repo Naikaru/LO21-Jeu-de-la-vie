@@ -96,6 +96,36 @@ const QColor& Automate1D::colorize(int value)const{
 }
 
 
+void Automate1D::initRandom(Etat* e) {
+    std::srand(std::time(NULL));
+    unsigned int probability = ((std::rand()%100)*(std::rand()%100))%100; // On met des modulos car exponentiation rapide plus performante
+    for(unsigned int i(0); i < e->getNbRows(); ++i){
+        for(unsigned int j(0); j < e->getNbCols(); ++j){
+            if(probability >= std::rand()%100)
+                e->setCellule(0,j,1);
+            else
+                e->setCellule(0,j,0);
+        }
+    }
+}
+
+
+void Automate1D::initSymetric(Etat* e) {
+    std::srand(std::time(NULL));
+    unsigned int probability = ((std::rand()%100)*(std::rand()%100))%100; // On met des modulos car exponentiation rapide plus performante
+    unsigned int cols = e->getNbCols();
+    for(unsigned int j(0); j <= (int) cols/2; ++j) {
+        if(probability >= std::rand()%100){
+            e->setCellule(0,j,1);
+            e->setCellule(0,cols-1-j,1);
+        }else{
+            e->setCellule(0,j,0);
+            e->setCellule(0,cols-1-j,0);
+        }
+    }
+}
+
+
 void Automate1D::changeRules() {
     newRules = new QWidget();
 
@@ -160,7 +190,7 @@ void Automate1D::changeRules() {
 void Automate1D::slotUpdateRules(){
     numero = numRule->value();
     numeroBit = NumToNumBit(numero);
-    QMessageBox::information(newRules, "Transition Rules Modifications", "Les règles de transitions ont bien été modifiées (<strong>FAUX</strong>)");
+    QMessageBox::information(newRules, "Transition Rules Modifications", "Les règles de transitions ont bien été modifiées");
 }
 
 void Automate1D::slotNumToNumBit(int n)

@@ -31,6 +31,8 @@ public:
     virtual void applyTransition(const Etat& depart, Etat& arrivee) const;
     virtual void changeStatus(unsigned int r, unsigned int c, Etat* e) const;
     virtual const QColor& colorize(int value) const;
+    virtual void initRandom(Etat* e);
+    virtual void initSymetric(Etat* e);
     virtual void changeRules();
 
 public slots:

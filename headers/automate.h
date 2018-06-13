@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include "headers/etat.h"
+#include <cstdlib>
+#include <ctime>
 
 #include <QObject>
 #include <QWidget>
@@ -65,6 +67,10 @@ public:
 
     // Permet de changer les règles de transtions (par polymorphisme)
     virtual void changeRules() = 0;
+
+    // Afin d'initialiser l'état de départ :
+    virtual void initRandom(Etat* e) = 0; // De manière aléatoire
+    virtual void initSymetric(Etat* e) = 0; // De manière symétrique (pas rapport à l'axe des ordonnées
 };
 
 
