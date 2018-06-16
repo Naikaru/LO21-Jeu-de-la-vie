@@ -87,9 +87,8 @@ void fenAutomate1D::avancer(){
 
 
 void fenAutomate1D::reculer(){
-    //monSimu->next();
-    //refreshGrid();
-    //maGrid->repaint();
+   monSimu->stepBack();
+   maGrid->removeRow(maGrid->rowCount()-1);
 }
 
 

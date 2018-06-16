@@ -79,7 +79,7 @@ void fenAutomate2D::avancer(){
 
 
 void fenAutomate2D::reculer(){
-    //monSimu->next();
+    monSimu->stepBack();
     refreshGrid();
     maGrid->repaint();
 }

@@ -3,6 +3,7 @@
 
 #include "headers/automate.h"
 #include "headers/etat.h"
+#include <QMessageBox>
 
 //   TODO  //
 //
@@ -76,6 +77,7 @@ public:
      unsigned int getRangDernier() const { return rang; } // retourne le rang du dernier
      void reset(); // revenir à l'état de départ
      Etat* getInitialState(){return const_cast<Etat*>(depart);} // retourne l'etat initial du simulateur (avec possibilité de le modifier)
+     void stepBack();
 };
 
 #endif // SIMULATEUR_H

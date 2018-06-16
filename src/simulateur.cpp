@@ -86,4 +86,11 @@ void Simulateur::reset(){
     rang = 0;
 }
 
+void Simulateur::stepBack(){
+    if(rang > 0 && etats[(rang-1)%nbMaxEtats] != nullptr && etats[(rang)%nbMaxEtats] != nullptr){
+        delete etats[rang%nbMaxEtats];
+        etats[rang%nbMaxEtats] = nullptr;
+        rang--;
+    }
 
+}
