@@ -11,7 +11,10 @@
 #include "headers/fenautomate2d.h"
 
 enum stateForest {empty, tree, fire, ashes};
-
+/**
+ * @brief The ForestFire class
+ *             Classe qui permet la simulation d'un feu de forêt
+ */
 class ForestFire : public Automate
 {
    Q_OBJECT
@@ -110,9 +113,24 @@ public slots:
 class ForestFireFactory : public abstractAutomateFactory{
 
 public:
+    /**
+     * @brief monNom Nom de la factory & de l'automate, permets d'unifier toutes les notations
+     */
     static std::string monNom;
+    /**
+     * @brief Automate1DFactory constructeur de la factory
+     */
     ForestFireFactory():abstractAutomateFactory(monNom){}
+    /**
+     * @brief getfenAutomate Fonction permettant de récupérer une fenAutomate2D bien construite, prête à l'utilisation
+     * @param monJson Json contenant les valeurs de attributs des elements de la simulation de feu de foret
+     * @return fenAutomate2D prete à l'utilisation
+     */
     virtual fenAutomate* getfenAutomate(QJsonObject& monJson);
+    /**
+     * @brief getfenAutomate Fonction permettant de récupérer une fenAutomate2D bien construite, prête à l'utilisation
+     * @return fenAutomate2D prete à l'utilisation
+     */
     virtual fenAutomate* getfenAutomate();
     virtual ~ForestFireFactory() = default;
 };

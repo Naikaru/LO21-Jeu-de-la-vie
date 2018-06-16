@@ -38,8 +38,6 @@ void fenAutomate1D::resizeGrid(){
 }
 
 
-
-
 void fenAutomate1D::addStep(){
     const Etat& dernier = monSimu->dernier(); // On récupère le dernier état
     int cols = (int) dernier.getNbCols();  // nb de colonnes de l'état
@@ -88,6 +86,7 @@ void fenAutomate1D::avancer(){
 
 
 void fenAutomate1D::reculer(){
+    if(maGrid->rowCount() == 1) return;
     if(monSimu->stepBack() == true)
         maGrid->removeRow(maGrid->rowCount()-1);
     else

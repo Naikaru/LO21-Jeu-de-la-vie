@@ -130,6 +130,10 @@ public:
      * @param e
      */
     virtual void initSymetric(Etat* e) = 0; // De manière symétrique (pas rapport à l'axe des ordonnées
+    /**
+     * @brief toJson Renvoie un QJsonObject qui contient la valeur des attributs de l'automate au format JSON
+     * @return Valeur des attributs de l'objet au format Json
+     */
     virtual QJsonObject& toJson() const = 0;
 };
 

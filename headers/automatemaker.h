@@ -14,14 +14,23 @@
 #include <string>
 
 
-// Classe qui correspond à la petite boite qui crée les automates
+/**
+ * @brief The Automatemaker class
+ *              Récupère le choix de l'utilisateur et crée la fenAutomate correspondant
+ */
 class Automatemaker : public QWidget
 {
 Q_OBJECT
 private:
     static Automatemaker* instance; // C'est un singleton
+    /**
+     * @brief Automatemaker Constructeur (privé) de la classe
+     */
     Automatemaker(); // Constructeur private
     ~Automatemaker(); // Destructeur private
+    /**
+     * @brief setAutomateList Initialise la combobox de la classe
+     */
     void setAutomateList(); // fonction qui initialise la combobox
 
     // ELEMENTS //
@@ -33,13 +42,26 @@ private:
     QPushButton* btAnnuler; // bouton annuler
 
 public:
+    /**
+     * @brief getInstance Fonction statique qui renvoie l'instance de AutomateMaker si elle existe, ou en crée une sinon
+     * @return Instance de automatemaker
+     */
     static Automatemaker* getInstance(); // Pour créer ou obtenir l'instance du singleton
+    /**
+     * @brief release détruit l'instance de automatemaker si elle existe
+     */
     static void release(); // Pour détruire le singleton
 
 public slots:
+    /**
+     * @brief creatAuto Crée un automate en fonction de la valeur de la combobox, et envoie le signal "newAuto"
+     */
     void creatAuto(); // Slot qui crée un automate et emit newAuto(fenAutomate*)
 
 signals:
+    /**
+     * @brief newAuto Signal émis lorsque l'utilisateur a cliqué sur le bouton pour créer un nouvel automate
+     */
     void newAuto(fenAutomate*);
 };
 

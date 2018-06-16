@@ -10,6 +10,10 @@
 #include "headers/fenautomate2d.h"
 #include "headers/abstractautomatefactory.h"
 
+/**
+ * @brief The GameOfLife class
+ *                  Classe qui permet la simulation d'un jeu de la vie
+ */
 class GameOfLife : public Automate
 {
     Q_OBJECT
@@ -160,9 +164,24 @@ public slots:
 
 class GameOfLifeFactory : public abstractAutomateFactory{
 public:
+    /**
+     * @brief monNom Nom de la factory & de l'automate, permets d'unifier toutes les notations
+     */
     static std::string monNom;
+    /**
+     * @brief Automate1DFactory constructeur de la factory
+     */
     GameOfLifeFactory():abstractAutomateFactory(monNom){}
+    /**
+     * @brief getfenAutomate Fonction permettant de récupérer une fenAutomate1D bien construite, prête à l'utilisation
+     * @return fenAutomate1D prete à l'utilisation
+     */
     virtual fenAutomate* getfenAutomate();
+    /**
+     * @brief getfenAutomate Fonction permettant de récupérer une fenAutomate1D bien construite, prête à l'utilisation
+     * @param monJson Json contenant les valeurs de attributs des elements de la simulation1D
+     * @return fenAutomate1D prete à l'utilisation
+     */
     virtual fenAutomate* getfenAutomate(QJsonObject& monJson);
     virtual ~GameOfLifeFactory() = default;
 

@@ -136,9 +136,15 @@ public:
      * @param v La valeur à insérer dans chaque cellule
      */
     void setAllTabValue(unsigned int v);
-
+    /**
+     * @brief toJson Renvoie un QJsonObject qui contient la valeur des attributs de l'etat au format JSON
+     * @return Valeur des attributs de l'objet au format Json
+     */
     QJsonObject& toJson() const;
-
+    /**
+     * @brief Etat Constructeur à partir d'une structure JSON
+     * @param eJson Structure contenant les paramètres de Etat
+     */
     Etat(const QJsonObject& eJson);
 };
 
