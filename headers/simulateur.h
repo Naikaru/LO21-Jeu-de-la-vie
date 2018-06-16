@@ -203,7 +203,6 @@ public:
       */
      Etat* getInitialState(){return const_cast<Etat*>(depart);} // retourne l'etat initial du simulateur (avec possibilité de le modifier)
 
-     void stepBack();
      QJsonObject& toJson() const;
      Simulateur(Automate* myauto, const QJsonObject& myData);
 
