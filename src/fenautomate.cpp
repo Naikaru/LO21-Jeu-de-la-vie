@@ -114,9 +114,6 @@ void fenAutomate::slotAjoutColonne(){
     addCols(1);         // Méthode qui met la grille d'affichage à jour.
 }
 
-void fenAutomate::slotRedimensionner(){
-    redimensionner();
-}
 
 void fenAutomate::slotChangeRules(){
     monSimu->getAutomate()->changeRules();
@@ -127,11 +124,13 @@ void fenAutomate::slotTimerIntervalChange(int i){
     myTimer->setInterval(i);
 }
 
+void fenAutomate::slotRedimensionner(){
+    redimensionner();
+}
 
 void fenAutomate::slotAvancer(){
     avancer();
 }
-
 
 void fenAutomate::slotReculer(){
     reculer();

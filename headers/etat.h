@@ -6,6 +6,12 @@
 #include <iostream>
 
 /**
+ * \file etat.h
+ * \brief Header contenant la classe Etat.
+ */
+
+
+/**
  * @brief The EtatException class permet de gérer les exceptions liées à la classe Etat
  */
 class EtatException {

@@ -158,6 +158,9 @@ short unsigned int NumBitToNum(const std::string& num);
 std::string NumToNumBit(short unsigned int num);
 
 
+/**
+ * @brief The Automate1DFactory class associe
+ */
 class Automate1DFactory : public abstractAutomateFactory{
 public:
     Automate1DFactory():abstractAutomateFactory("Automate 1D"){}
