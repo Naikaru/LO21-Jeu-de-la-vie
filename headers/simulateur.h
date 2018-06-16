@@ -169,6 +169,12 @@ public:
      void next();
 
      /**
+      * @brief stepBack Permet un retour à l'état précédent si cela est possible
+      * @return true si le retour est effectué, false sinon
+      */
+     bool stepBack();
+
+     /**
       * @brief dernier Renvoie le denier etat généré par le simulateur
       * @return une référence constante sur le dernier etat généré : *etats[rang],
       */
@@ -203,5 +209,6 @@ public:
 
      const Etat& getEtat(unsigned int index) const {if(index < nbMaxEtats) return *etats[index]; else return NULL;}
      unsigned int getBufferSize() const {return nbMaxEtats;}
+
 };
 #endif // SIMULATEUR_H

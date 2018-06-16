@@ -24,7 +24,6 @@ fenAutomate2D::fenAutomate2D(QString nom, Simulateur* s):fenAutomate(nom,s) {
     resizeGrid();
     refreshGrid();
     connect(maGrid,SIGNAL(clicked(QModelIndex)),this,SLOT(slotGridClick(QModelIndex)));
-    //monSimu->reset();
 }
 
 
@@ -81,10 +80,12 @@ void fenAutomate2D::avancer(){
 
 
 void fenAutomate2D::reculer(){
-    monSimu->stepBack();
-    refreshGrid();
-    maGrid->repaint();
-}
+    if(monSimu->stepBack() == true){
+        refreshGrid();
+        maGrid->repaint();
+    }else
+        QMessageBox::warning(this, "BackStep fonctionality unavailable", "Impossible de retourner en arrière !");
+ }
 
 
 void fenAutomate2D::slotSizeChange(){
