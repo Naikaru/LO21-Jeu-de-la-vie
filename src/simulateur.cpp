@@ -95,3 +95,29 @@ bool Simulateur::stepBack(){
     }
     return false;
 }
+
+QJsonObject& Simulateur::toJson() const{
+    QJsonObject* myData = new QJsonObject;
+    (*myData)["automate"] = myAutomat->toJson();
+    (*myData)["depart"] = depart->toJson();
+    QJsonArray monTab;
+    for(int unsigned i = 0;i<nbMaxEtats;i++)
+            if(etats[i] != nullptr)
+                monTab.append(etats[i]->toJson());
+     (*myData)["buffer"] = monTab;
+     (*myData)["nbMaxEtats"] = (int)nbMaxEtats;
+     (*myData)["rang"] = (int)rang;
+    return *myData;
+}
+
+Simulateur::Simulateur(Automate* myauto, const QJsonObject& myData):myAutomat(myauto){
+    if(myData.contains("depart") && myData["depart"].isObject()) depart = new Etat(myData["depart"].toObject());
+    if(myData.contains("nbMaxEtats")) nbMaxEtats = myData["nbMaxEtats"].toInt();
+    if(myData.contains("rang")) rang = myData["rang"].toInt();
+    etats = new Etat*[nbMaxEtats];
+    for(unsigned int i(0); i<nbMaxEtats;i++) etats[i] = nullptr;
+    if(myData.contains("buffer") && myData["buffer"].isArray()){
+      QJsonArray mesEtats = myData["buffer"].toArray();
+      for(unsigned int i(0); i<mesEtats.size();i++){ etats[i] = new Etat(mesEtats[i].toObject());}
+    }
+}

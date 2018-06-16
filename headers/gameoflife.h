@@ -132,7 +132,8 @@ public:
      * @brief changeRules La methode permet à l'utilisateur de choisir la règle de transtion via une interface QWidget* newRules
      */
     virtual void changeRules();
-
+    QJsonObject& toJson() const;
+    GameOfLife(const QJsonObject& myData);
 public slots:
     /**
      * @brief slotMinChanged slot permettant la cohérence entre la borne maximum et minimum (On empêche le croisement)
@@ -154,12 +155,15 @@ public slots:
      */
     void slotUpdateRules();
 
+
 };
 
 class GameOfLifeFactory : public abstractAutomateFactory{
 public:
-    GameOfLifeFactory():abstractAutomateFactory("Jeu de la vie"){}
+    static std::string monNom;
+    GameOfLifeFactory():abstractAutomateFactory(monNom){}
     virtual fenAutomate* getfenAutomate();
+    virtual fenAutomate* getfenAutomate(QJsonObject& monJson);
     virtual ~GameOfLifeFactory() = default;
 
 };

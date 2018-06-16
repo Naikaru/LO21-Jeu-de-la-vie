@@ -1,6 +1,7 @@
 #include "headers/automate1d.h"
 
 std::string Automate1D::ERROR_BAD_ETAT = "L'Etat n'est pas un etat 1D";
+std::string Automate1DFactory::monNom = "Automate 1D";
 
 // Transforme les string de 0 et de 1 en int
 short unsigned int NumBitToNum(const std::string& num) {
@@ -226,3 +227,23 @@ fenAutomate* Automate1DFactory::getfenAutomate(){
     fenAutomate* mafenetre = new fenAutomate1D("1D : Nouvel Automate",monSimu);
     return mafenetre;
 }
+fenAutomate* Automate1DFactory::getfenAutomate(QJsonObject& monJson){
+    Automate* monAutomate;
+    if(monJson.contains("automate") && monJson["automate"].isObject()) monAutomate = new Automate1D(monJson["automate"].toObject());
+
+    Simulateur* monSimu = new Simulateur(monAutomate,monJson);
+    fenAutomate* mafenetre = new fenAutomate1D("1D : Nouvel Automate",monSimu);
+    return mafenetre;
+}
+QJsonObject& Automate1D::toJson() const{
+    QJsonObject* myData = new QJsonObject;
+    (*myData)["numero"]=(int)numero;
+    (*myData)["type"]=QString::fromStdString(Automate1DFactory::monNom);
+    return (*myData);
+}
+
+Automate1D::Automate1D(const QJsonObject &myData){
+    if(myData.contains("numero")) numero = myData["numero"].toInt();
+    numeroBit = NumToNumBit(numero);
+}
+

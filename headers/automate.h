@@ -23,7 +23,7 @@
 #include <QPushButton>
 #include <QIntValidator>
 #include <QMessageBox>
-
+#include <QString>
 
 /**
  * @brief The AutomateException class
@@ -130,6 +130,7 @@ public:
      * @param e
      */
     virtual void initSymetric(Etat* e) = 0; // De manière symétrique (pas rapport à l'axe des ordonnées
+    virtual QJsonObject& toJson() const = 0;
 };
 
 

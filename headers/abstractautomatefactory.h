@@ -3,6 +3,7 @@
 
 #include <cstdio>
 #include <string>
+#include <QJsonObject>
 #include "fenautomate.h"
 
 class abstractAutomateFactory
@@ -12,6 +13,7 @@ protected:
     abstractAutomateFactory(std::string n):nom(n){}
 public:
     virtual ~abstractAutomateFactory() = default;
+    virtual fenAutomate* getfenAutomate(QJsonObject& monJson) = 0;
     virtual fenAutomate* getfenAutomate() = 0;
     std::string getNom() {return nom;}
 };

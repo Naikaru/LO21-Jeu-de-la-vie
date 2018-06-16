@@ -114,3 +114,36 @@ void Etat::setRows(unsigned int i){
         rmRows(nbRows-i);
     }
 }
+
+QJsonObject& Etat::toJson() const{
+   QJsonObject* myData = new QJsonObject;
+   (*myData)["nbRows"] = nbRows;
+   (*myData)["nbCols"] = nbCols;
+   QJsonArray myGrid;
+   for(int i=0; i<nbRows; i++){
+       QJsonArray tempArray;
+       for(int j=0; j<nbCols; j++) tempArray.append(grid[i][j]);
+       myGrid.append(tempArray);
+   }
+   (*myData)["grid"] = myGrid;
+   return (*myData);
+}
+
+Etat::Etat(const QJsonObject& ejson){
+
+    if(ejson.contains("nbRows"))
+        nbRows = ejson["nbRows"].toInt();
+    if(ejson.contains("nbCols"))
+        nbCols = ejson["nbCols"].toInt();
+    if(ejson.contains("grid") && ejson["grid"].isArray()){
+        QJsonArray JsonGrid = ejson["grid"].toArray();
+        grid.clear();
+        grid.resize(nbRows);
+        unsigned short int i,j;
+        for(i=0; i<nbRows; i++) grid[i].resize(nbCols);
+        for(i=0;i<nbRows;i++){
+            QJsonArray QCols = JsonGrid[i].toArray();
+            for(j=0;j<nbCols;j++) grid[i][j] = QCols[j].toInt();
+        }
+    }
+}

@@ -78,7 +78,7 @@ public:
      * @brief getNumero Accesseur en lecture
      * @return La règle de transition (entière)
      */
-    unsigned short int getNumero() const { return numero; }
+    unsigned short int getNumero() const { return numero; }     
     /**
      * @brief getNumeroBit Accesseur en lecture
      * @return La règle de transition (string)
@@ -123,10 +123,6 @@ public:
      */
     virtual void changeRules();
 
-    QJsonObject& toJson() const;
-
-    Automate1D(const QJsonObject& myData);
-
 public slots:
     /**
      * @brief slotUpdateRules slot mettant à jour la regle de transition après validation de l'utilsateur
@@ -145,8 +141,6 @@ public slots:
      * @param n la chaine de caracère à convertir en entier
      */
     void slotNumBitToNum(const QString& n);
-
-
 };
 
 /**
@@ -164,14 +158,9 @@ short unsigned int NumBitToNum(const std::string& num);
 std::string NumToNumBit(short unsigned int num);
 
 
-/**
- * @brief The Automate1DFactory class associe
- */
 class Automate1DFactory : public abstractAutomateFactory{
 public:
-    static std::string monNom;
-    Automate1DFactory():abstractAutomateFactory(monNom){}
-    virtual fenAutomate* getfenAutomate(QJsonObject& monJson);
+    Automate1DFactory():abstractAutomateFactory("Automate 1D"){}
     virtual fenAutomate* getfenAutomate();
     virtual ~Automate1DFactory() = default;
 };

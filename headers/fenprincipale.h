@@ -14,6 +14,10 @@
 #include <QWidget>
 #include <QPoint>
 #include <Qicon>
+#include <QString>
+#include <QIODevice>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include "headers/fenautomate.h"
 #include "headers/automatemaker.h"
 
@@ -34,6 +38,7 @@ public slots:
      * @param newFenAutomate La fenêtre à laquelle associer l'automate cellulaire
      */
     void new_Automate(fenAutomate* newFenAutomate);
+    void loadAutomat();
 private:
     /**
      * @brief maker Permet la création d'automates

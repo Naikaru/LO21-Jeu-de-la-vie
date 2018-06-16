@@ -8,6 +8,9 @@ FenPrincipale::FenPrincipale():QMainWindow()
     // Deux boutons
     QMenu *menuFichier = menuBar()->addMenu("&Fichier");
     QMenu *menuAutomate = menuBar()->addMenu("&Automate");
+    // Action de charger les automates
+    QAction *actionLoad = new QAction(QIcon(":/img/folder.png"),"Charger Fichier",this);
+    menuFichier->addAction(actionLoad);
 
     // Action de quitter
     QAction *actionQuit = new QAction(QIcon(":/img/error.png"),"Fermer",this);
@@ -35,6 +38,7 @@ FenPrincipale::FenPrincipale():QMainWindow()
     connect(actionCascadeAutomate,SIGNAL(triggered()),myMDI,SLOT(cascadeSubWindows()));
     connect(actionCloseAllAutomates,SIGNAL(triggered()),myMDI,SLOT(closeAllSubWindows()));
     connect(actionNewAutomate,SIGNAL(triggered()),maker,SLOT(show()));
+    connect(actionLoad,SIGNAL(triggered()),this,SLOT(loadAutomat()));
     connect(maker,SIGNAL(newAuto(fenAutomate*)),this,SLOT(new_Automate(fenAutomate*)));
     connect(actionQuit,SIGNAL(triggered()),qApp,SLOT(quit()));
 
@@ -106,4 +110,30 @@ FenPrincipale::~FenPrincipale(){
     delete leftToolBar;
     delete myMDI;
 }
+
+void FenPrincipale::loadAutomat(){
+    QString path = QFileDialog::getOpenFileName(this, "Ouvrir un fichier", QString(), "json (*.json)");
+    if(path=="")return;
+    QFile myFile(path);
+    if(!myFile.open(QIODevice::ReadOnly | QIODevice::Text)){
+        qWarning("saveSimulateur:on peut pas ouvrir le fichier");
+        return;
+    }
+    QString val = myFile.readAll();
+    myFile.close();
+    QJsonDocument myDoc = QJsonDocument::fromJson(val.toUtf8());
+    QJsonObject monObjet = myDoc.object();
+    gestionnaireAutomateFactory* monGestionnaire = gestionnaireAutomateFactory::getInstance();
+    abstractAutomateFactory* mafactory;
+    fenAutomate* maFen;
+    if(monObjet.contains("automate") && monObjet["automate"].isObject()){
+        if(monObjet["automate"].toObject().contains("type")){
+            mafactory = monGestionnaire->getAutomateFactory(monObjet["automate"].toObject()["type"].toString().toStdString());
+            maFen = mafactory->getfenAutomate(monObjet);
+        }
+    }
+
+    ajouter_automate(maFen);
+}
+
 

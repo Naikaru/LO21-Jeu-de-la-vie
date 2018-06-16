@@ -1,4 +1,5 @@
 #include "headers/gameoflife.h"
+std::string GameOfLifeFactory::monNom = "Jeu de la vie";
 
 // Constructeur de GameOfLife
 GameOfLife::GameOfLife(unsigned short int min, unsigned short int max, unsigned short int exact, Neighbourhood n)
@@ -253,3 +254,33 @@ fenAutomate* GameOfLifeFactory::getfenAutomate(){
     return mafenetre;
 }
 
+fenAutomate* GameOfLifeFactory::getfenAutomate(QJsonObject &monJson){
+    Automate* monAutomate;
+    if(monJson.contains("automate") && monJson["automate"].isObject()) monAutomate = new GameOfLife(monJson["automate"].toObject());
+
+    Simulateur* monSimu = new Simulateur(monAutomate,monJson);
+    fenAutomate* mafenetre = new fenAutomate2D("ForestFire : Nouvel Automate",monSimu);
+    return mafenetre;
+}
+
+
+QJsonObject& GameOfLife::toJson() const{
+    QJsonObject* myData = new QJsonObject;
+    (*myData)["minNeighbours"] = minNeighbours;
+    (*myData)["maxNeighbours"] = maxNeighbours;
+    (*myData)["exactNeighbours"] = exactNeighbours;
+    (*myData)["voisinage"]=(typeN == Moore) ? "1" : "0";
+    (*myData)["type"]=QString::fromStdString(GameOfLifeFactory::monNom);
+    return (*myData);
+}
+
+GameOfLife::GameOfLife(const QJsonObject& myData){
+    if(myData.contains("minNeighbours"))
+            minNeighbours = myData["minNeighbours"].toInt();
+        if(myData.contains("maxNeighbours"))
+            maxNeighbours = myData["maxNeighbours"].toInt();
+        if(myData.contains("exactNeighbours"))
+            exactNeighbours = myData["exactNeighbours"].toInt();
+        if(myData.contains("voisinage"))
+            typeN = Neighbourhood(myData["voisinage"].toInt());
+}

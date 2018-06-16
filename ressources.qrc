@@ -19,5 +19,6 @@
         <file>img/layout.png</file>
         <file>img/rules.png</file>
         <file>img/reset-button.png</file>
+        <file>img/folder.png</file>
     </qresource>
 </RCC>

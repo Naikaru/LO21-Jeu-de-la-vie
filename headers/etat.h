@@ -3,6 +3,8 @@
 #include <QWidget>
 #include <string>
 #include <vector>
+#include <QJsonArray>
+#include <QJsonObject>
 #include <iostream>
 
 /**
@@ -140,6 +142,10 @@ public:
      * @param v La valeur à insérer dans chaque cellule
      */
     void setAllTabValue(unsigned int v);
+
+    QJsonObject& toJson() const;
+
+    Etat(const QJsonObject& eJson);
 };
 
 #endif // ETAT_H
