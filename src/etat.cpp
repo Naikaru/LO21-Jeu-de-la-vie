@@ -4,11 +4,7 @@ std::string Etat::ERROR_BAD_INDEX = "Index passe en argument incorrect";
 
 Etat::Etat(unsigned short int Rows, unsigned short int Cols):
     nbRows(Rows),nbCols(Cols), grid(Rows, std::vector<int>(Cols, 0))
-{
-//    unsigned short int i;
-//    grid.resize(nbRows);
-//    for(i=0; i<nbRows; i++) grid[i].resize(nbCols);
-}
+{}
 
 int Etat::getCellule(unsigned short int i, unsigned short int j) const{
     if( (i>=nbRows) || (j>= nbCols)) throw EtatException("Etat::getCellule -> " + ERROR_BAD_INDEX);
@@ -49,7 +45,7 @@ void Etat::destroyGrid(){
     grid.clear();
 }
 
-// redim(nbLignes,nbColonnes)
+
 void Etat::redimGrid(unsigned short int i,unsigned short int j){
     if(nbRows < i){ // Si on doit ajouter des lignes
         if(nbCols<j){ // On commence par mettre à jour le nombre de colonnes

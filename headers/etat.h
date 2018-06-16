@@ -5,13 +5,9 @@
 #include <vector>
 #include <iostream>
 
-//   TODO  //
-//
-// 1/ Verifier les desctructeurs, j'ai ptet fait de la merde
-//
-//   FIN TODO  //
-
-// Classe qui correspond aux exceptions pour les Etats (enfin il n'y en a qu'un là)
+/**
+ * @brief The EtatException class permet de gérer les exceptions liées à la classe Etat
+ */
 class EtatException {
     private:
         std::string info;
@@ -21,15 +17,30 @@ class EtatException {
         std::string getInfo() const { return info; }
 };
 
-// Classe qui correspond à un état d'un automate
+
+/**
+ * @brief The Etat class correspond à un état d'un automate cellulaire (une génération)
+ */
 class Etat
 {
+    /**
+     * @brief ERROR_BAD_INDEX est un code erreur générique pour la classe Etat
+     */
+    static std::string ERROR_BAD_INDEX;
 
-    static std::string ERROR_BAD_INDEX; // juste un code erreur
-
+    /**
+     * @brief grid est une matrice d'entier, permettant de gérer les valeurs prises par chaque cellules
+     */
     std::vector<std::vector<int>> grid;
     // grid[Rows][Cols]
+
+    /**
+     * @brief nbRows Le nombre de lignes de la grille
+     */
     unsigned short int nbRows;
+    /**
+     * @brief nbCols Le nombre de colonnes de la grille
+     */
     unsigned short int nbCols;
 
 public:
@@ -39,28 +50,90 @@ public:
 
     ~Etat() = default;
 
+    /**
+     * @brief getNbRows Accesseur en lecture pour obtenir le nombre de lignes.
+     * @return l'attribut nbRows
+     */
     unsigned short int getNbRows() const { return nbRows; }
+
+    /**
+     * @brief getNbCols Accesseur en lecture pour obtenir le nombre de colonnes
+     * @return l'attribut nbCols
+     */
     unsigned short int getNbCols() const { return nbCols; }
 
-    // Mets la valeur val dans la case (i,j)
+    /**
+     * @brief setCellule Permet la mise à jour de la cellule d'indice (i,j)
+     * @param i row index
+     * @param j column index
+     * @param val la nouvelle valeur prise par la cellule
+     */
     void setCellule(unsigned short int i,unsigned short int j,int val);
 
-    //renvoie la valeur de la case (i,j)
+    /**
+     * @brief getCellule renvoie la valeur de la cellule d'indice (i,j)
+     * @param i row index
+     * @param j column index
+     * @return La valeur de grid[i][j]
+     */
     int getCellule(unsigned short int i, unsigned short int j) const;
 
-    void destroyGrid();// remets la grille à 0 (pas certain de ce que ça fait)
+    /**
+     * @brief destroyGrid permet de réinitialiser la grille avec la valeur 0.
+     */
+    void destroyGrid();
 
-    // Redimensionne la grille avec la taille (i,j)
+    /**
+     * @brief redimGrid Redimensionne la grille avec la taille (i,j)
+     * @param i le nouveau nombre de lignes
+     * @param j le nouveau nombre de colonnes
+     */
     void redimGrid(unsigned short int i,unsigned short int j);
 
-    void addRows(unsigned int i); // Ajoute i lignes
-    void rmRows(unsigned int i); // retire i lignes
-    void addCols(unsigned int i, int value = 0); // Ajoute i colonnes, on peut specifier la valeur à donner aux nouvelles cases
-    void rmCols(unsigned int i); // retire i colonnes
+    /**
+     * @brief addRows Permet l'ajout de lignes à l'attribut grid
+     * @param i le nombre de lignes à ajouter
+     */
+    void addRows(unsigned int i);
 
-    void setCols(unsigned int i); // retire/ajoute des colonnes pour arriver à i colonnes
-    void setRows(unsigned int i); // retire/ajoute des lignes pour arrives à i lignes
-    void setAllTabValue(unsigned int v); // mets la valeur v dans toute la grille
+    /**
+     * @brief rmRows Permet la suppression de lignes à l'attribut grid
+     * @param i le nombre de lignes à retirer
+     */
+    void rmRows(unsigned int i);
+
+    /**
+     * @brief addCols Permet l'ajout de colonnes à l'attribut grid
+     * @param i le nombre de colonnes à ajouter
+     * @param value la valeur des cases qui composent les colonnes ajoutées (0 par défaut).
+     */
+    void addCols(unsigned int i, int value = 0); // Ajoute i colonnes, on peut specifier la valeur à donner aux nouvelles cases
+
+    /**
+     * @brief rmCols Permet la suppression de colonnes à l'attribut grid
+     * @param i le nombre de colonnes à retirer
+     */
+    void rmCols(unsigned int i);
+
+    /**
+     * @brief setCols Variante de addCols : réajuste le nombre de colonnes de grid avec une valeur exacte.
+     *          retire/ajoute des colonnes pour arriver à i colonnes
+     * @param i le nombre de colonnes final de grid
+     */
+    void setCols(unsigned int i);
+
+    /**
+     * @brief setRows Variante de addRows : réajuste le nombre de lignes de grid avec une valeur exacte.
+     *          retire/ajoute des lignes pour arriver à i lignes
+     * @param i
+     */
+    void setRows(unsigned int i);
+
+    /**
+     * @brief setAllTabValue Permet de donner à la totalité de la grille va valeur v
+     * @param v La valeur à insérer dans chaque cellule
+     */
+    void setAllTabValue(unsigned int v);
 };
 
 #endif // ETAT_H
