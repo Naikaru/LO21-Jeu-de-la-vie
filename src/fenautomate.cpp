@@ -36,6 +36,8 @@ void fenAutomate::UImaker(){
     QAction* actionRules = new QAction(QIcon(":/img/rules.png"),"Règles",this);
     menuSettings->addAction(actionRules);
     connect(actionRules,SIGNAL(triggered()),this,SLOT(slotChangeRules()));
+    //QMessageBox::warning(this, "Réinitialisation de la simulation", "Cette action entraîne la réinitialisation du simulateur");
+    //connect(actionRules, SIGNAL(triggered()), this, SLOT(slotReset()));
 
 
     // Configuration des fonctionnalités l'IHM
