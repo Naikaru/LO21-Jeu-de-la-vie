@@ -210,7 +210,7 @@ void Automate1D::slotNumBitToNum(const QString& n)
     std::string str = "";
     for(unsigned int i(0); i<8; ++i)
     {
-        str+=numBitRule[i]->text().toLatin1();
+        str= str + numBitRule[i]->text().toStdString();
     }
 
     short unsigned int tmpNum = NumBitToNum(str);

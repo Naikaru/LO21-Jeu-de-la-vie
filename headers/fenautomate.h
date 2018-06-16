@@ -72,7 +72,12 @@ protected:
    //
     bool playPause;
     void UImaker(); // Fonction qui fait l'interface, pour eviter d'avoir 2x le même morceau de code pour les 2 constructeurs
-
+    void resizeEvent(QResizeEvent* event)
+    {
+       QMainWindow::resizeEvent(event);
+       resizeGrid();
+       // Your code here.
+    }
 public:
     fenAutomate(Simulateur* s);
     fenAutomate(QString nom, Simulateur* s);

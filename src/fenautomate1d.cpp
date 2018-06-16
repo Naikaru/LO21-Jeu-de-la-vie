@@ -6,14 +6,14 @@ fenAutomate1D::fenAutomate1D(QString nom, Simulateur *s): fenAutomate(nom,s)
     monLayout->addWidget(maGrid,0,0,90,100);
     maGrid->horizontalHeader()->hide();
     maGrid->verticalHeader()->hide();
-
+    maGrid->verticalHeader()->setMinimumSectionSize(1);
+    maGrid->horizontalHeader()->setMinimumSectionSize(1);
     unsigned int cols = monSimu->dernier().getNbCols();
 
     for(unsigned int j(0);j<cols;j++){
       maGrid->setItem(0,j,new QTableWidgetItem(""));
       maGrid->item(0,j)->setFlags(Qt::ItemIsEnabled);
     }
-    resizeGrid();
     connect(maGrid,SIGNAL(clicked(QModelIndex)),this,SLOT(slotGridClick(QModelIndex)));
     //monSimu->reset();
 }
@@ -25,7 +25,7 @@ void fenAutomate1D::resizeGrid(){
     unsigned int rows = maGrid->rowCount();
 
     //adaptGridSize();
-    int size = (int) 500/cols;
+    int size = (int) maGrid->size().width()/cols;
 
     for(unsigned int i(0);i<rows;i++){
        maGrid->setRowHeight(i,size);
@@ -34,7 +34,6 @@ void fenAutomate1D::resizeGrid(){
     for(unsigned int j(0);j<cols;j++){
       maGrid->setColumnWidth(j,size);
     }
-
 }
 
 
@@ -48,19 +47,22 @@ void fenAutomate1D::addStep(){
 
     // On introduit une nouvelle ligne correspondant à la génération suivante
     maGrid->setRowCount(row+1);
+    maGrid->setRowHeight(row, (int) maGrid->size().width()/cols);
     for(unsigned int j(0); j<cols; ++j){
         maGrid->setItem(row,j, new QTableWidgetItem(""));
         maGrid->item(row,j)->setFlags(Qt::ItemIsEnabled);
         // Chercher un moyen de rendre inaccessibled les cases maGrid->item(row-1,j)
         maGrid->item(row,j)->setBackgroundColor(monAuto->colorize(dernier.getCellule(0,j)));
         // un état de Automate1D n'a qu'une seule ligne. donc getCellule(0,j)
-        maGrid->setRowHeight(row, (int) 500/cols);
+        maGrid->setColumnWidth(j, (int) maGrid->size().width()/cols);
+
     }
     maGrid->scrollToBottom();
 }
 
 
 void fenAutomate1D::slotGridClick(QModelIndex j){
+    if(j.row() == maGrid->rowCount() - 1)
     cellChange(j.row(),j.column());
 }
 

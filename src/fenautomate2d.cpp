@@ -7,6 +7,9 @@ fenAutomate2D::fenAutomate2D(QString nom, Simulateur* s):fenAutomate(nom,s) {
     monLayout->addWidget(maGrid,0,0,90,100);
     maGrid->horizontalHeader()->hide();
     maGrid->verticalHeader()->hide();
+    maGrid->verticalHeader()->setMinimumSectionSize(1);
+    maGrid->horizontalHeader()->setMinimumSectionSize(1);
+
 
     unsigned int cols = monSimu->dernier().getNbCols();
     unsigned int rows = monSimu->dernier().getNbRows();
@@ -25,20 +28,20 @@ fenAutomate2D::fenAutomate2D(QString nom, Simulateur* s):fenAutomate(nom,s) {
 
 void fenAutomate2D::resizeGrid(){
     int size;
-    unsigned int cols = maGrid->columnCount();
-    unsigned int rows = maGrid->rowCount();
+        unsigned int cols = maGrid->columnCount();
+        unsigned int rows = maGrid->rowCount();
 
-    if(maGrid->size().width()/rows < maGrid->size().height()/cols)
-        size = (int) maGrid->size().height()/cols;
-    else
-        size = (int) maGrid->size().width()/rows;
-    size = (size<1)? 1:size;
-    for(unsigned int i(0);i<rows;i++){
-       maGrid->setRowHeight(i,size);
-    }
-    for(unsigned int j(0);j<cols;j++){
-      maGrid->setColumnWidth(j,size);
-    }
+        if(maGrid->size().width()/cols > maGrid->size().height()/rows)
+            size = (int) maGrid->size().height()/rows;
+        else
+            size = (int) maGrid->size().width()/cols;
+        size = (size<1)? 1:size;
+        for(unsigned int i(0);i<rows;i++){
+           maGrid->setRowHeight(i,size);
+        }
+        for(unsigned int j(0);j<cols;j++){
+          maGrid->setColumnWidth(j,size);
+        }
 }
 
 void fenAutomate2D::cellChange(unsigned int i, unsigned int j){
@@ -142,7 +145,7 @@ void fenAutomate2D::redimensionner(){
     connect(BtOk, SIGNAL(clicked()), this, SLOT(slotUpdateDimensions()));
 
     QPushButton* BtCancel = new QPushButton("Annuler");
-    connect(BtCancel, SIGNAL(clicked()), this,SLOT(close()));
+    connect(BtCancel, SIGNAL(clicked()), widgetDimensions,SLOT(close()));
 
     QHBoxLayout* hlayout = new QHBoxLayout();
     hlayout->addWidget(BtOk);
