@@ -15,7 +15,6 @@ fenAutomate1D::fenAutomate1D(QString nom, Simulateur *s): fenAutomate(nom,s)
       maGrid->item(0,j)->setFlags(Qt::ItemIsEnabled);
     }
     connect(maGrid,SIGNAL(clicked(QModelIndex)),this,SLOT(slotGridClick(QModelIndex)));
-    //monSimu->reset();
 }
 
 
@@ -24,7 +23,6 @@ void fenAutomate1D::resizeGrid(){
     unsigned int cols = monSimu->dernier().getNbCols();
     unsigned int rows = maGrid->rowCount();
 
-    //adaptGridSize();
     int size = (int) maGrid->size().width()/cols;
 
     for(unsigned int i(0);i<rows;i++){
@@ -87,8 +85,10 @@ void fenAutomate1D::avancer(){
 
 
 void fenAutomate1D::reculer(){
-   monSimu->stepBack();
-   maGrid->removeRow(maGrid->rowCount()-1);
+    if(monSimu->stepBack() == true)
+        maGrid->removeRow(maGrid->rowCount()-1);
+    else
+        QMessageBox::warning(this, "BackStep fonctionality unavailable", "Impossible de retourner en arrière !");
 }
 
 
