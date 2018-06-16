@@ -15,6 +15,7 @@ fenAutomate1D::fenAutomate1D(QString nom, Simulateur *s): fenAutomate(nom,s)
       maGrid->item(0,j)->setFlags(Qt::ItemIsEnabled);
     }
     connect(maGrid,SIGNAL(clicked(QModelIndex)),this,SLOT(slotGridClick(QModelIndex)));
+    refreshGrid();
     //monSimu->reset();
 }
 
@@ -108,10 +109,13 @@ void fenAutomate1D::reinitialize(){
 }
 
 void fenAutomate1D::refreshGrid(){
+
     const Etat& dernier = monSimu->dernier();
     unsigned int cols = (int) dernier.getNbCols();
     unsigned int row = maGrid->rowCount();
     const Automate* monAuto = monSimu->getAutomate();
+
+
     //adaptGridSize();
     for(int j(0);j<cols;j++){
         maGrid->item(row-1,j)->setBackgroundColor(monAuto->colorize(dernier.getCellule(0,j)));

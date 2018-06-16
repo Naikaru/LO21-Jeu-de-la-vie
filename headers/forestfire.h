@@ -35,6 +35,7 @@ private:
 
 
 public:
+
     ForestFire(Neighbourhood n=Moore);
     virtual ~ForestFire()=default;
     ForestFire(const ForestFire& a);
@@ -94,6 +95,8 @@ public:
      * @brief changeRules La methode permet à l'utilisateur de choisir la règle de transtion via une interface QWidget* newRules
      */
     virtual void changeRules();
+    QJsonObject& toJson() const;
+    ForestFire(const QJsonObject& myData);
 
 public slots:
     /**
@@ -105,8 +108,11 @@ public slots:
 };
 
 class ForestFireFactory : public abstractAutomateFactory{
+
 public:
-    ForestFireFactory():abstractAutomateFactory("Feu de foret"){}
+    static std::string monNom;
+    ForestFireFactory():abstractAutomateFactory(monNom){}
+    virtual fenAutomate* getfenAutomate(QJsonObject& monJson);
     virtual fenAutomate* getfenAutomate();
     virtual ~ForestFireFactory() = default;
 };

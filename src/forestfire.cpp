@@ -1,5 +1,6 @@
 #include "headers/forestfire.h"
 
+std::string ForestFireFactory::monNom = "Forest fire";
 // Constructeur de GameOfLife
 ForestFire::ForestFire(Neighbourhood n): typeN(n) {}
 
@@ -179,4 +180,23 @@ fenAutomate* ForestFireFactory::getfenAutomate(){
     Simulateur* monSimu = new Simulateur(monAutomate, monEtat);
     fenAutomate* mafenetre = new fenAutomate2D("ForestFire : Nouvel Automate",monSimu);
     return mafenetre;
+}
+
+fenAutomate* ForestFireFactory::getfenAutomate(QJsonObject &monJson){
+    Automate* monAutomate;
+    if(monJson.contains("automate") && monJson["automate"].isObject()) monAutomate = new ForestFire(monJson["automate"].toObject());
+    Simulateur* monSimu = new Simulateur(monAutomate,monJson);
+    fenAutomate* mafenetre = new fenAutomate2D("ForestFire : Nouvel Automate",monSimu);
+    return mafenetre;
+}
+
+QJsonObject& ForestFire::toJson() const{
+    QJsonObject* myData = new QJsonObject;
+    (*myData)["voisinage"]=(typeN == Moore) ? "1" : "0";
+    (*myData)["type"]=QString::fromStdString(ForestFireFactory::monNom);
+    return (*myData);
+}
+
+ForestFire::ForestFire(const QJsonObject& myData){
+    if(myData.contains("voisinage")) typeN = Neighbourhood(myData["voisinage"].toInt());
 }

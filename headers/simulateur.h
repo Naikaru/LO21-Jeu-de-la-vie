@@ -4,6 +4,8 @@
 #include "headers/automate.h"
 #include "headers/etat.h"
 #include <QMessageBox>
+#include <QJsonObject>
+#include <QJsonArray>
 
 //   TODO  //
 //
@@ -194,6 +196,12 @@ public:
       * @return Un pointeur sur depart
       */
      Etat* getInitialState(){return const_cast<Etat*>(depart);} // retourne l'etat initial du simulateur (avec possibilité de le modifier)
+
      void stepBack();
+     QJsonObject& toJson() const;
+     Simulateur(Automate* myauto, const QJsonObject& myData);
+
+     const Etat& getEtat(unsigned int index) const {if(index < nbMaxEtats) return *etats[index]; else return NULL;}
+     unsigned int getBufferSize() const {return nbMaxEtats;}
 };
 #endif // SIMULATEUR_H

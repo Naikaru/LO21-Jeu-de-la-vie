@@ -28,6 +28,10 @@
 #include <QSlider>
 #include <QComboBox>
 #include <QSizePolicy>
+#include <QJsonObject>
+#include <QFile>
+#include <QFileDialog>
+#include <QJsonDocument>
 
 //   TODO  //
 // Dans fenAutomate
@@ -71,6 +75,8 @@ protected:
     QTableWidget* maGrid; // La grille affichée.
    //
     bool playPause;
+    bool sauvegarde();
+    bool sauvegarde(QString& path);
     void UImaker(); // Fonction qui fait l'interface, pour eviter d'avoir 2x le même morceau de code pour les 2 constructeurs
     void resizeEvent(QResizeEvent* event)
     {
@@ -103,6 +109,7 @@ public:
     virtual void refreshGrid() = 0;
     virtual void addCols(unsigned int c=1) = 0;
     virtual void redimensionner() = 0;
+    QJsonObject* saveThisState();
 
 public slots:
     void slotRedimensionner();
@@ -115,7 +122,7 @@ public slots:
     void slotReset();
     void slotTimerIntervalChange(int i);
     void slotBtPlayStop();
-
+    void slotSauvegarder();
     virtual void cellChange(unsigned int i, unsigned int j) = 0;
 
 };

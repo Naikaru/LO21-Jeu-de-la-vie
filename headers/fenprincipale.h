@@ -14,6 +14,10 @@
 #include <QWidget>
 #include <QPoint>
 #include <Qicon>
+#include <QString>
+#include <QIODevice>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include "headers/fenautomate.h"
 #include "headers/automatemaker.h"
 
@@ -34,6 +38,7 @@ public slots:
     // Slot qui ajoute l'automate passé en paramètre dans la MDI area
     // En utilisant la fonction "ajouter_automate"
     void new_Automate(fenAutomate* newFenAutomate);
+    void loadAutomat();
 private:
     // Zone du milieu
     Automatemaker* maker;

@@ -123,6 +123,10 @@ public:
      */
     virtual void changeRules();
 
+    QJsonObject& toJson() const;
+
+    Automate1D(const QJsonObject& myData);
+
 public slots:
     /**
      * @brief slotUpdateRules slot mettant à jour la regle de transition après validation de l'utilsateur
@@ -141,6 +145,8 @@ public slots:
      * @param n la chaine de caracère à convertir en entier
      */
     void slotNumBitToNum(const QString& n);
+
+
 };
 
 /**
@@ -160,7 +166,9 @@ std::string NumToNumBit(short unsigned int num);
 
 class Automate1DFactory : public abstractAutomateFactory{
 public:
-    Automate1DFactory():abstractAutomateFactory("Automate 1D"){}
+    static std::string monNom;
+    Automate1DFactory():abstractAutomateFactory(monNom){}
+    virtual fenAutomate* getfenAutomate(QJsonObject& monJson);
     virtual fenAutomate* getfenAutomate();
     virtual ~Automate1DFactory() = default;
 };

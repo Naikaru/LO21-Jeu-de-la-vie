@@ -32,6 +32,11 @@ void fenAutomate::UImaker(){
     menuDimensions->addAction(actionAjouterColonne);
     connect(actionAjouterColonne,SIGNAL(triggered()),this,SLOT(slotAjoutColonne()));
 
+    // Ajout d'une colonne
+    QAction* actionSauvegarder = new QAction("Sauvegarder",this);
+    menuBar()->addAction(actionSauvegarder);
+    connect(actionSauvegarder,SIGNAL(triggered()),this,SLOT(slotSauvegarder()));
+
     // Modification des règles de transition
     QAction* actionRules = new QAction(QIcon(":/img/rules.png"),"Règles",this);
     menuSettings->addAction(actionRules);
@@ -163,3 +168,30 @@ void fenAutomate::slotReset(){
     // Il s'agit avec reinitialize() de modifier la grille en conséquence, si on est en 1D ou 2D
 }
 
+void fenAutomate::slotSauvegarder(){
+    sauvegarde();
+}
+
+bool fenAutomate::sauvegarde(){
+    QFile saveFile(QFileDialog::getSaveFileName(this, "Enregistrer un fichier", QString(), "json (*.json)"));
+       if(!saveFile.open(QIODevice::WriteOnly)){
+           qWarning("saveSimulateur:on peut pas ouvrir le fichier");
+           return false;
+       }
+       QJsonDocument saveDoc(monSimu->toJson());
+       saveFile.write(saveDoc.toJson());
+       printf("You have saved jeu de la vie");
+       saveFile.close();
+       return true;
+}
+bool fenAutomate::sauvegarde(QString& path){
+    QFile saveFile(QFileDialog::getSaveFileName(this, "Enregistrer un fichier", QString(), "json (*.json)"));
+       if(!saveFile.open(QIODevice::WriteOnly)){
+           qWarning("saveSimulateur:on peut pas ouvrir le fichier");
+           return false;
+       }
+       QJsonDocument saveDoc(monSimu->toJson());
+       saveFile.write(saveDoc.toJson());
+       printf("You have saved jeu de la vie");
+       return true;
+}
