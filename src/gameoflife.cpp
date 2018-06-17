@@ -259,7 +259,7 @@ fenAutomate* GameOfLifeFactory::getfenAutomate(QJsonObject &monJson){
     if(monJson.contains("automate") && monJson["automate"].isObject()) monAutomate = new GameOfLife(monJson["automate"].toObject());
 
     Simulateur* monSimu = new Simulateur(monAutomate,monJson);
-    fenAutomate* mafenetre = new fenAutomate2D("ForestFire : Nouvel Automate",monSimu);
+    fenAutomate* mafenetre = new fenAutomate2D("GameOfLife : Nouvel Automate",monSimu);
     return mafenetre;
 }
 
@@ -269,7 +269,7 @@ QJsonObject& GameOfLife::toJson() const{
     (*myData)["minNeighbours"] = minNeighbours;
     (*myData)["maxNeighbours"] = maxNeighbours;
     (*myData)["exactNeighbours"] = exactNeighbours;
-    (*myData)["voisinage"]=(typeN == Moore) ? "1" : "0";
+    (*myData)["voisinage"]=(typeN == Moore) ? 1 : 0;
     (*myData)["type"]=QString::fromStdString(GameOfLifeFactory::monNom);
     return (*myData);
 }
@@ -283,4 +283,5 @@ GameOfLife::GameOfLife(const QJsonObject& myData){
             exactNeighbours = myData["exactNeighbours"].toInt();
         if(myData.contains("voisinage"))
             typeN = Neighbourhood(myData["voisinage"].toInt());
+        std::cout<<minNeighbours<<" "<<maxNeighbours<<" "<<exactNeighbours<<" "<<typeN;
 }
