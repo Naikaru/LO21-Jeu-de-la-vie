@@ -10,7 +10,12 @@
 #include "headers/fenautomate.h"
 #include "headers/fenautomate2d.h"
 
+/**
+ * @brief The stateForest enum
+ *          Equivaut à la valeur entier prise par les cellules de la classe ForestFire
+ */
 enum stateForest {empty, tree, fire, ashes};
+
 /**
  * @brief The ForestFire class
  *             Classe qui permet la simulation d'un feu de forêt

@@ -89,10 +89,10 @@ Automate* ForestFire::copy() const{
 const QColor& ForestFire::colorize(int value) const
 {
     switch(value){
-        case(0): return *(new QColor("White")); break;
-        case(1): return *(new QColor("Green")); break;
-        case(2): return *(new QColor("Red")); break;
-        case(3): return *(new QColor("Grey")); break;
+        case(empty): return *(new QColor("White")); break;
+        case(tree): return *(new QColor("Green")); break;
+        case(fire): return *(new QColor("Red")); break;
+        case(ashes): return *(new QColor("Grey")); break;
     default: return *(new QColor("Black")); break;
     }
 
