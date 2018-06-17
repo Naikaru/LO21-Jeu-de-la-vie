@@ -96,6 +96,48 @@ bool Simulateur::stepBack(){
     return false;
 }
 
+void Simulateur::updateBufferSize(int newSize){
+    Etat** newStates = new Etat*[newSize];
+    for (unsigned int i(0); i<newSize; ++i) newStates[i] = nullptr;
+
+    if(nbMaxEtats < newSize){
+        if(rang < nbMaxEtats){  // Moins d'états générés que la taille du buffer
+            for (unsigned int i(0); i<=rang; ++i)
+                newStates[i] = etats[i];
+        }else{                  // Plus d'états générés que la taille du buffer, on a alors forcément fait un cycle.
+            for (unsigned int i(0); i<nbMaxEtats; ++i)
+                newStates[i] = etats[(rang+i+1)%nbMaxEtats];
+            rang = nbMaxEtats - 1;
+        }
+    }
+    else if(nbMaxEtats > newSize){
+        // On enregistre les newSize derniers états
+        if(rang%nbMaxEtats > newSize){
+            for (unsigned int i(0); i<newSize; ++i)
+                newStates[i] = etats[(rang%nbMaxEtats)-newSize+1+i];
+            rang = newSize - 1;
+        }
+        else if(rang < newSize){
+            for (unsigned int i(0); i<newSize; ++i)
+                newStates[i] = etats[i];
+        }
+        else if(rang%nbMaxEtats < newSize){
+            for (unsigned int i(0); i<newSize; ++i)
+                newStates[i] = etats[(nbMaxEtats - (rang%nbMaxEtats) + i)%nbMaxEtats];
+            rang = newSize - 1;
+        }
+    }
+    else{
+        return;
+    }
+
+    Etat** old = etats;
+    delete[] old;
+    etats = newStates;
+    nbMaxEtats = newSize;
+}
+
+
 QJsonObject& Simulateur::toJson() const{
     QJsonObject* myData = new QJsonObject;
     (*myData)["automate"] = myAutomat->toJson();

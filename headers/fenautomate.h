@@ -73,6 +73,7 @@ protected:
     QWidget* myCentralWidget; // Il faut définir un widget pour le centre
 
     QTableWidget* maGrid; // La grille affichée.
+    QSpinBox* bufferSize; // La taille du buffer de monSimu
    //
     bool playPause;
     bool sauvegarde();
@@ -115,6 +116,15 @@ public slots:
     void slotRedimensionner();
     void slotAjoutColonne();
     void slotChangeRules();
+
+    /**
+     * @brief slotChangeBufferSize Crée l'interface proposant à l'utilisateur la mise à jour du buffer
+     */
+    void slotChangeBufferSize();
+    /**
+     * @brief slotUpdateBufferSize Met à jour la taille du buffer (dans Simulateur) suite à la validation de l'utilisateur
+     */
+    void slotUpdateBufferSize();
 
     void slotAvancer();
     void slotReculer();

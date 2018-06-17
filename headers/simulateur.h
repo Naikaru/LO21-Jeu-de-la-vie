@@ -7,12 +7,6 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-//   TODO  //
-//
-//
-//   FIN TODO  //
-
-// Classe qui correspond aux exceptions de simulateur
 
 /**
  * @brief The SimulateurException class permet de gérer les exceptions liées à la classe Simulateur
@@ -66,13 +60,13 @@ class Simulateur
     unsigned int nbMaxEtats;
 
     /**
-     * @brief rang L'indice du dernier Etat sauvegardé dans etats
+     * @brief Le numéro de la génération - 1
      */
     unsigned int rang;
 
 public:
 
-    Simulateur(/*const*/ Automate* a, const Etat* dep, unsigned int buffer = 2);
+    Simulateur(/*const*/ Automate* a, const Etat* dep, unsigned int buffer = 5);
     Simulateur(const Simulateur& s);
     Simulateur& operator=(const Simulateur& s);
      ~Simulateur();
@@ -207,7 +201,10 @@ public:
      Simulateur(Automate* myauto, const QJsonObject& myData);
 
      const Etat& getEtat(unsigned int index) const {if(index < nbMaxEtats) return *etats[index]; else return NULL;}
-     unsigned int getBufferSize() const {return nbMaxEtats;}
 
+     unsigned int getBufferSize() const {return nbMaxEtats;}
+     void setBufferSize(int value) { nbMaxEtats = value; }
+
+     void updateBufferSize(int newSize);
 };
 #endif // SIMULATEUR_H

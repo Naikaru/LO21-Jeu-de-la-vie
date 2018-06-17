@@ -32,17 +32,23 @@ void fenAutomate::UImaker(){
     menuDimensions->addAction(actionAjouterColonne);
     connect(actionAjouterColonne,SIGNAL(triggered()),this,SLOT(slotAjoutColonne()));
 
-    // Ajout d'une colonne
-    QAction* actionSauvegarder = new QAction("Sauvegarder",this);
-    menuBar()->addAction(actionSauvegarder);
-    connect(actionSauvegarder,SIGNAL(triggered()),this,SLOT(slotSauvegarder()));
-
     // Modification des règles de transition
     QAction* actionRules = new QAction(QIcon(":/img/rules.png"),"Règles",this);
     menuSettings->addAction(actionRules);
     connect(actionRules,SIGNAL(triggered()),this,SLOT(slotChangeRules()));
     //QMessageBox::warning(this, "Réinitialisation de la simulation", "Cette action entraîne la réinitialisation du simulateur");
     //connect(actionRules, SIGNAL(triggered()), this, SLOT(slotReset()));
+
+    // Modification de la taille du buffer (nombre d'état sauvegardables)
+    QAction* actionBuffer = new QAction("Buffer", this);
+    menuSettings->addAction(actionBuffer);
+    connect(actionBuffer, SIGNAL(triggered()),this,SLOT(slotChangeBufferSize()));
+
+    // Sauvegarder l'etat de l'automate courant
+    QAction* actionSauvegarder = new QAction("Sauvegarder",this);
+    menuBar()->addAction(actionSauvegarder);
+    connect(actionSauvegarder,SIGNAL(triggered()),this,SLOT(slotSauvegarder()));
+
 
 
     // Configuration des fonctionnalités l'IHM
@@ -131,6 +137,35 @@ void fenAutomate::slotTimerIntervalChange(int i){
 
 void fenAutomate::slotRedimensionner(){
     redimensionner();
+}
+
+void fenAutomate::slotChangeBufferSize(){
+    QWidget* widgetBuffer = new QWidget();
+    QFormLayout* mainLayout = new QFormLayout();
+
+    bufferSize = new QSpinBox();
+    bufferSize->setRange(1,10);
+    bufferSize->setValue(monSimu->getBufferSize());
+
+    QPushButton* BtOk = new QPushButton("Valider");
+    connect(BtOk, SIGNAL(clicked()), this, SLOT(slotUpdateBufferSize()));
+
+    QPushButton* BtCancel = new QPushButton("Annuler");
+    connect(BtCancel, SIGNAL(clicked()), widgetBuffer,SLOT(close()));
+
+    QHBoxLayout* hlayout = new QHBoxLayout();
+    hlayout->addWidget(BtOk);
+    hlayout->addWidget(BtCancel);
+
+    mainLayout->addRow("Taille du buffer :", bufferSize);
+    mainLayout->addRow(hlayout);
+
+    widgetBuffer->setLayout(mainLayout);
+    widgetBuffer->show();
+}
+
+void fenAutomate::slotUpdateBufferSize(){
+    monSimu->updateBufferSize(bufferSize->value());
 }
 
 void fenAutomate::slotAvancer(){
