@@ -122,9 +122,15 @@ public:
      * @brief changeRules La methode permet à l'utilisateur de choisir la règle de transtion
      */
     virtual void changeRules();
-
+    /**
+     * @brief toJson Renvoie un QJsonObject qui contient la valeur des attributs de l'automate au format JSON
+     * @return Valeur des attributs de l'objet au format Json
+     */
     QJsonObject& toJson() const;
-
+    /**
+     * @brief Automate1D Constructeur à partir d'une structure Json
+     * @param myData structure Json qui contient les valeurs des attributs de la classe
+     */
     Automate1D(const QJsonObject& myData);
 
 public slots:
@@ -169,9 +175,24 @@ std::string NumToNumBit(short unsigned int num);
  */
 class Automate1DFactory : public abstractAutomateFactory{
 public:
+    /**
+     * @brief monNom Nom de la factory & de l'automate, permets d'unifier toutes les notations
+     */
     static std::string monNom;
+    /**
+     * @brief Automate1DFactory constructeur de la factory
+     */
     Automate1DFactory():abstractAutomateFactory(monNom){}
+    /**
+     * @brief getfenAutomate Fonction permettant de récupérer une fenAutomate1D bien construite, prête à l'utilisation
+     * @param monJson Json contenant les valeurs de attributs des elements de la simulation1D
+     * @return fenAutomate1D prete à l'utilisation
+     */
     virtual fenAutomate* getfenAutomate(QJsonObject& monJson);
+    /**
+     * @brief getfenAutomate Fonction permettant de récupérer une fenAutomate1D bien construite, prête à l'utilisation
+     * @return fenAutomate1D prete à l'utilisation
+     */
     virtual fenAutomate* getfenAutomate();
     virtual ~Automate1DFactory() = default;
 };

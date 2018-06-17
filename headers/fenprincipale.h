@@ -23,12 +23,16 @@
 
 
 /**
- * @brief The FenPrincipale class correspond à la fenêtre principale du programme
+ * @brief The FenPrincipale class
+ *                  Correspond à la fenêtre principale, qui contient les autres fenêtres
  */
 class FenPrincipale : public QMainWindow
 {
 Q_OBJECT
 public:
+    /**
+     * @brief FenPrincipale Constructeur de la fenetre principale
+     */
     FenPrincipale();
     ~FenPrincipale();
 public slots:
@@ -38,31 +42,33 @@ public slots:
      * @param newFenAutomate La fenêtre à laquelle associer l'automate cellulaire
      */
     void new_Automate(fenAutomate* newFenAutomate);
+    /**
+     * @brief loadAutomat charge un automate dans la MDI area a partir d'un fichier
+     */
     void loadAutomat();
 private:
+    // Zone du milieu
     /**
-     * @brief maker Permet la création d'automates
+     * @brief maker instance de automateMaker, qui permets de récupérer des fenAutomate à ajouter
      */
     Automatemaker* maker;
-
     /**
-     * @brief myMDI correspond à la zone du milieu de la fenêtre (à laquelle on peut ajouter d'autres fenêtres)
+     * @brief myMDI Zone du milieu, contenant des fenêtres
      */
-    QMdiArea* myMDI;
-
+    QMdiArea* myMDI; // Zone du milieu
     /**
-     * @brief leftToolBar la zone d'option latérale permettant création/suppression/selection d'un des automates
+     * @brief leftToolBar Barre de gauche, contenant la liste des automates lancés
      */
-    QToolBar* leftToolBar;
-
+    QToolBar* leftToolBar; // Barre du côté
     /**
-     * @brief actionNewAutomate QAction permettant la génération de l'automate
+     * @brief actionNewAutomate Action de créer un automate (bouton vert & element dans le Qmenu)
      */
     QAction *actionNewAutomate; // Action importante
 
+    // Ajouter l'automate passé en param dans la MDI area
     /**
-     * @brief ajouter_automate Ajouter la fenêtre passée en param dans la MDI area
-     * @param newFenAutomate La fenêtre initialisée avec le bon automate
+     * @brief ajouter_automate Ajoute un automate à la MDI area
+     * @param newFenAutomate fenêtre à ajouter à la MDI area
      */
     void ajouter_automate(fenAutomate* newFenAutomate);
 };
